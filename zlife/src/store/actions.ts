@@ -42,6 +42,16 @@ export const createFinanceActions: StateCreator<
     return get().userName;
   },
 
+  language: "en",
+
+  getLanguage: () => {
+    return get().language;
+  },
+
+  setLanguage: (language) => {
+    set({ language: language });
+  },
+
   removeYear: (year) => {
     set((state) => {
       if (!state.data[year]) return state;

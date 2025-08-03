@@ -1,0 +1,13 @@
+{
+  "welcome": "خوش آمدید به سایت",
+  "login": "ورود",
+  "logout": "خروج",
+  "profile": "پروفایل",
+  "settings": "تنظیمات",
+  "language": "زبان",
+  "theme": "تم",
+  "dark_mode": "حالت تاریک",
+  "light_mode": "حالت روشن",
+  "save": "ذخیره",
+  "cancel": "لغو"
+}

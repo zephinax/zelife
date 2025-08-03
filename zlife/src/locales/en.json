@@ -1,0 +1,13 @@
+{
+  "auth": {
+    "startJourney": "Start Your Journey with Us",
+    "wellcome": "Welcome Back",
+    "signInToYourAccount": "Sign in to your account",
+    "email": "Email",
+    "password": "Password",
+    "remeberMe": "Remeber me",
+    "forgotPassword": "Forgot Password",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  }
+}

@@ -5,15 +5,15 @@
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
   padding-block: 0.5rem;
   padding-inline: 1.25rem;
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffff;
+  color: var(--color-text);
   gap: 10px;
   font-weight: bold;
-  border: 3px solid #ffffff4d;
+  border: 3px solid #ffffff21;
   outline: none;
   overflow: hidden;
   font-size: 15px;
@@ -29,7 +29,7 @@
 
 .button:hover {
   transform: scale(1.04);
-  border-color: #fff9;
+  border-color: rgba(255, 255, 255, 0.267);
 }
 
 .button:active {

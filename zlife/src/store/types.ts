@@ -34,6 +34,11 @@ export interface FinanceState {
   userName: string;
   setUserName: (name: string) => void;
   getUserName: () => string;
+
+  language: string;
+  setLanguage: (language: string) => void;
+  getLanguage: () => string;
+
   data: {
     [year: string]: YearData;
   };

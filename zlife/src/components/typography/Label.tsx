@@ -10,14 +10,16 @@ const Label: React.FC<LabelPropsType> = ({
   return (
     <label
       htmlFor={htmlFor}
-      className={`flex items-center gap-2 font-medium text-gray-700 ${className}`}
+      className={`flex items-center gap-2 font-medium text-text-secondary ${className}`}
     >
-      {icon && <span className="w-5 h-5 text-gray-500">{icon}</span>}
+      {icon && <span className="w-5 h-5 text-text-secondary">{icon}</span>}
       <span className="text-secondary-800 text-nowrap 2xl:text-sm text-xs font-medium">
         {text}
       </span>
       {children && (
-        <span className="2xl:text-sm text-xs text-gray-500">{children}</span>
+        <span className="2xl:text-sm text-xs text-text-secondary">
+          {children}
+        </span>
       )}
     </label>
   );

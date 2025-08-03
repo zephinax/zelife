@@ -4,7 +4,7 @@ import type { Paraghrap_Props_Type } from "./types";
 const Paragraph = ({
   children,
   className,
-  theme = "black",
+  theme = "default",
   size = "sm",
   onClick,
 }: Paraghrap_Props_Type) => {

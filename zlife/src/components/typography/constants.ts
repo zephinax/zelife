@@ -23,5 +23,7 @@ export const TextTheme = (theme: ThemeType) => {
     ? "text-teal-500"
     : theme === "cyan"
     ? "text-cyan-500"
-    : "text-gray-900";
+    : theme === "default"
+    ? "text-text"
+    : "";
 };
