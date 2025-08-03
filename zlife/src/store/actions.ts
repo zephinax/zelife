@@ -32,6 +32,16 @@ export const createFinanceActions: StateCreator<
     });
   },
 
+  userName: "",
+
+  setUserName: (name) => {
+    set({ userName: name });
+  },
+
+  getUserName: () => {
+    return get().userName;
+  },
+
   removeYear: (year) => {
     set((state) => {
       if (!state.data[year]) return state;

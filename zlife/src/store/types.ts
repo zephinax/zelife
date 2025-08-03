@@ -31,6 +31,9 @@ export interface YearData {
 }
 
 export interface FinanceState {
+  userName: string;
+  setUserName: (name: string) => void;
+  getUserName: () => string;
   data: {
     [year: string]: YearData;
   };
