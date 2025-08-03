@@ -1,7 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
 import type { ChangeEvent } from "react";
-
-export const queryClient = new QueryClient();
 
 export const activeItemHandler = ({ isActive }: { isActive: boolean }) => {
   return `flex 2xl:[&>svg]:w-6 [&>svg]:w-5 items-center gap-2 w-full transition-colors duration-300 px-1 py-3 ${
