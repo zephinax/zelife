@@ -5,8 +5,6 @@ import Input from "../../components/inputs/Input";
 import SubTitle from "../../components/typography/SubTitle";
 import Title from "../../components/typography/Title";
 import { useTranslation } from "../../hooks/useTranslation";
-import Checkbox from "../../components/inputs/CheckBox";
-import Paragraph from "../../components/typography/Paragraph";
 
 export default function AuthForm() {
   const { t } = useTranslation();
