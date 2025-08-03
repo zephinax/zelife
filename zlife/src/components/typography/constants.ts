@@ -6,7 +6,7 @@ export const TextTheme = (theme: ThemeType) => {
     : theme === "blue"
     ? "text-blue-500"
     : theme === "error"
-    ? "text-red-600"
+    ? "text-red-400"
     : theme === "primary"
     ? "text-blue-600"
     : theme === "secondary"

@@ -4,6 +4,7 @@
     "wellcome": "Welcome Back",
     "createYourAccount": "Create your account",
     "createAccount": "Create account",
-    "userName": "User name"
+    "userName": "User name",
+    "userNameRequired": "User name is required"
   }
 }

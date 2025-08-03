@@ -9,12 +9,16 @@ import { useTranslation } from "../../hooks/useTranslation";
 export default function AuthForm() {
   const { t } = useTranslation();
   const form = useForm();
-  const {} = form;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
+      onSubmit={handleSubmit((data) => {
+        console.log(data);
+      })}
       className="w-full lg:mr-20 p-6 lg:p-8 rounded-3xl z-30 bg-background-secondary max-w-[500px]"
     >
       <div className="p-2">
@@ -22,7 +26,13 @@ export default function AuthForm() {
         <SubTitle>{t("auth.createYourAccount")}</SubTitle>
       </div>
       <div className="flex flex-col gap-4 mt-2">
-        <Input label={t("auth.userName")} />
+        <Input
+          errorText={errors.userName?.message as string}
+          {...register("userName", {
+            required: `${t("auth.userNameRequired")}`,
+          })}
+          label={t("auth.userName")}
+        />
       </div>
       <Button type="submit" className="w-full mt-8">
         {t("auth.createAccount")}

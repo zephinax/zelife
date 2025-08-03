@@ -4,6 +4,7 @@
     "wellcome": "خوش آمدید",
     "createYourAccount": "حساب کاربری خود را ایجاد کنید",
     "createAccount": "ایجاد حساب کاربری",
-    "userName": "نام کاربری"
+    "userName": "نام کاربری",
+    "userNameRequired": "نام کاربری الزامی است"
   }
 }
