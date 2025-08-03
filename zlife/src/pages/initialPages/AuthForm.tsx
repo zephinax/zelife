@@ -5,10 +5,12 @@ import Input from "../../components/inputs/Input";
 import SubTitle from "../../components/typography/SubTitle";
 import Title from "../../components/typography/Title";
 import { useTranslation } from "../../hooks/useTranslation";
+import { useFinanceStore } from "../../store/store";
 
 export default function AuthForm() {
   const { t } = useTranslation();
   const form = useForm();
+  const { setUserName } = useFinanceStore();
   const {
     register,
     handleSubmit,
@@ -17,7 +19,7 @@ export default function AuthForm() {
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data);
+        setUserName(data.userName);
       })}
       className="w-full lg:mr-20 p-6 lg:p-8 rounded-3xl z-30 bg-background-secondary max-w-[500px]"
     >
