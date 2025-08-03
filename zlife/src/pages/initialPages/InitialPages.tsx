@@ -1,3 +1,3 @@
 export default function InitialPages() {
-  return <div>InitialApp</div>;
+  return <div className="w-screen h-screen">InitialApp</div>;
 }
