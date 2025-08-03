@@ -1,10 +1,24 @@
-import { useState } from "react";
-import "./App.css";
-
+import { useFinanceStore } from "./store/store";
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <></>;
+  const { createYear, removeYear } = useFinanceStore();
+  return (
+    <>
+      <button
+        onClick={() => {
+          createYear("1404");
+        }}
+      >
+        create year
+      </button>
+      <button
+        onClick={() => {
+          removeYear("1404");
+        }}
+      >
+        delete year
+      </button>
+    </>
+  );
 }
 
 export default App;

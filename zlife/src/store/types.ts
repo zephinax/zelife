@@ -38,7 +38,9 @@ export interface FinanceState {
 
 export interface FinanceActions {
   createYear: (year: string) => void;
+  removeYear: (year: string) => void;
   createMonth: (year: string, month: string) => void;
+  removeMonth: (year: string, month: string) => void;
 
   addTransaction: (
     year: string,

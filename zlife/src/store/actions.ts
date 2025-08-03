@@ -32,6 +32,14 @@ export const createFinanceActions: StateCreator<
     });
   },
 
+  removeYear: (year) => {
+    set((state) => {
+      if (!state.data[year]) return state;
+      delete state.data[year];
+      return { data: { ...state.data } };
+    });
+  },
+
   createMonth: (year, month) => {
     set((state) => {
       if (!state.data[year]) {
@@ -40,6 +48,14 @@ export const createFinanceActions: StateCreator<
       if (!state.data[year][month]) {
         state.data[year][month] = createEmptyMonthData();
       }
+      return { data: { ...state.data } };
+    });
+  },
+
+  removeMonth: (year, month) => {
+    set((state) => {
+      if (!state.data[year] || !state.data[year][month]) return state;
+      delete state.data[year][month];
       return { data: { ...state.data } };
     });
   },
