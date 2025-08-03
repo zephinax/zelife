@@ -2,9 +2,17 @@ import { Route, Routes } from "react-router-dom";
 import { useTheme } from "./hooks/useTheme";
 import { useFinanceStore } from "./store/store";
 import Auth from "./pages/initialPages/Auth";
+import { useEffect } from "react";
 
 function App() {
-  const { createYear, removeYear, userName } = useFinanceStore();
+  const { createYear, removeYear, userName, language } = useFinanceStore();
+  useEffect(() => {
+    if (language === "fa") {
+      document.body.setAttribute("dir", "rtl");
+    } else {
+      document.body.setAttribute("dir", "ltr");
+    }
+  }, [language]);
   const {} = useTheme();
   return (
     <main className="text-text bg-background">

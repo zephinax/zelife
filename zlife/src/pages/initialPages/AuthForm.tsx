@@ -17,34 +17,18 @@ export default function AuthForm() {
       onSubmit={(e) => {
         e.preventDefault();
       }}
-      className="w-full lg:mr-20 p-4 rounded-3xl z-30 bg-background-secondary max-w-[500px]"
+      className="w-full lg:mr-20 p-6 lg:p-8 rounded-3xl z-30 bg-background-secondary max-w-[500px]"
     >
       <div className="p-2">
         <Title>{t("auth.wellcome")}</Title>
-        <SubTitle>{t("auth.signInToYourAccount")}</SubTitle>
+        <SubTitle>{t("auth.createYourAccount")}</SubTitle>
       </div>
-      <div className="flex flex-col gap-4 mt-5">
-        <Input label={t("auth.email")} />
-        <Input type="password" label={t("auth.password")} />
+      <div className="flex flex-col gap-4 mt-2">
+        <Input label={t("auth.userName")} />
       </div>
-      <div className="flex my-4 mx-1.5 items-center ">
-        <Checkbox onChange={() => {}} />
-        <Paragraph>{t("auth.remeberMe")}</Paragraph>
-      </div>
-      <Button type="submit" className="w-full mt-2">
-        {t("auth.signIn")}
+      <Button type="submit" className="w-full mt-8">
+        {t("auth.createAccount")}
       </Button>
-      <div className="w-full flex items-center gap-2 my-2">
-        <div className="h-[1px] w-full rounded-full bg-accent/20 mt-2"></div>
-        <div className="text-accent">or</div>
-        <div className="h-[1px] w-full rounded-full bg-accent/20 mt-2"></div>
-      </div>
-      <div className="flex text-center items-center justify-center gap-1">
-        <Paragraph>Don’t have an account?</Paragraph>
-        <a className="text-accent " href="#">
-          <Paragraph className="!text-accent">Sign up</Paragraph>
-        </a>
-      </div>
     </form>
   );
 }

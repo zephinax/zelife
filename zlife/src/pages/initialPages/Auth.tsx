@@ -1,3 +1,4 @@
+import LanguageSwitch from "../../components/languageSwitch/LanguageSwitch";
 import Silk from "../../components/react-bits/Silk";
 import AuthForm from "./AuthForm";
 
@@ -29,6 +30,7 @@ export default function Auth() {
       <div className=" flex-1 flex items-center justify-center">
         <AuthForm />
       </div>
+      <LanguageSwitch className="fixed bottom-4 left-4" />
     </div>
   );
 }
