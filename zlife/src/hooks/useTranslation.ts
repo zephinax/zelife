@@ -30,6 +30,14 @@ export const useTranslation = () => {
     load();
   }, [language]);
 
+  useEffect(() => {
+    if (language === "fa") {
+      document.body.setAttribute("dir", "rtl");
+    } else {
+      document.body.setAttribute("dir", "ltr");
+    }
+  }, [language]);
+
   const t = (key: string): string => {
     const value = getValueByPath(messages, key);
     return typeof value === "string" ? value : key;
