@@ -15,6 +15,9 @@
     "transactionTypeRequired": "Transaction type is required",
     "income": "Income",
     "expense": "Expense",
-    "choseOption": "Chose option"
+    "choseOption": "Chose option",
+    "amount": "Amount",
+    "amountRequired": "Amount is required",
+    "description": "Description"
   }
 }

@@ -1,11 +1,11 @@
 export type TransactionType = "income" | "expense";
 
 export interface Transaction {
-  id: string;
+  id?: string;
   amount: number;
   type: TransactionType;
   description?: string;
-  date: string; // ISO Date string (مثلاً "2025-08-03")
+  date: string;
   labels?: string[];
 }
 
