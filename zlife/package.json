@@ -20,6 +20,7 @@
     "react-router-dom": "^7.7.1",
     "tailwindcss": "^4.1.11",
     "uuid": "^11.1.0",
+    "vite-plugin-pwa": "^1.0.2",
     "zustand": "^5.0.7"
   },
   "devDependencies": {
