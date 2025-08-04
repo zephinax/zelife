@@ -24,16 +24,16 @@ export default function TopNavigation({
           onClick={() => {
             alert("This Future Will add");
           }}
-          className="h-[40px] bg-background-secondary/40 flex items-center justify-center pl-2 pr-3 gap-0.5 rounded-full"
+          className="h-[40px] pt-0.5 bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center pl-2 pr-3 gap-0.5 rounded-full"
         >
-          <IoIosArrowDown className="size-4" />
+          <IoIosArrowDown className="size-4 " />
           <span className="font-medium">{selectedDate}</span>
         </div>
         <div
           onClick={() => {
             alert("This Future Will add");
           }}
-          className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center"
+          className="bg-background-secondary/40 w-[40px] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
         >
           <FaChartLine className="size-4" />
         </div>
@@ -41,7 +41,7 @@ export default function TopNavigation({
           onClick={() => {
             alert("This Future Will add");
           }}
-          className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center"
+          className="bg-background-secondary/40 w-[40px] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
         >
           <FaCreditCard className="size-4" />
         </div>

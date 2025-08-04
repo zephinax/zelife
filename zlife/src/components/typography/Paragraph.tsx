@@ -10,7 +10,7 @@ const Paragraph = ({
 }: Paraghrap_Props_Type) => {
   return (
     <p
-      className={`text-${size} max-sm:text-xs ${
+      className={`text-${size} max-sm:text-base ${
         size === "md" ? "tetx-base" : ""
       } ${TextTheme(theme)} ${className || ""}`}
       onClick={onClick}

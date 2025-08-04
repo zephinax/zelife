@@ -6,6 +6,7 @@ import { useFinanceStore } from "../../store/store";
 import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
 import { BiDollar } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
+import Modal from "../../components/modal/Modal";
 
 export default function Dashboard() {
   const { getSummaryByMonth, selectedDate } = useFinanceStore();
@@ -45,7 +46,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="absolute bottom-0 w-full p-4 flex justify-between items-center !text-white">
-          <div className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center">
+          <div className="bg-background-secondary/40 backdrop-blur-sm w-[40px] h-[40px] rounded-full flex items-center justify-center">
             <IoIosAdd className="size-6" />
           </div>
         </div>
@@ -58,6 +59,9 @@ export default function Dashboard() {
           <div>sdfsdfd</div>
         </div>
       </div>
+      <Modal size="sm" title={"sdsd"} isOpen onClose={() => {}}>
+        sdsd
+      </Modal>
     </div>
   );
 }
