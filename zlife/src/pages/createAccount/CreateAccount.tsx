@@ -4,7 +4,7 @@ import Paragraph from "../../components/typography/Paragraph";
 import Title from "../../components/typography/Title";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useFinanceStore } from "../../store/store";
-import AuthForm from "./AuthForm";
+import CreateAccountForm from "./CreateAccountForm";
 
 export default function Auth() {
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ export default function Auth() {
           rotation={0}
         />
         <Title
-          className={`absolute text-4xl top-[35vh] max-w-[280px] ${
+          className={`absolute text-4xl top-[35vh] lg:top-[10vh] !text-white max-w-[280px] ${
             language === "fa"
               ? "right-[6vw] sm:right-[18vw] md:right-[24vw] lg:right-[8vw]"
               : "left-[6vw] sm:left-[18vw] md:left-[24vw] lg:left-[8vw] leading-12"
@@ -42,7 +42,7 @@ export default function Auth() {
         </Title>
       </div>
       <div className=" flex-1 flex items-center justify-center">
-        <AuthForm />
+        <CreateAccountForm />
       </div>
       <LanguageSwitch className="fixed bottom-4 left-4" />
       <Paragraph className="fixed bottom-4 right-4 !text-primary">

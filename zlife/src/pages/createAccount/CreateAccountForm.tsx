@@ -7,7 +7,7 @@ import Title from "../../components/typography/Title";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useFinanceStore } from "../../store/store";
 
-export default function AuthForm() {
+export default function CreateAccountForm() {
   const { t } = useTranslation();
   const form = useForm();
   const { setUserName } = useFinanceStore();

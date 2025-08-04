@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { useTheme } from "./hooks/useTheme";
 import { useFinanceStore } from "./store/store";
-import Auth from "./pages/initialPages/Auth";
+import Auth from "./pages/createAccount/CreateAccount";
 import { useEffect } from "react";
 import Dashboard from "./pages/dashboard/Dashboard";
 
