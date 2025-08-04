@@ -7,12 +7,13 @@ import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
 import { BiDollar } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
 import Modal from "../../components/modal/Modal";
+import { useState } from "react";
 
 export default function Dashboard() {
   const { getSummaryByMonth, selectedDate } = useFinanceStore();
   const { year, month } = parseShamsiDate(selectedDate);
   const remaining = getSummaryByMonth(String(year), String(month));
-
+  const [addTransactionModal, setAddTransactionModal] = useState(false);
   return (
     <div className="w-screen min-h-screen">
       <div className="relative h-[40vh] rounded-b-3xl overflow-hidden">
@@ -46,7 +47,12 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="absolute bottom-0 w-full p-4 flex justify-between items-center !text-white">
-          <div className="bg-background-secondary/40 backdrop-blur-sm w-[40px] h-[40px] rounded-full flex items-center justify-center">
+          <div
+            onClick={() => {
+              setAddTransactionModal(true);
+            }}
+            className="bg-background-secondary/40 backdrop-blur-sm w-[40px] h-[40px] rounded-full flex items-center justify-center"
+          >
             <IoIosAdd className="size-6" />
           </div>
         </div>
@@ -59,7 +65,14 @@ export default function Dashboard() {
           <div>sdfsdfd</div>
         </div>
       </div>
-      <Modal size="sm" title={"sdsd"} isOpen onClose={() => {}}>
+      <Modal
+        size="sm"
+        title={"sdsd"}
+        isOpen={addTransactionModal}
+        onClose={() => {
+          setAddTransactionModal(false);
+        }}
+      >
         sdsd
       </Modal>
     </div>

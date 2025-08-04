@@ -1,6 +1,4 @@
 import React, { type ReactNode } from "react";
-import Title from "../typography/Title";
-
 import ReactDOM from "react-dom";
 import { FaXmark } from "react-icons/fa6";
 import Paragraph from "../typography/Paragraph";
