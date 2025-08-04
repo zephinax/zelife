@@ -6,8 +6,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 
 function App() {
   const { userName } = useFinanceStore();
-
-  const {} = useTheme();
+  useTheme();
   return (
     <main className="text-text bg-background">
       <Routes>

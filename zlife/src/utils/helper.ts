@@ -6,6 +6,36 @@ export const activeItemHandler = ({ isActive }: { isActive: boolean }) => {
   }`;
 };
 
+export function getCurrentShamsiDate(): {
+  year: number;
+  month: number;
+  day: number;
+} {
+  const now = new Date();
+
+  // Format with full Shamsi date: year, month, and day
+  const shamsiFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+
+  const parts = shamsiFormatter.formatToParts(now);
+  const dateParts: Record<string, number> = {};
+
+  for (const part of parts) {
+    if (part.type === "year" || part.type === "month" || part.type === "day") {
+      dateParts[part.type] = parseInt(part.value, 10);
+    }
+  }
+
+  return {
+    year: dateParts.year,
+    month: dateParts.month,
+    day: dateParts.day,
+  };
+}
+
 const numbersToWords: { [key: number]: string } = {
   0: "صفر",
   1: "یک",
