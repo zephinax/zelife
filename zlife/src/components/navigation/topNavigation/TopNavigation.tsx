@@ -1,6 +1,6 @@
 import { FaChartLine, FaCreditCard } from "react-icons/fa";
 import { useFinanceStore } from "../../../store/store";
-import { IoIosArrowDown } from "react-icons/io";
+// import { IoIosArrowDown } from "react-icons/io";
 
 export default function TopNavigation({
   className = "",
@@ -24,9 +24,9 @@ export default function TopNavigation({
           onClick={() => {
             alert("This Future Will add");
           }}
-          className="h-[40px] pt-0.5 bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center pl-2 pr-3 gap-0.5 rounded-full"
+          className="h-[40px] bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center pl-2 pr-2 gap-0.5 rounded-full"
         >
-          <IoIosArrowDown className="size-4 " />
+          {/* <IoIosArrowDown className="size-4 mt-0.5" /> */}
           <span className="font-medium">{selectedDate}</span>
         </div>
         <div

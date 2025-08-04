@@ -8,9 +8,12 @@ import { BiDollar } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
 import Modal from "../../components/modal/Modal";
 import { useState } from "react";
+import { useTranslation } from "../../hooks/useTranslation";
+import SelectBox from "../../components/inputs/SelectBox";
 
 export default function Dashboard() {
   const { getSummaryByMonth, selectedDate } = useFinanceStore();
+  const { t } = useTranslation();
   const { year, month } = parseShamsiDate(selectedDate);
   const remaining = getSummaryByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
@@ -66,14 +69,20 @@ export default function Dashboard() {
         </div>
       </div>
       <Modal
+        overflowY="overflow-y-visible"
         size="sm"
-        title={"sdsd"}
+        title={t("dashboard.addTransaction")}
         isOpen={addTransactionModal}
         onClose={() => {
           setAddTransactionModal(false);
         }}
       >
-        sdsd
+        <SelectBox
+          label="انتخاب کشور"
+          options={["ایران", "کانادا", "آلمان", "ژاپن"]}
+          errorText="لطفاً یک گزینه انتخاب کنید"
+          dir="rtl"
+        />
       </Modal>
     </div>
   );

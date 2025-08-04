@@ -5,14 +5,12 @@ const Paragraph = ({
   children,
   className,
   theme = "default",
-  size = "sm",
+  size = "xs",
   onClick,
 }: Paraghrap_Props_Type) => {
   return (
     <p
-      className={`text-${size} max-sm:text-base ${
-        size === "md" ? "tetx-base" : ""
-      } ${TextTheme(theme)} ${className || ""}`}
+      className={`text-${size} ${TextTheme(theme)} ${className || ""}`}
       onClick={onClick}
     >
       {children}

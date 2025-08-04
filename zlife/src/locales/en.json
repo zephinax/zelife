@@ -6,5 +6,8 @@
     "createAccount": "Create account",
     "userName": "User name",
     "userNameRequired": "User name is required"
+  },
+  "dashboard": {
+    "addTransaction": "Add Transaction"
   }
 }

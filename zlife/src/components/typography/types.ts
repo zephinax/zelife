@@ -18,7 +18,7 @@ export interface Paraghrap_Props_Type {
   children: ReactNode;
   className?: string;
   theme?: ThemeType;
-  size?: "lg" | "sm" | "md";
+  size?: "lg" | "sm" | "md" | "base" | "xs";
   onClick?: () => void;
 }
 export interface Title_Props_Type {

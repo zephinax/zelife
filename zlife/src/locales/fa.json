@@ -6,5 +6,8 @@
     "createAccount": "ایجاد حساب کاربری",
     "userName": "نام کاربری",
     "userNameRequired": "نام کاربری الزامی است"
+  },
+  "dashboard": {
+    "addTransaction": "افزودن تراکنش"
   }
 }
