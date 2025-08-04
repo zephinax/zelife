@@ -31,11 +31,8 @@ export const useTranslation = () => {
   }, [language]);
 
   useEffect(() => {
-    if (language === "fa") {
-      document.body.setAttribute("dir", "rtl");
-    } else {
-      document.body.setAttribute("dir", "ltr");
-    }
+    document.body.setAttribute("dir", language === "fa" ? "rtl" : "ltr");
+    document.body.setAttribute("lang", language);
   }, [language]);
 
   const t = (key: string): string => {

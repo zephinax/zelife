@@ -11,7 +11,7 @@ export default function TopNavigation({
     >
       <img
         width={40}
-        className="rounded-full bg-background-secondary"
+        className="rounded-full bg-background-secondary/40"
         height={40}
         src="/logo.svg"
       ></img>
