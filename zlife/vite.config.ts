@@ -9,128 +9,79 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["icon.svg", "robots.txt"],
+      includeAssets: [
+        "logo.svg",
+        "robots.txt",
+        "logo.png",
+        "fonts/*.ttf",
+        "icons/*.png",
+      ],
       manifest: {
         name: "Zlife – Take Control of Your Life",
         short_name: "Zlife",
         description: "Take Control of Your Life",
         theme_color: "#000000",
+        background_color: "#000000",
+        display: "standalone",
+        start_url: "/",
         icons: [
-          {
-            src: "icons/icon-48.png",
-            sizes: "48x48",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "icons/icon-48.png",
-            sizes: "48x48",
-            type: "image/png",
-            purpose: "maskable",
-          },
+          ...[48, 72, 96, 128, 144, 152, 192, 384, 512].flatMap((size) => [
+            {
+              src: `icons/icon-${size}.png`,
+              sizes: `${size}x${size}`,
+              type: "image/png",
+              purpose: "any",
+            },
+            {
+              src: `icons/icon-${size}.png`,
+              sizes: `${size}x${size}`,
+              type: "image/png",
+              purpose: "maskable",
+            },
+          ]),
+        ],
+      },
+      workbox: {
+        cleanupOutdatedCaches: true,
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB
+        clientsClaim: true, // سرویس‌ورکر جدید بلافاصله روی کلاینت‌ها کنترل بگیرد
+        skipWaiting: true,
+        globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
 
+        runtimeCaching: [
           {
-            src: "icons/icon-72.png",
-            sizes: "72x72",
-            type: "image/png",
-            purpose: "any",
+            urlPattern: /\/fonts\/.*\.(?:woff2|woff|ttf)$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "font-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+            },
           },
           {
-            src: "icons/icon-72.png",
-            sizes: "72x72",
-            type: "image/png",
-            purpose: "maskable",
-          },
-
-          {
-            src: "icons/icon-96.png",
-            sizes: "96x96",
-            type: "image/png",
-            purpose: "any",
+            urlPattern: /\/icons\/.*\.(?:png|svg)$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "icon-cache",
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+            },
           },
           {
-            src: "icons/icon-96.png",
-            sizes: "96x96",
-            type: "image/png",
-            purpose: "maskable",
-          },
-
-          {
-            src: "icons/icon-128.png",
-            sizes: "128x128",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "icons/icon-128.png",
-            sizes: "128x128",
-            type: "image/png",
-            purpose: "maskable",
-          },
-
-          {
-            src: "icons/icon-144.png",
-            sizes: "144x144",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "icons/icon-144.png",
-            sizes: "144x144",
-            type: "image/png",
-            purpose: "maskable",
-          },
-
-          {
-            src: "icons/icon-152.png",
-            sizes: "152x152",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "icons/icon-152.png",
-            sizes: "152x152",
-            type: "image/png",
-            purpose: "maskable",
-          },
-
-          {
-            src: "icons/icon-192.png",
-            sizes: "192x192",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "icons/icon-192.png",
-            sizes: "192x192",
-            type: "image/png",
-            purpose: "maskable",
-          },
-
-          {
-            src: "icons/icon-384.png",
-            sizes: "384x384",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "icons/icon-384.png",
-            sizes: "384x384",
-            type: "image/png",
-            purpose: "maskable",
-          },
-
-          {
-            src: "icons/icon-512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "icons/icon-512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
+            urlPattern: /^https:\/\/your-api\.com\/.*$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-cache",
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60,
+              },
+            },
           },
         ],
       },
