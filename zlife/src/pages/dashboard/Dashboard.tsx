@@ -3,13 +3,14 @@ import TopNavigation from "../../components/navigation/topNavigation/TopNavigati
 import Silk from "../../components/react-bits/Silk";
 import Paragraph from "../../components/typography/Paragraph";
 import { useFinanceStore } from "../../store/store";
-import { getCurrentShamsiDate, numberWithCommas } from "../../utils/helper";
+import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
 import { BiDollar } from "react-icons/bi";
 
 export default function Dashboard() {
-  const { getSummaryByMonth } = useFinanceStore();
-  const { year, month } = getCurrentShamsiDate();
+  const { getSummaryByMonth, selectedDate } = useFinanceStore();
+  const { year, month } = parseShamsiDate(selectedDate);
   const remaining = getSummaryByMonth(String(year), String(month));
+
   return (
     <div className="w-screen min-h-screen">
       <div className="relative h-[40vh] rounded-b-3xl overflow-hidden">

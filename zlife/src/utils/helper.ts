@@ -6,6 +6,11 @@ export const activeItemHandler = ({ isActive }: { isActive: boolean }) => {
   }`;
 };
 
+function persianToEnglishDigits(str: string): string {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  return str.replace(/[۰-۹]/g, (d) => persianDigits.indexOf(d).toString());
+}
+
 export function getCurrentShamsiDate(): {
   year: number;
   month: number;
@@ -13,22 +18,24 @@ export function getCurrentShamsiDate(): {
 } {
   const now = new Date();
 
-  // Format with full Shamsi date: year, month, and day
   const shamsiFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
     year: "numeric",
     month: "numeric",
     day: "numeric",
   });
 
-  // فرمت کردن سال، ماه، روز به رشته "YYYY/MM/DD"
-
   const parts = shamsiFormatter.formatToParts(now);
   const dateParts: Record<string, number> = {};
 
   for (const part of parts) {
     if (part.type === "year" || part.type === "month" || part.type === "day") {
-      dateParts[part.type] = parseInt(part.value, 10);
+      const english = persianToEnglishDigits(part.value);
+      dateParts[part.type] = parseInt(english, 10);
     }
+  }
+
+  if (isNaN(dateParts.year) || isNaN(dateParts.month) || isNaN(dateParts.day)) {
+    throw new Error("Shamsi date parsing failed due to non-numeric input");
   }
 
   return {
