@@ -9,6 +9,10 @@ export interface Transaction {
   labels?: string[];
 }
 
+export interface ReportSettings {
+  defaultView: "daily" | "monthly" | "yearly";
+}
+
 export interface DayData {
   transactions: Transaction[];
   tasks: Task[];
@@ -53,6 +57,26 @@ export interface FinanceActions {
   removeYear: (year: string) => void;
   createMonth: (year: string, month: string) => void;
   removeMonth: (year: string, month: string) => void;
+  settings: ReportSettings;
+
+  getTransactionsByYear: (year: string) => Transaction[];
+  getTransactionsByMonth: (year: string, month: string) => Transaction[];
+  getTransactionsByDay: (
+    year: string,
+    month: string,
+    day: string
+  ) => Transaction[];
+  setDefaultView: (
+    view: "daily" | "monthly" | "yearly",
+    confirm?: boolean
+  ) => Promise<void>;
+
+  getDefaultView: () => "daily" | "monthly" | "yearly";
+  resetReportSettings: () => void;
+
+  // Optionally, you could add filtered versions
+  getIncomeByYear: (year: string) => Transaction[];
+  getExpensesByYear: (year: string) => Transaction[];
 
   addTransaction: (
     year: string,

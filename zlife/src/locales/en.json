@@ -8,7 +8,9 @@
     "userNameRequired": "User name is required"
   },
   "dashboard": {
-    "addTransaction": "Add transaction"
+    "addTransaction": "Add transaction",
+    "transactions": "Transactions",
+    "noTransaction": "There is no transaction"
   },
   "transaction": {
     "transactionType": "Transaction type",

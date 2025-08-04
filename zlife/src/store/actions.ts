@@ -5,6 +5,7 @@ import {
   type FinanceActions,
   type FinanceState,
   type MonthData,
+  type Transaction,
   type YearData,
 } from "./types";
 import { v4 as uuidv4 } from "uuid";
@@ -90,6 +91,87 @@ export const createFinanceActions: StateCreator<
       delete state.data[year][month];
       return { data: { ...state.data } };
     });
+  },
+
+  getTransactionsByDay: (year, month, day) => {
+    const dayData = get().data?.[year]?.[month]?.[day];
+    return dayData?.transactions || [];
+  },
+
+  getTransactionsByMonth: (year, month) => {
+    const monthData = get().data?.[year]?.[month];
+    if (!monthData) return [];
+
+    const transactions: Transaction[] = [];
+    for (const day in monthData) {
+      transactions.push(...monthData[day].transactions);
+    }
+    return transactions;
+  },
+
+  getTransactionsByYear: (year) => {
+    const yearData = get().data?.[year];
+    if (!yearData) return [];
+
+    const transactions: Transaction[] = [];
+    for (const month in yearData) {
+      for (const day in yearData[month]) {
+        transactions.push(...yearData[month][day].transactions);
+      }
+    }
+    return transactions;
+  },
+
+  settings: {
+    defaultView: "monthly",
+  },
+
+  setDefaultView: async (view, confirm = false) => {
+    if (confirm) {
+      const currentView = get().settings.defaultView;
+      const shouldProceed = window.confirm(
+        `Change default view from ${currentView} to ${view}?`
+      );
+      if (!shouldProceed) return;
+    }
+
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        defaultView: view,
+      },
+    }));
+  },
+
+  // Get the current default view
+  getDefaultView: () => {
+    return get().settings.defaultView;
+  },
+
+  // Reset to default settings
+  resetReportSettings: () => {
+    const shouldReset = window.confirm("Reset report settings to defaults?");
+    if (!shouldReset) return;
+
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        defaultView: "monthly", // Reset to monthly
+      },
+    }));
+  },
+
+  // Optional filtered versions
+  getIncomeByYear: (year) => {
+    return get()
+      .getTransactionsByYear(year)
+      .filter((tx) => tx.type === "income");
+  },
+
+  getExpensesByYear: (year) => {
+    return get()
+      .getTransactionsByYear(year)
+      .filter((tx) => tx.type === "expense");
   },
 
   addTransaction: (year, month, day, transaction) => {

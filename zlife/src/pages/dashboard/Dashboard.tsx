@@ -11,13 +11,16 @@ import { useState } from "react";
 import { useTranslation } from "../../hooks/useTranslation";
 
 import TransactionForm from "./TransactionForm";
+import type { Transaction } from "../../store/types";
+import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 
 export default function Dashboard() {
-  const { getSummaryByMonth, selectedDate } = useFinanceStore();
+  const { getSummaryByMonth, selectedDate, getTransactionsByMonth } =
+    useFinanceStore();
   const { t } = useTranslation();
   const { year, month } = parseShamsiDate(selectedDate);
   const remaining = getSummaryByMonth(String(year), String(month));
-
+  const transactions = getTransactionsByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
   return (
     <div className="w-screen min-h-screen">
@@ -34,7 +37,7 @@ export default function Dashboard() {
             <Paragraph className=" font-semibold !text-white !text-5xl left-0">
               {numberWithCommas(remaining.balance)}
             </Paragraph>
-            <BiDollar className="!text-white size-6" />
+            <BiDollar className="!text-white size-6 mt-0.5" />
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1 !text-white bg-green-500/30 px-2 rounded-4xl justify-center">
@@ -63,11 +66,41 @@ export default function Dashboard() {
         </div>
         <TopNavigation className="absolute top-0" />
       </div>
-      <div className="px-4 pt-4">
-        <div className="bg-background-secondary p-2 w-full rounded-xl">
-          <div>sdsd</div>
-          <div>sdsds</div>
-          <div>sdfsdfd</div>
+      <div className="mt-2 px-4">
+        <div className="">
+          <Paragraph className="font-medium" size="lg">
+            {t("dashboard.transactions")}
+          </Paragraph>
+        </div>
+        <div className="p-4 mt-2 flex flex-col-reverse gap-4 bg-background-secondary justify-center items-center rounded-xl">
+          {transactions?.length && transactions.length > 0 ? (
+            transactions.map((item: Transaction) => {
+              return (
+                <>
+                  <div className="w-full h-[1px] bg-background first:hidden"></div>
+                  <div className="w-full flex items-center gap-4">
+                    <div>
+                      {item.type === "income" ? (
+                        <FaCircleArrowDown className="!text-green-400 size-6" />
+                      ) : (
+                        <FaCircleArrowUp className="!text-red-500 size-6" />
+                      )}
+                    </div>
+                    <div>
+                      <Paragraph size="md" className="font-medium">
+                        {numberWithCommas(item.amount)}
+                      </Paragraph>
+                      {item.description && (
+                        <Paragraph>{item.description}</Paragraph>
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+            })
+          ) : (
+            <Paragraph>{t("dashboard.noTransaction")}</Paragraph>
+          )}
         </div>
       </div>
       <Modal

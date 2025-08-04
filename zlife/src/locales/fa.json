@@ -8,7 +8,9 @@
     "userNameRequired": "نام کاربری الزامی است"
   },
   "dashboard": {
-    "addTransaction": "افزودن تراکنش"
+    "addTransaction": "افزودن تراکنش",
+    "transactions": "تراکنس ها",
+    "noTransaction": "تراکنشی موجود نیست"
   },
   "transaction": {
     "transactionType": "نوع تراکنش",
