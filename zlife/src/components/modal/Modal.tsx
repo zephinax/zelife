@@ -30,18 +30,22 @@ const Modal: React.FC<ModalProps> = ({
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  // Handle mount/unmount
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
     if (isOpen) {
       setShow(true);
-      // Let the browser paint before setting visible (for transition to work)
-      requestAnimationFrame(() => setVisible(true));
+      timeoutId = setTimeout(() => {
+        setVisible(true);
+      }, 20);
     } else {
       setVisible(false);
-      // Unmount after animation ends
-      const timeout = setTimeout(() => setShow(false), 300);
-      return () => clearTimeout(timeout);
+      timeoutId = setTimeout(() => {
+        setShow(false);
+      }, 300);
     }
+
+    return () => clearTimeout(timeoutId);
   }, [isOpen]);
 
   const handleClose = () => {

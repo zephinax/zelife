@@ -9,5 +9,12 @@
   },
   "dashboard": {
     "addTransaction": "افزودن تراکنش"
+  },
+  "transaction": {
+    "transactionType": "نوع تراکنش",
+    "transactionTypeRequired": "نوع تراکنش الزامی است",
+    "income": "واریز",
+    "expense": "برداشت",
+    "choseOption": "انتخاب کنید"
   }
 }

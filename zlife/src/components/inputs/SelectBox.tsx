@@ -17,7 +17,7 @@ export interface SelectBoxProps {
 }
 
 const inputBaseClass =
-  "2xl:text-base text-sm bg-background rounded-3xl placeholder:text-sm !outline-none block w-full 2xl:py-[8px] py-2 px-3 border border-text-secondary focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-secondary-200 text-text";
+  "2xl:text-base text-sm bg-background rounded-3xl h-[38px] placeholder:text-sm !outline-none block w-full 2xl:py-[8px] py-2 px-3 border border-text-secondary focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-secondary-200 text-text";
 
 const SelectBox = forwardRef<HTMLDivElement, SelectBoxProps>(
   (
@@ -32,7 +32,7 @@ const SelectBox = forwardRef<HTMLDivElement, SelectBoxProps>(
       dir = "auto",
       className,
       inputClassName,
-      placeholder = "یک گزینه انتخاب کنید",
+      placeholder = "",
     },
     ref
   ) => {
@@ -85,7 +85,7 @@ const SelectBox = forwardRef<HTMLDivElement, SelectBoxProps>(
             onClick={toggleOpen}
           >
             {selected || (
-              <Paragraph className="text-text-secondary">
+              <Paragraph className="text-text-secondary mt-0.5">
                 {placeholder}
               </Paragraph>
             )}

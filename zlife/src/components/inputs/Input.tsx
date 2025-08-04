@@ -5,7 +5,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import type { InputProps } from "./types";
 
 export const inputClass =
-  "2xl:text-base text-sm bg-background rounded-3xl placeholder:text-sm !outline-none block w-full 2xl:py-[8px] py-2 px-3 border border-text-secondary focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-secondary-200";
+  "2xl:text-base text-sm bg-background rounded-3xl h-[38px] placeholder:text-sm !outline-none block w-full 2xl:py-[8px] py-2 px-3 border border-text-secondary focus:border-primary disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-secondary-200";
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (

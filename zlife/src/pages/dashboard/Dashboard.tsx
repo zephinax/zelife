@@ -9,13 +9,15 @@ import { IoIosAdd } from "react-icons/io";
 import Modal from "../../components/modal/Modal";
 import { useState } from "react";
 import { useTranslation } from "../../hooks/useTranslation";
-import SelectBox from "../../components/inputs/SelectBox";
+
+import TransactionForm from "./TransactionForm";
 
 export default function Dashboard() {
   const { getSummaryByMonth, selectedDate } = useFinanceStore();
   const { t } = useTranslation();
   const { year, month } = parseShamsiDate(selectedDate);
   const remaining = getSummaryByMonth(String(year), String(month));
+
   const [addTransactionModal, setAddTransactionModal] = useState(false);
   return (
     <div className="w-screen min-h-screen">
@@ -77,12 +79,7 @@ export default function Dashboard() {
           setAddTransactionModal(false);
         }}
       >
-        <SelectBox
-          label="انتخاب کشور"
-          options={["ایران", "کانادا", "آلمان", "ژاپن"]}
-          errorText="لطفاً یک گزینه انتخاب کنید"
-          dir="rtl"
-        />
+        <TransactionForm />
       </Modal>
     </div>
   );

@@ -8,6 +8,13 @@
     "userNameRequired": "User name is required"
   },
   "dashboard": {
-    "addTransaction": "Add Transaction"
+    "addTransaction": "Add transaction"
+  },
+  "transaction": {
+    "transactionType": "Transaction type",
+    "transactionTypeRequired": "Transaction type is required",
+    "income": "Income",
+    "expense": "Expense",
+    "choseOption": "Chose option"
   }
 }
