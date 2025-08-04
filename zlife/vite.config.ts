@@ -14,7 +14,7 @@ export default defineConfig({
         name: "Zlife – Take Control of Your Life",
         short_name: "Zlife",
         description: "Take Control of Your Life",
-        theme_color: "#d24670",
+        theme_color: "#000000",
         icons: [
           {
             src: "icons/icon-48.png",
