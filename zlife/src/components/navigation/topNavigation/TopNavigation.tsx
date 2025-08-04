@@ -19,15 +19,30 @@ export default function TopNavigation({
         src="/logo.svg"
       ></img>
 
-      <div className="flex items-center gap-2 text-white">
-        <div className="h-[40px] bg-background-secondary/40 flex items-center justify-center pl-2 pr-3 gap-0.5 rounded-full">
+      <div className="flex items-center gap-2 !text-white">
+        <div
+          onClick={() => {
+            alert("This Future Will add");
+          }}
+          className="h-[40px] bg-background-secondary/40 flex items-center justify-center pl-2 pr-3 gap-0.5 rounded-full"
+        >
           <IoIosArrowDown className="size-4" />
           <span className="font-medium">{selectedDate}</span>
         </div>
-        <div className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center">
+        <div
+          onClick={() => {
+            alert("This Future Will add");
+          }}
+          className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center"
+        >
           <FaChartLine className="size-4" />
         </div>
-        <div className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center">
+        <div
+          onClick={() => {
+            alert("This Future Will add");
+          }}
+          className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center"
+        >
           <FaCreditCard className="size-4" />
         </div>
       </div>

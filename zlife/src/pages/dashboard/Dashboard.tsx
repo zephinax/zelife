@@ -5,6 +5,7 @@ import Paragraph from "../../components/typography/Paragraph";
 import { useFinanceStore } from "../../store/store";
 import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
 import { BiDollar } from "react-icons/bi";
+import { IoIosAdd } from "react-icons/io";
 
 export default function Dashboard() {
   const { getSummaryByMonth, selectedDate } = useFinanceStore();
@@ -41,6 +42,11 @@ export default function Dashboard() {
               </span>
               <FaArrowUp className="size-2.5" />
             </div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 w-full p-4 flex justify-between items-center !text-white">
+          <div className="bg-background-secondary/40 w-[40px] h-[40px] rounded-full flex items-center justify-center">
+            <IoIosAdd className="size-6" />
           </div>
         </div>
         <TopNavigation className="absolute top-0" />
