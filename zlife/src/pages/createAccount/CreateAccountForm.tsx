@@ -6,11 +6,13 @@ import SubTitle from "../../components/typography/SubTitle";
 import Title from "../../components/typography/Title";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useFinanceStore } from "../../store/store";
+import { formatShamsiDate, getCurrentShamsiDate } from "../../utils/helper";
 
 export default function CreateAccountForm() {
   const { t } = useTranslation();
   const form = useForm();
-  const { setUserName } = useFinanceStore();
+  const { year, month, day } = getCurrentShamsiDate();
+  const { setUserName, setSelectedDate } = useFinanceStore();
   const {
     register,
     handleSubmit,
@@ -20,6 +22,7 @@ export default function CreateAccountForm() {
     <form
       onSubmit={handleSubmit((data) => {
         setUserName(data.userName);
+        setSelectedDate(formatShamsiDate(year, month, day));
       })}
       className="w-full lg:mr-20 p-6 lg:p-8 rounded-3xl z-30 bg-background-secondary max-w-[500px]"
     >

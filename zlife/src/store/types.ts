@@ -39,6 +39,10 @@ export interface FinanceState {
   setLanguage: (language: string) => void;
   getLanguage: () => string;
 
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+  getSelectedDate: () => string;
+
   data: {
     [year: string]: YearData;
   };

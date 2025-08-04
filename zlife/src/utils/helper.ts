@@ -20,6 +20,8 @@ export function getCurrentShamsiDate(): {
     day: "numeric",
   });
 
+  // فرمت کردن سال، ماه، روز به رشته "YYYY/MM/DD"
+
   const parts = shamsiFormatter.formatToParts(now);
   const dateParts: Record<string, number> = {};
 
@@ -34,6 +36,29 @@ export function getCurrentShamsiDate(): {
     month: dateParts.month,
     day: dateParts.day,
   };
+}
+
+export function formatShamsiDate(
+  year: number,
+  month: number,
+  day: number
+): string {
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${year}/${pad(month)}/${pad(day)}`;
+}
+
+// تبدیل رشته "YYYY/MM/DD" به آبجکت {year, month, day}
+export function parseShamsiDate(dateStr: string): {
+  year: number;
+  month: number;
+  day: number;
+} {
+  const parts = dateStr.split("/");
+  if (parts.length !== 3) throw new Error("Invalid date format");
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const day = parseInt(parts[2], 10);
+  return { year, month, day };
 }
 
 const numbersToWords: { [key: number]: string } = {

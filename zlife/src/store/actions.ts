@@ -52,6 +52,18 @@ export const createFinanceActions: StateCreator<
     set({ language: language });
   },
 
+  selectedDate: "",
+
+  setSelectedDate: (date: string) => {
+    set(() => ({
+      selectedDate: date,
+    }));
+  },
+
+  getSelectedDate: () => {
+    return get().selectedDate;
+  },
+
   removeYear: (year) => {
     set((state) => {
       if (!state.data[year]) return state;
