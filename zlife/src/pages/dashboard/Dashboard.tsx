@@ -1,3 +1,4 @@
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import TopNavigation from "../../components/navigation/topNavigation/TopNavigation";
 import Silk from "../../components/react-bits/Silk";
 import Paragraph from "../../components/typography/Paragraph";
@@ -19,11 +20,27 @@ export default function Dashboard() {
           noiseIntensity={1.5}
           rotation={0}
         />
-        <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center gap-1">
-          <Paragraph className=" font-semibold !text-white !text-5xl left-0">
-            {numberWithCommas(remaining.balance)}
-          </Paragraph>
-          <BiDollar className="!text-white size-6" />
+        <div className="absolute top-[50%] flex-col justify-center gap-2 items-center flex left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+          <div className="flex items-center gap-1">
+            <Paragraph className=" font-semibold !text-white !text-5xl left-0">
+              {numberWithCommas(remaining.balance)}
+            </Paragraph>
+            <BiDollar className="!text-white size-6" />
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 !text-white bg-green-500/30 px-2 rounded-4xl justify-center">
+              <span className="text-[14px]">
+                {numberWithCommas(remaining.income)}
+              </span>
+              <FaArrowDown className="size-2.5" />
+            </div>
+            <div className="flex items-center gap-1 !text-white bg-red-500/30 px-2 rounded-4xl justify-center">
+              <span className="text-[14px]">
+                {numberWithCommas(remaining.expense)}
+              </span>
+              <FaArrowUp className="size-2.5" />
+            </div>
+          </div>
         </div>
         <TopNavigation className="absolute top-0" />
       </div>
