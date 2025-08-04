@@ -9,12 +9,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg", "robots.txt"],
+      includeAssets: ["icon.svg", "robots.txt"],
       manifest: {
         name: "Zlife – Take Control of Your Life",
         short_name: "Zlife",
-        description: "My awesome Vite + React PWA!",
-        theme_color: "#000000",
+        description: "Take Control of Your Life",
+        theme_color: "#d24670",
         icons: [
           {
             src: "icons/icon-48.png",
