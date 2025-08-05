@@ -29,5 +29,14 @@
     "finance": "مالی",
     "tasks": "فعالیت‌ها",
     "setting": "تنظیمات"
+  },
+  "setting": {
+    "syncData": "همگام‌سازی اطلاعات",
+    "token": "توکن دسترسی شخصی گیت‌هاب",
+    "tokenRequired": "توکن دسترسی شخصی گیت‌هاب الزامی است",
+    "gistId": "شناسه Gist",
+    "gistIdRequired": "شناسه Gist الزامی است",
+    "filename": "نام فایل",
+    "filenameRequired": "نام فایل الزامی است"
   }
 }

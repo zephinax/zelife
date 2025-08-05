@@ -10,7 +10,7 @@ export default function TopNavigation({
 }: {
   className?: string;
 }) {
-  const { defaultDate, selectedDate } = useFinanceStore();
+  const { defaultDate, selectedDate, avatarUrl } = useFinanceStore();
   const [date, setDate] = useState("");
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const DATE = selectedDate ? selectedDate : defaultDate;
@@ -22,7 +22,7 @@ export default function TopNavigation({
         width={40}
         className="rounded-full bg-background-secondary"
         height={40}
-        src="/logo.svg"
+        src={avatarUrl ? avatarUrl : "/logo.svg"}
       ></img>
 
       <div className="flex items-center gap-2 !text-white">

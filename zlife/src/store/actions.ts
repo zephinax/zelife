@@ -24,6 +24,170 @@ export const createFinanceActions: StateCreator<
 > = (set, get) => ({
   data: {},
 
+  exportData: () => {
+    const state = get();
+    return {
+      state: {
+        data: JSON.parse(JSON.stringify(state.data)),
+        userName: state.userName,
+        language: state.language,
+        selectedDate: state.selectedDate,
+        defaultDate: state.defaultDate,
+        token: state.token,
+        gistId: state.gistId,
+        filename: state.filename,
+        isSyncEnable: state.isSyncEnable,
+        avatarUrl: state.avatarUrl,
+      },
+      version: 0,
+    };
+  },
+
+  importData: (backup) => {
+    if (!backup?.state) {
+      console.error("Invalid backup format");
+      return;
+    }
+
+    const localData = get();
+    const importedData = backup.state;
+
+    // Function to deeply compare two objects
+    const hasDifferences = (obj1: any, obj2: any): boolean => {
+      if (obj1 === obj2) return false;
+      if (
+        typeof obj1 !== "object" ||
+        typeof obj2 !== "object" ||
+        obj1 === null ||
+        obj2 === null
+      )
+        return true;
+
+      const keys1 = Object.keys(obj1);
+      const keys2 = Object.keys(obj2);
+
+      if (keys1.length !== keys2.length) return true;
+
+      for (const key of keys1) {
+        if (!keys2.includes(key)) return true;
+        if (hasDifferences(obj1[key], obj2[key])) return true;
+      }
+
+      return false;
+    };
+
+    // Check if there are any differences in the data
+    const hasDataDifferences = hasDifferences(
+      localData.data,
+      importedData.data
+    );
+
+    if (!hasDataDifferences) {
+      // No differences found, just update non-data fields if needed
+      set({
+        ...localData,
+        userName: importedData.userName || localData.userName,
+        language: importedData.language || localData.language,
+        selectedDate: importedData.selectedDate || localData.selectedDate,
+        defaultDate: importedData.defaultDate || localData.defaultDate,
+        token: importedData.token || localData.token,
+        gistId: importedData.gistId || localData.gistId,
+        filename: importedData.filename || localData.filename,
+        isSyncEnable: importedData.isSyncEnable || localData.isSyncEnable,
+        avatarUrl: importedData.avatarUrl || localData.avatarUrl,
+      });
+      return;
+    }
+
+    // If there are differences, ask user what to do
+    const userChoice = window.confirm(
+      "The imported data is different from your current data.\n\n" +
+        'Click "OK" to MERGE the data (keeping both local and imported entries).\n' +
+        'Click "Cancel" to REPLACE your current data with the imported data.'
+    );
+
+    if (userChoice) {
+      // MERGE: Combine both datasets
+      const mergedData = { ...localData.data };
+
+      // Merge year by year
+      for (const year in importedData.data) {
+        if (!mergedData[year]) {
+          mergedData[year] = { ...importedData.data[year] };
+        } else {
+          // Merge month by month
+          for (const month in importedData.data[year]) {
+            if (!mergedData[year][month]) {
+              mergedData[year][month] = { ...importedData.data[year][month] };
+            } else {
+              // Merge day by day
+              for (const day in importedData.data[year][month]) {
+                if (!mergedData[year][month][day]) {
+                  mergedData[year][month][day] = {
+                    ...importedData.data[year][month][day],
+                  };
+                } else {
+                  // Merge transactions and tasks
+                  const mergedDay = mergedData[year][month][day];
+                  const importedDay = importedData.data[year][month][day];
+
+                  // Merge transactions (avoid duplicates by ID)
+                  const existingTxIds = new Set(
+                    mergedDay.transactions.map((tx) => tx.id)
+                  );
+                  mergedDay.transactions.push(
+                    ...importedDay.transactions.filter(
+                      (tx) => !existingTxIds.has(tx.id)
+                    )
+                  );
+
+                  // Merge tasks (avoid duplicates by ID)
+                  const existingTaskIds = new Set(
+                    mergedDay.tasks.map((task) => task.id)
+                  );
+                  mergedDay.tasks.push(
+                    ...importedDay.tasks.filter(
+                      (task) => !existingTaskIds.has(task.id)
+                    )
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+
+      set({
+        ...localData,
+        data: mergedData,
+        userName: importedData.userName || localData.userName,
+        language: importedData.language || localData.language,
+        selectedDate: importedData.selectedDate || localData.selectedDate,
+        defaultDate: importedData.defaultDate || localData.defaultDate,
+        token: importedData.token || localData.token,
+        gistId: importedData.gistId || localData.gistId,
+        filename: importedData.filename || localData.filename,
+        isSyncEnable: importedData.isSyncEnable || localData.isSyncEnable,
+        avatarUrl: importedData.avatarUrl || localData.avatarUrl,
+      });
+    } else {
+      // REPLACE: Use the imported data completely
+      set({
+        ...localData, // Preserve all functions
+        data: importedData.data || {},
+        userName: importedData.userName || "",
+        language: importedData.language || "en",
+        selectedDate: importedData.selectedDate || "",
+        defaultDate: importedData.defaultDate || "",
+        token: importedData.token || "",
+        gistId: importedData.gistId || "",
+        filename: importedData.filename || "",
+        isSyncEnable: importedData.isSyncEnable || false,
+        avatarUrl: importedData.avatarUrl || "",
+      });
+    }
+  },
+
   createYear: (year) => {
     set((state) => {
       if (!state.data[year]) {

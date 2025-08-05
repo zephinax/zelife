@@ -29,5 +29,14 @@
     "finance": "Finance",
     "tasks": "Tasks",
     "setting": "Setting"
+  },
+  "setting": {
+    "syncData": "Sync Data",
+    "token": "Github PAT token",
+    "tokenRequired": "GitHub PAT token is required",
+    "gistId": "Gist ID",
+    "gistIdRequired": "Gist ID is required",
+    "filename": "File name",
+    "filenameRequired": "File name is required"
   }
 }

@@ -104,7 +104,7 @@ export default function Dashboard() {
             onClick={() => {
               setAddTransactionModal(true);
             }}
-            className="bg-background-secondary/40 pr-[var(--padding-end)] pl-[var(--padding-start)] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
+            className="bg-background-secondary/40 pr-[var(--padding-end)] !text-white pl-[var(--padding-start)] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
             style={{
               paddingInlineStart: "0.5rem",
               paddingInlineEnd: "0.75rem",
