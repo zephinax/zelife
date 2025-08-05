@@ -30,7 +30,7 @@ export default function Dashboard() {
   const [addTransactionModal, setAddTransactionModal] = useState(false);
   return (
     <div className="w-screen min-h-screen pb-[200px]">
-      <div className="relative h-[40vh] rounded-b-3xl overflow-hidden">
+      <div className="relative h-[38vh] mx-2 rounded-3xl overflow-hidden">
         <Silk
           speed={8}
           scale={1}
