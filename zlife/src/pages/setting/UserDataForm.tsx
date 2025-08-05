@@ -13,8 +13,7 @@ export default function UserDataForm({
   targetTransaction?: Transaction;
   onSuccess?: () => void;
 }) {
-  const { setGistId, setToken, setFilename, selectedDate, defaultDate } =
-    useFinanceStore();
+  const { setGistId, setToken, setFilename } = useFinanceStore();
   const { t } = useTranslation();
   const userDataForm = useForm();
   const {
@@ -39,6 +38,7 @@ export default function UserDataForm({
         setFilename(data.filename);
         setToken(data.token);
         setGistId(data.gistId);
+        onSuccess && onSuccess();
       })}
       className="pb-2 flex flex-col gap-4"
     >
