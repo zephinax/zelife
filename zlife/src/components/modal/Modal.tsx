@@ -62,7 +62,7 @@ const Modal: React.FC<ModalProps> = ({
         }`}
       ></div>
       <div
-        className={`relative bg-background-secondary z-[999999] rounded-xl border-secondary-200 mx-auto transition-all duration-300 transform ease-in-out ${
+        className={`relative bg-background-secondary z-[999999] rounded-4xl border-secondary-200 mx-auto transition-all duration-300 transform ease-in-out ${
           visible
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-8"
@@ -81,7 +81,7 @@ const Modal: React.FC<ModalProps> = ({
         } ${className || ""}`}
       >
         <div className="px-4">
-          <div className="flex pt-3 pb-2 justify-between items-center">
+          <div className="flex pt-3 pb-2 px-2 justify-between items-center">
             {typeof title === "string" ? (
               <Paragraph size="lg" className="!mb-0">
                 {title}

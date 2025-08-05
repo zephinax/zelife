@@ -90,14 +90,14 @@ export default function TransactionForm({
         })}
       />
       <div className="w-full flex flex-col gap-2">
-        <div className="flex justify-evenly gap-2">
+        <div className="flex justify-evenly gap-4">
           {transactionOptions.map((item) => {
             return (
               <div
                 onClick={() => {
                   setValue("type", item);
                 }}
-                className={`bg-background flex-1 justify-center items-center text-center border border-primary  text-text py-1 px-4 rounded-full text-[14px] ${
+                className={`bg-background flex-1 flex justify-center items-center h-[38px] text-center border border-text-secondary  text-text py-1 px-4 rounded-full text-[14px] ${
                   watch("type") === item
                     ? `${
                         watch("type") === "income"
