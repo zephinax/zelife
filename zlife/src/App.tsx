@@ -5,6 +5,7 @@ import Auth from "./pages/createAccount/CreateAccount";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Tasks from "./pages/tasks/Tasks";
 import Setting from "./pages/setting/Setting";
+import BottomNavigation from "./components/navigation/topNavigation/BottomNavigation";
 
 function App() {
   const { userName } = useFinanceStore();
@@ -24,6 +25,7 @@ function App() {
           </>
         )}
       </Routes>
+      <BottomNavigation />
     </main>
   );
 }

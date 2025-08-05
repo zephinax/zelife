@@ -9,12 +9,12 @@
   },
   "dashboard": {
     "addTransaction": "افزودن تراکنش",
-    "transactions": "تراکنس ها",
-    "noTransaction": "تراکنشی موجود نیست"
+    "transactions": "تراکنش ها",
+    "noTransaction": "اولین تراکنشت رو ایجاد کن!"
   },
   "transaction": {
     "transactionType": "نوع تراکنش",
-    "transactionTypeRequired": "اولین تراکنشت رو ایجاد کن!",
+    "transactionTypeRequired": "نوع تراکنش الزامی است",
     "income": "واریز",
     "expense": "برداشت",
     "choseOption": "انتخاب کنید",
@@ -23,5 +23,10 @@
     "amountInvalid": "مبلغ نامعتبر است",
     "amountMustBePositive": "مبلغ باید بزرگتر از صفر باشد",
     "description": "توضیحات"
+  },
+  "navbar": {
+    "finance": "مالی",
+    "tasks": "فعالیت‌ها",
+    "setting": "تنظیمات"
   }
 }

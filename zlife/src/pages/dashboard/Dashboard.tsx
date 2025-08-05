@@ -176,7 +176,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <BottomNavigation />
       <Modal
         overflowY="overflow-y-visible"
         size="sm"

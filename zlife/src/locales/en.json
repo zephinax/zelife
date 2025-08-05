@@ -23,5 +23,10 @@
     "amountInvalid": "Invalid amount",
     "amountMustBePositive": "Amount must be greater than zero",
     "description": "Description"
+  },
+  "navbar": {
+    "finance": "Finance",
+    "tasks": "Tasks",
+    "setting": "Setting"
   }
 }
