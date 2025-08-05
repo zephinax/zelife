@@ -20,6 +20,8 @@
     "choseOption": "Chose option",
     "amount": "Amount",
     "amountRequired": "Amount is required",
+    "amountInvalid": "Invalid amount",
+    "amountMustBePositive": "Amount must be greater than zero",
     "description": "Description"
   }
 }

@@ -19,6 +19,9 @@
     "expense": "برداشت",
     "choseOption": "انتخاب کنید",
     "amount": "مبلغ",
-    "amountRequired": "مبلغ الزامی است"
+    "amountRequired": "مبلغ الزامی است",
+    "amountInvalid": "مبلغ نامعتبر است",
+    "amountMustBePositive": "مبلغ باید بزرگتر از صفر باشد",
+    "description": "توضیحات"
   }
 }

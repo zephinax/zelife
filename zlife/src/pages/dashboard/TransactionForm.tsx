@@ -9,6 +9,7 @@ import {
   parseShamsiDate,
   removeCommas,
 } from "../../utils/helper";
+import Paragraph from "../../components/typography/Paragraph";
 
 export default function TransactionForm({
   onSuccess,
@@ -55,6 +56,19 @@ export default function TransactionForm({
         type="text"
         errorText={errors.amount?.message as string}
         label={t("transaction.amount")}
+        {...register("amount", {
+          required: `${t("transaction.amountRequired")}`,
+          validate: (value) => {
+            const numericValue = Number(removeCommas(value));
+            if (isNaN(numericValue)) {
+              return t("transaction.amountInvalid");
+            }
+            if (numericValue <= 0) {
+              return t("transaction.amountMustBePositive");
+            }
+            return true;
+          },
+        })}
         onChange={(event) => {
           const raw = removeCommas(event.target.value);
           if (/^\d*\.?\d*$/.test(raw)) {
@@ -62,24 +76,46 @@ export default function TransactionForm({
           }
         }}
       />
+
       <Input
         type="text"
-        errorText={errors.amount?.message as string}
+        errorText={errors.description?.message as string}
         label={t("transaction.description")}
         {...register("description")}
       />
-      <SelectBox
-        label={t("transaction.transactionType")}
-        placeholder={t("transaction.choseOption")}
-        options={transactionOptions}
+      <Input
+        hidden
         {...register("type", {
           required: `${t("transaction.transactionTypeRequired")}`,
         })}
-        errorText={errors.type?.message as string}
-        onChange={(value) => {
-          setValue("type", value);
-        }}
       />
+      <div className="w-full flex flex-col gap-2">
+        <div className="flex justify-evenly gap-2">
+          {transactionOptions.map((item) => {
+            return (
+              <div
+                onClick={() => {
+                  setValue("type", item);
+                }}
+                className={`bg-background flex-1 justify-center items-center text-center border border-primary  text-text py-1 px-4 rounded-full text-[14px] ${
+                  watch("type") === item
+                    ? `${
+                        watch("type") === "income"
+                          ? "bg-green-500/40 !border-green-500"
+                          : "bg-red-500/40 !border-red-500"
+                      }`
+                    : ""
+                }`}
+              >
+                <span className="">{t(`transaction.${item}`)}</span>
+              </div>
+            );
+          })}
+        </div>
+        {errors.type?.message && (
+          <Paragraph theme="error">{errors.type?.message as string}</Paragraph>
+        )}
+      </div>
       <Button className="w-full mt-2" type="submit">
         {t("dashboard.addTransaction")}
       </Button>
