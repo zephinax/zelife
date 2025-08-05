@@ -63,33 +63,47 @@ const SwipeableDelete: React.FC<SwipeableDeleteProps> = ({
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+    if (showDeleteButton) {
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }
   }, [showDeleteButton]);
 
+  // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>): void => {
+    e.preventDefault(); // Prevent scrolling
     handleStart(e.touches[0].clientX);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>): void => {
-    handleMove(e.touches[0].clientX);
+    if (isDragging) {
+      e.preventDefault(); // Prevent scrolling while swiping
+      handleMove(e.touches[0].clientX);
+    }
   };
 
-  const handleTouchEnd = (): void => {
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>): void => {
+    e.preventDefault();
     handleEnd();
   };
 
+  // Mouse event handlers (for testing on desktop)
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.preventDefault();
     handleStart(e.clientX);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>): void => {
-    handleMove(e.clientX);
+    if (isDragging) {
+      e.preventDefault();
+      handleMove(e.clientX);
+    }
   };
 
-  const handleMouseUp = (): void => {
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.preventDefault();
     handleEnd();
   };
 
@@ -105,8 +119,9 @@ const SwipeableDelete: React.FC<SwipeableDeleteProps> = ({
       className="relative overflow-hidden rounded-lg"
       style={{ touchAction: "pan-y" }}
     >
+      {/* Delete button */}
       <div
-        className="absolute top-0 right-0 h-full flex items-center justify-center bg-red-500 text-white transition-all duration-200"
+        className="absolute top-0 right-0 h-full flex items-center justify-center bg-red-500 text-white transition-all duration-200 z-10"
         style={{
           width: `${DELETE_BUTTON_WIDTH}px`,
           transform: `translateX(${
@@ -116,11 +131,12 @@ const SwipeableDelete: React.FC<SwipeableDeleteProps> = ({
       >
         <button
           onClick={handleDelete}
-          className="h-[calc(100%-6px)] translate-y-[-2px] relative w-full bg-danger-500 max-w-[100px] rounded-r-xl flex items-center justify-center hover:bg-red-600 transition-colors"
+          className="h-full w-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition-colors rounded-r-lg"
+          style={{ minHeight: "60px" }} // Ensure minimum touch target
         >
           <svg
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -133,14 +149,12 @@ const SwipeableDelete: React.FC<SwipeableDeleteProps> = ({
               strokeLinejoin="round"
             />
           </svg>
-          {showDeleteButton && (
-            <div className="w-10 h-[85.2px] absolute top-0 right-[90%] bg-danger-500"></div>
-          )}
         </button>
       </div>
 
+      {/* Main content */}
       <div
-        className="relative pb-1 transition-transform duration-200 ease-out"
+        className="relative transition-transform duration-200 ease-out select-none"
         style={{
           transform: `translateX(-${translateX}px)`,
           cursor: isDragging ? "grabbing" : "grab",
@@ -150,7 +164,7 @@ const SwipeableDelete: React.FC<SwipeableDeleteProps> = ({
         onTouchEnd={handleTouchEnd}
         onMouseDown={handleMouseDown}
         onMouseMove={isDragging ? handleMouseMove : undefined}
-        onMouseUp={handleMouseUp}
+        onMouseUp={isDragging ? handleMouseUp : undefined}
         onMouseLeave={handleMouseLeave}
       >
         {children}

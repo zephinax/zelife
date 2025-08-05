@@ -30,6 +30,14 @@ export default function Dashboard() {
   const remaining = getSummaryByMonth(String(year), String(month));
   const transactions = getTransactionsByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
+
+  // Add the delete handler
+  const handleDeleteTransaction = (transactionId: string | number) => {
+    // Implement your delete logic here
+    console.log("Deleting transaction:", transactionId);
+    // deleteTransaction(transactionId); // Uncomment when you have this method in your store
+  };
+
   return (
     <div className="w-screen min-h-[100svh] pb-[200px]">
       <div className="sticky top-0 mx-2 rounded-3xl overflow-hidden h-[38vh] z-[9999]">
@@ -85,10 +93,13 @@ export default function Dashboard() {
           {transactions?.length && transactions.length > 0 ? (
             transactions.map((item: Transaction) => {
               return (
-                <>
+                <div key={item.id} className="w-full">
                   <div className="w-full h-[1px] bg-background first:hidden"></div>
-                  <SwipeableDelete itemId={item.id!} onDelete={() => {}}>
-                    <div className="w-full flex items-center gap-4">
+                  <SwipeableDelete
+                    itemId={item.id!}
+                    onDelete={handleDeleteTransaction} // Pass the actual delete handler
+                  >
+                    <div className="w-full flex items-center gap-4 py-2">
                       <div>
                         {item.type === "income" ? (
                           <FaCircleArrowDown className="!text-green-400 size-6" />
@@ -106,7 +117,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </SwipeableDelete>
-                </>
+                </div>
               );
             })
           ) : (
