@@ -66,7 +66,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="w-screen min-h-[100svh] pb-[200px]">
+    <div className="w-screen min-h-[100svh] pb-[85px]">
       <div className="sticky top-0 mx-2 rounded-4xl overflow-hidden h-[38vh] z-[9999]">
         <Silk
           speed={8}
