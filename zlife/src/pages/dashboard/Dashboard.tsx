@@ -125,7 +125,7 @@ export default function Dashboard() {
         </div>
         <div
           dir="ltr"
-          className="p-2 py-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto"
+          className="p-2 py-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
         >
           {transactions?.length && transactions.length > 0 ? (
             transactions.map((item: Transaction, index) => {

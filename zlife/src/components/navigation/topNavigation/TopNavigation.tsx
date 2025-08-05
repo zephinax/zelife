@@ -30,7 +30,7 @@ export default function TopNavigation({
           onClick={() => {
             setIsDateModalOpen(true);
           }}
-          className="h-[40px] bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center px-3 gap-0.5 rounded-full rtl:flex-row-reverse"
+          className="h-[40px] bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center px-3 gap-0.5 rounded-full flex-row-reverse"
         >
           <span className="font-medium">{DATE}</span>
           <BiChevronDown className="size-5 transform" />

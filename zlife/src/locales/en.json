@@ -37,6 +37,7 @@
     "gistId": "Gist ID",
     "gistIdRequired": "Gist ID is required",
     "filename": "File name",
-    "filenameRequired": "File name is required"
+    "filenameRequired": "File name is required",
+    "language": "Language"
   }
 }

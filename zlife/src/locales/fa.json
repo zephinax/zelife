@@ -37,6 +37,7 @@
     "gistId": "شناسه Gist",
     "gistIdRequired": "شناسه Gist الزامی است",
     "filename": "نام فایل",
-    "filenameRequired": "نام فایل الزامی است"
+    "filenameRequired": "نام فایل الزامی است",
+    "language": "زبان"
   }
 }
