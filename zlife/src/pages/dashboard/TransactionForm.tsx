@@ -48,7 +48,7 @@ export default function TransactionForm({
         onSuccess && onSuccess();
         transactionForm.reset();
       })}
-      className="pb-2 flex flex-col gap-2"
+      className="pb-2 flex flex-col gap-4"
     >
       <Input
         value={numberWithCommas(watch("amount"))}
@@ -89,7 +89,7 @@ export default function TransactionForm({
           required: `${t("transaction.transactionTypeRequired")}`,
         })}
       />
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full -mt-2 flex flex-col gap-2">
         <div className="flex justify-evenly gap-4">
           {transactionOptions.map((item) => {
             return (
@@ -116,7 +116,7 @@ export default function TransactionForm({
           <Paragraph theme="error">{errors.type?.message as string}</Paragraph>
         )}
       </div>
-      <Button className="w-full mt-2" type="submit">
+      <Button className="w-full mt-2 my-2" type="submit">
         {t("dashboard.addTransaction")}
       </Button>
     </form>

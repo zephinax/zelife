@@ -8,7 +8,6 @@ export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  className?: string;
   overflowY?:
     | "overflow-y-auto"
     | "overflow-y-hidden"
@@ -23,7 +22,6 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
-  className,
   size = "fit",
   overflowY = "overflow-y-auto",
 }) => {
@@ -55,46 +53,54 @@ const Modal: React.FC<ModalProps> = ({
   if (!show) return null;
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 z-[99999] backdrop-blur-[1px] flex items-center justify-center">
+    <div
+      className={`fixed inset-0 z-[99999] backdrop-blur-[1px] bg-transparent flex items-end justify-center md:items-center md:justify-center
+    `}
+      onClick={handleClose}
+    >
       <div
         className={`absolute inset-0 z-[99999] bg-[#0000006c] transition-opacity duration-300 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       ></div>
       <div
-        className={`relative bg-background-secondary z-[999999] rounded-4xl border-secondary-200 mx-auto transition-all duration-300 transform ease-in-out ${
-          visible
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 translate-y-8"
-        } max-w-[90%] ${
-          size === "sm"
-            ? "w-[370px]"
-            : size === "md"
-            ? "w-[750px]"
-            : size === "lg"
-            ? "w-[1100px]"
-            : size === "xl"
-            ? "!w-[80%]"
-            : size === "full"
-            ? "w-[90%]"
-            : ""
-        } ${className || ""}`}
+        onClick={(e) => e.stopPropagation()}
+        className={`
+         relative bg-background-secondary px-4 z-[999999] border-secondary-200 mx-auto transition-all duration-300 ease-in-out
+         ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}
+         max-w-[90%]
+         ${
+           size === "sm"
+             ? "w-full"
+             : size === "md"
+             ? "w-full"
+             : size === "lg"
+             ? "w-[1100px]"
+             : size === "xl"
+             ? "!w-[80%]"
+             : size === "full"
+             ? "w-[90%]"
+             : ""
+         }
+         rounded-t-4xl rounded-b-none
+         md:min-w-[400px]
+         fixed bottom-0 left-0 right-0 max-w-full
+         md:relative md:rounded-4xl md:max-w-[90%] md:w-auto md:bottom-auto md:left-auto md:right-auto md:fixed-none
+       `}
       >
-        <div className="px-4">
-          <div className="flex pt-4 pb-3 px-2 justify-between items-center">
-            {typeof title === "string" ? (
-              <Paragraph size="lg" className="!mb-0">
-                {title}
-              </Paragraph>
-            ) : (
-              title
-            )}
-            <button onClick={handleClose} className="ml-0 block cursor-pointer">
-              <FaXmark className="text-primary size-4" />
-            </button>
-          </div>
+        <div className="pt-4 pb-3 px-2 flex justify-between items-center">
+          {typeof title === "string" ? (
+            <Paragraph size="lg" className="!mb-0">
+              {title}
+            </Paragraph>
+          ) : (
+            title
+          )}
+          <button onClick={handleClose} className="ml-0 block cursor-pointer">
+            <FaXmark className="text-primary size-4" />
+          </button>
         </div>
-        <div className={`max-h-[90svh] px-4 pb-2 ${overflowY}`}>{children}</div>
+        <div className={`max-h-[90svh] pb-2 ${overflowY}`}>{children}</div>
       </div>
     </div>,
     document.body
