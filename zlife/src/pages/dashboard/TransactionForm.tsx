@@ -44,7 +44,7 @@ export default function TransactionForm({
           String(PARSE_DATE.day),
           newTransaction
         );
-        onSuccess();
+        onSuccess && onSuccess();
         transactionForm.reset();
       })}
       className="pb-2 flex flex-col gap-2"
