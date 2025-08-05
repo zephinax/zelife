@@ -1,5 +1,6 @@
 import { FaChartLine, FaCreditCard } from "react-icons/fa";
 import { useFinanceStore } from "../../../store/store";
+import { BiChevronDown } from "react-icons/bi";
 
 export default function TopNavigation({
   className = "",
@@ -24,10 +25,12 @@ export default function TopNavigation({
           onClick={() => {
             alert("This Future Will add");
           }}
-          className="h-[40px] bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center px-3 gap-0.5 rounded-full"
+          className="h-[40px] bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center px-3 gap-0.5 rounded-full rtl:flex-row-reverse"
         >
           <span className="font-medium">{DATE}</span>
+          <BiChevronDown className="size-5 transform" />
         </div>
+
         <div className="bg-background-secondary/40 w-[40px] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center">
           <FaChartLine className="size-4" />
         </div>
