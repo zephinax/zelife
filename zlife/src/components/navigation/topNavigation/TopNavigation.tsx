@@ -6,7 +6,7 @@ export default function TopNavigation({
 }: {
   className?: string;
 }) {
-  const { defaultDate, selectedDate, setSelectedDate } = useFinanceStore();
+  const { defaultDate, selectedDate } = useFinanceStore();
   const DATE = selectedDate ? selectedDate : defaultDate;
   return (
     <div
@@ -28,12 +28,7 @@ export default function TopNavigation({
         >
           <span className="font-medium">{DATE}</span>
         </div>
-        <div
-          onClick={() => {
-            setSelectedDate("1405/03/12");
-          }}
-          className="bg-background-secondary/40 w-[40px] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
-        >
+        <div className="bg-background-secondary/40 w-[40px] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center">
           <FaChartLine className="size-4" />
         </div>
         <div
