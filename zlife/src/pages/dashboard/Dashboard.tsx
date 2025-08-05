@@ -102,9 +102,10 @@ export default function Dashboard() {
             onClick={() => {
               setAddTransactionModal(true);
             }}
-            className="bg-background-secondary/40 backdrop-blur-sm w-[40px] h-[40px] rounded-full flex items-center justify-center"
+            className="bg-background-secondary/40 pr-3 pl-2 backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
           >
             <IoIosAdd className="size-6" />
+            <Paragraph>{t("dashboard.addTransaction")}</Paragraph>
           </div>
         </div>
         <TopNavigation className="absolute top-0" />
