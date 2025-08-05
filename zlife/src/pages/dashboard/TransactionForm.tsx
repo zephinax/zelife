@@ -59,6 +59,8 @@ export default function TransactionForm({
               labels: ["شارژ", "موبایل"],
             }
           );
+          onSuccess && onSuccess();
+          transactionForm.reset();
         } else {
           const newTransaction = {
             amount: Number(removeCommas(data.amount)),
