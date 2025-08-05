@@ -81,7 +81,7 @@ const Modal: React.FC<ModalProps> = ({
         } ${className || ""}`}
       >
         <div className="px-4">
-          <div className="flex pt-3 pb-2 px-2 justify-between items-center">
+          <div className="flex pt-4 pb-3 px-2 justify-between items-center">
             {typeof title === "string" ? (
               <Paragraph size="lg" className="!mb-0">
                 {title}

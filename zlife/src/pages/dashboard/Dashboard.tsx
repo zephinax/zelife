@@ -66,7 +66,7 @@ export default function Dashboard() {
           noiseIntensity={1.5}
           rotation={0}
         />
-        <div className="absolute top-[50%] flex-col justify-center gap-2 items-center flex left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+        <div className="absolute z-[9999] top-[50%] flex-col justify-center gap-2 items-center flex left-[50%] translate-x-[-50%] translate-y-[-50%] ">
           <div className="flex items-center gap-1">
             <Paragraph className=" font-semibold !text-white !text-5xl left-0">
               {numberWithCommas(remaining.balance)}
@@ -88,7 +88,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 w-full p-4 flex justify-between items-center !text-white">
+        <div className="absolute z-[9999] bottom-0 w-full p-4 flex justify-between items-center !text-white">
           <div
             onClick={() => {
               setAddTransactionModal(true);
