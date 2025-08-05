@@ -13,6 +13,8 @@ import { useTranslation } from "../../hooks/useTranslation";
 import TransactionForm from "./TransactionForm";
 import type { Transaction } from "../../store/types";
 import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
+import BottomNavigation from "../../components/navigation/topNavigation/BottomNavigation";
+import SwipeableDelete from "../../components/swipeableDelete/SwipeableDelete";
 
 export default function Dashboard() {
   const {
@@ -30,7 +32,7 @@ export default function Dashboard() {
   const [addTransactionModal, setAddTransactionModal] = useState(false);
   return (
     <div className="w-screen min-h-[100svh] pb-[200px]">
-      <div className="sticky top-0 mx-2 rounded-3xl overflow-hidden h-[38vh]">
+      <div className="sticky top-0 mx-2 rounded-3xl overflow-hidden h-[38vh] z-[9999]">
         <Silk
           speed={8}
           scale={1}
@@ -85,23 +87,25 @@ export default function Dashboard() {
               return (
                 <>
                   <div className="w-full h-[1px] bg-background first:hidden"></div>
-                  <div className="w-full flex items-center gap-4">
-                    <div>
-                      {item.type === "income" ? (
-                        <FaCircleArrowDown className="!text-green-400 size-6" />
-                      ) : (
-                        <FaCircleArrowUp className="!text-red-500 size-6" />
-                      )}
+                  <SwipeableDelete itemId={item.id!} onDelete={() => {}}>
+                    <div className="w-full flex items-center gap-4">
+                      <div>
+                        {item.type === "income" ? (
+                          <FaCircleArrowDown className="!text-green-400 size-6" />
+                        ) : (
+                          <FaCircleArrowUp className="!text-red-500 size-6" />
+                        )}
+                      </div>
+                      <div>
+                        <Paragraph size="md" className="font-medium">
+                          {numberWithCommas(item.amount)}
+                        </Paragraph>
+                        {item.description && (
+                          <Paragraph>{item.description}</Paragraph>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <Paragraph size="md" className="font-medium">
-                        {numberWithCommas(item.amount)}
-                      </Paragraph>
-                      {item.description && (
-                        <Paragraph>{item.description}</Paragraph>
-                      )}
-                    </div>
-                  </div>
+                  </SwipeableDelete>
                 </>
               );
             })
@@ -110,6 +114,8 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      <BottomNavigation />
       <Modal
         overflowY="overflow-y-visible"
         size="sm"
