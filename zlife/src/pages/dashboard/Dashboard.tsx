@@ -15,18 +15,24 @@ import type { Transaction } from "../../store/types";
 import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 
 export default function Dashboard() {
-  const { getSummaryByMonth, selectedDate, getTransactionsByMonth } =
-    useFinanceStore();
+  const {
+    getSummaryByMonth,
+    selectedDate,
+    defaultDate,
+    getTransactionsByMonth,
+  } = useFinanceStore();
   const { t } = useTranslation();
-  const { year, month } = parseShamsiDate(selectedDate);
+  const DATE = selectedDate ? selectedDate : defaultDate;
+  const PARSE_DATE = parseShamsiDate(DATE);
+  const { year, month } = PARSE_DATE;
   const remaining = getSummaryByMonth(String(year), String(month));
   const transactions = getTransactionsByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
   return (
-    <div className="w-screen min-h-screen">
+    <div className="w-screen min-h-screen pb-[200px]">
       <div className="relative h-[40vh] rounded-b-3xl overflow-hidden">
         <Silk
-          speed={5}
+          speed={8}
           scale={1}
           color="#d24670"
           noiseIntensity={1.5}

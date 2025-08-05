@@ -1,13 +1,13 @@
 import { FaChartLine, FaCreditCard } from "react-icons/fa";
 import { useFinanceStore } from "../../../store/store";
-// import { IoIosArrowDown } from "react-icons/io";
 
 export default function TopNavigation({
   className = "",
 }: {
   className?: string;
 }) {
-  const { selectedDate } = useFinanceStore();
+  const { defaultDate, selectedDate, setSelectedDate } = useFinanceStore();
+  const DATE = selectedDate ? selectedDate : defaultDate;
   return (
     <div
       className={`flex p-4 w-full justify-between items-center ${className}`}
@@ -26,11 +26,11 @@ export default function TopNavigation({
           }}
           className="h-[40px] bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center px-3 gap-0.5 rounded-full"
         >
-          <span className="font-medium">{selectedDate}</span>
+          <span className="font-medium">{DATE}</span>
         </div>
         <div
           onClick={() => {
-            alert("This Future Will add");
+            setSelectedDate("1405/03/12");
           }}
           className="bg-background-secondary/40 w-[40px] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
         >

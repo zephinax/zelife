@@ -65,6 +65,17 @@ export const createFinanceActions: StateCreator<
     return get().selectedDate;
   },
 
+  defaultDate: "",
+  setDefaultDate: (date: string) => {
+    set(() => ({
+      defaultDate: date,
+    }));
+  },
+
+  getDefaultDate: () => {
+    return get().selectedDate;
+  },
+
   removeYear: (year) => {
     set((state) => {
       if (!state.data[year]) return state;

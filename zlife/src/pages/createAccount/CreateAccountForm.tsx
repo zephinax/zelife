@@ -12,7 +12,7 @@ export default function CreateAccountForm() {
   const { t } = useTranslation();
   const form = useForm();
   const { year, month, day } = getCurrentShamsiDate();
-  const { setUserName, setSelectedDate } = useFinanceStore();
+  const { setUserName, setDefaultDate } = useFinanceStore();
   const {
     register,
     handleSubmit,
@@ -22,7 +22,7 @@ export default function CreateAccountForm() {
     <form
       onSubmit={handleSubmit((data) => {
         setUserName(data.userName);
-        setSelectedDate(formatShamsiDate(year, month, day));
+        setDefaultDate(formatShamsiDate(year, month, day));
       })}
       className="w-full lg:mr-20 p-6 lg:p-8 rounded-3xl z-30 bg-background-secondary max-w-[500px]"
     >

@@ -25,7 +25,7 @@ export default function Auth() {
         className="flex-1 h-[85vh] absolute top-[-30%] w-full lg:static flex items-center justify-center"
       >
         <Silk
-          speed={5}
+          speed={8}
           scale={1}
           color="#d24670"
           noiseIntensity={1.5}

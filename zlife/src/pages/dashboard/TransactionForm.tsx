@@ -11,8 +11,9 @@ import {
 } from "../../utils/helper";
 
 export default function TransactionForm() {
-  const { addTransaction, selectedDate } = useFinanceStore();
-  const parseSelectedDate = parseShamsiDate(selectedDate);
+  const { addTransaction, selectedDate, defaultDate } = useFinanceStore();
+  const DATE = selectedDate ? selectedDate : defaultDate;
+  const PARSE_DATE = parseShamsiDate(DATE);
   const transactionOptions = ["income", "expense"];
   const { t } = useTranslation();
   const transactionForm = useForm();
@@ -30,13 +31,13 @@ export default function TransactionForm() {
           amount: Number(removeCommas(data.amount)),
           type: data.type,
           description: data.description,
-          date: selectedDate,
+          date: DATE,
           labels: ["شارژ", "موبایل"],
         };
         addTransaction(
-          String(parseSelectedDate.year),
-          String(parseSelectedDate.month),
-          String(parseSelectedDate.day),
+          String(PARSE_DATE.year),
+          String(PARSE_DATE.month),
+          String(PARSE_DATE.day),
           newTransaction
         );
         transactionForm.reset();

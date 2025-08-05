@@ -14,7 +14,7 @@
   },
   "transaction": {
     "transactionType": "نوع تراکنش",
-    "transactionTypeRequired": "نوع تراکنش الزامی است",
+    "transactionTypeRequired": "اولین تراکنشت رو ایجاد کن!",
     "income": "واریز",
     "expense": "برداشت",
     "choseOption": "انتخاب کنید",

@@ -47,6 +47,10 @@ export interface FinanceState {
   setSelectedDate: (date: string) => void;
   getSelectedDate: () => string;
 
+  defaultDate: string;
+  setDefaultDate: (date: string) => void;
+  getDefaultDate: () => string;
+
   data: {
     [year: string]: YearData;
   };

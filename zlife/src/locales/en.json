@@ -10,7 +10,7 @@
   "dashboard": {
     "addTransaction": "Add transaction",
     "transactions": "Transactions",
-    "noTransaction": "There is no transaction"
+    "noTransaction": "Create your first transaction!"
   },
   "transaction": {
     "transactionType": "Transaction type",
