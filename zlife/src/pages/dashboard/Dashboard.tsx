@@ -1,4 +1,4 @@
-import { FaArrowDown, FaArrowUp, FaEdit, FaTrash } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import TopNavigation from "../../components/navigation/topNavigation/TopNavigation";
 import Silk from "../../components/react-bits/Silk";
 import Paragraph from "../../components/typography/Paragraph";
@@ -17,6 +17,8 @@ import BottomNavigation from "../../components/navigation/topNavigation/BottomNa
 import SwipeActions, {
   type SwipeAction,
 } from "../../components/swipeActions/SwipeActions";
+import { FiTrash2 } from "react-icons/fi";
+import { GrEdit } from "react-icons/gr";
 
 export default function Dashboard() {
   const {
@@ -33,24 +35,10 @@ export default function Dashboard() {
   const transactions = getTransactionsByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
 
-  // Add the delete handler
-  const handleDeleteTransaction = (transaction: Transaction) => {
-    // Implement your delete logic here
-    console.log("Deleting transaction:", transaction);
-    // deleteTransaction(transaction.id); // Uncomment when you have this method in your store
-  };
-
-  // Add custom action handler
-  const handleDuplicateTransaction = (transaction: Transaction) => {
-    console.log("Duplicating transaction:", transaction);
-    // Implement duplication logic
-  };
-
-  // Define dynamic actions for transactions
   const getTransactionActions: SwipeAction<Transaction>[] = [
     {
       type: "edit",
-      icon: FaEdit,
+      icon: GrEdit,
       function: (transaction) => {
         console.log(transaction);
       },
@@ -58,16 +46,11 @@ export default function Dashboard() {
       label: "Edit Transaction",
     },
     {
-      type: "duplicate",
-      icon: IoIosAdd,
-      function: handleDuplicateTransaction,
-      color: "#10B981", // Green
-      label: "Duplicate Transaction",
-    },
-    {
       type: "delete",
-      icon: FaTrash,
-      function: handleDeleteTransaction,
+      icon: FiTrash2,
+      function: (transaction) => {
+        console.log(transaction);
+      },
       color: "#EF4444", // Red
       label: "Delete Transaction",
     },
@@ -124,24 +107,37 @@ export default function Dashboard() {
             {t("dashboard.transactions")}
           </Paragraph>
         </div>
-        <div className="p-4 mt-2 flex flex-col-reverse gap-4 bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto">
+        <div className="p-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto">
           {transactions?.length && transactions.length > 0 ? (
-            transactions.map((item: Transaction) => {
+            transactions.map((item: Transaction, index) => {
+              const isLast = index === transactions.length - 1;
               return (
                 <div key={item.id} className="w-full">
-                  <div className="w-full h-[1px] bg-background first:hidden"></div>
+                  {!isLast && (
+                    <div className="w-full h-[1px] my-1 bg-background"></div>
+                  )}
                   <SwipeActions
                     item={item}
                     actions={getTransactionActions}
                     actionWidth={70}
                     swipeThreshold={60}
                   >
-                    <div className="w-full flex items-center gap-4 py-2">
-                      <div>
+                    <div className="w-full flex items-center gap-2 py-2">
+                      <div className="px-2">
                         {item.type === "income" ? (
-                          <FaCircleArrowDown className="!text-green-400 size-6" />
+                          <div className="flex flex-col gap-1 justify-center items-center">
+                            <FaCircleArrowDown className="!text-green-400 size-6" />
+                            <p className="text-[9px] font-medium">
+                              {item.date}
+                            </p>
+                          </div>
                         ) : (
-                          <FaCircleArrowUp className="!text-red-500 size-6" />
+                          <div className="flex flex-col gap-1 justify-center items-center">
+                            <FaCircleArrowUp className="!text-red-500 size-6" />
+                            <p className="text-[9px] font-medium">
+                              {item.date}
+                            </p>
+                          </div>
                         )}
                       </div>
                       <div>
