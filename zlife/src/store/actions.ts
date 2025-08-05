@@ -76,6 +76,43 @@ export const createFinanceActions: StateCreator<
     return get().selectedDate;
   },
 
+  token: "",
+
+  // token
+  getToken: () => {
+    return get().token;
+  },
+  setToken: (token: string) => {
+    set({ token });
+  },
+
+  gistId: "",
+
+  getGistId: () => {
+    return get().gistId;
+  },
+  setGistId: (gistId: string) => {
+    set({ gistId });
+  },
+
+  filename: "",
+
+  getFilename: () => {
+    return get().filename;
+  },
+  setFilename: (filename: string) => {
+    set({ filename });
+  },
+
+  isSyncEnable: false,
+
+  getIsSyncEnable: () => {
+    return get().isSyncEnable;
+  },
+  setIsSyncEnable: (value: boolean) => {
+    set({ isSyncEnable: value });
+  },
+
   removeYear: (year) => {
     set((state) => {
       if (!state.data[year]) return state;

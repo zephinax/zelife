@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@buildix/wheel-datepicker": "^0.0.11-beta",
     "@react-three/fiber": "^9.3.0",
     "@tailwindcss/vite": "^4.1.11",
     "@types/three": "^0.178.1",

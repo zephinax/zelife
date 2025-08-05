@@ -51,6 +51,22 @@ export interface FinanceState {
   setDefaultDate: (date: string) => void;
   getDefaultDate: () => string;
 
+  token: string;
+  setToken: (token: string) => void;
+  getToken: () => string;
+
+  gistId: string;
+  setGistId: (gistId: string) => void;
+  getGistId: () => string;
+
+  filename: string;
+  setFilename: (filename: string) => void;
+  getFilename: () => string;
+
+  isSyncEnable: boolean;
+  setIsSyncEnable: (value: boolean) => void;
+  getIsSyncEnable: () => boolean;
+
   data: {
     [year: string]: YearData;
   };

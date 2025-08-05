@@ -1,6 +1,9 @@
 import { FaChartLine, FaCreditCard } from "react-icons/fa";
 import { useFinanceStore } from "../../../store/store";
 import { BiChevronDown } from "react-icons/bi";
+import Modal from "../../modal/Modal";
+import { WheelDatePicker } from "@buildix/wheel-datepicker";
+import { useState } from "react";
 
 export default function TopNavigation({
   className = "",
@@ -8,6 +11,8 @@ export default function TopNavigation({
   className?: string;
 }) {
   const { defaultDate, selectedDate } = useFinanceStore();
+  const [date, setDate] = useState("");
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const DATE = selectedDate ? selectedDate : defaultDate;
   return (
     <div
@@ -23,7 +28,7 @@ export default function TopNavigation({
       <div className="flex items-center gap-2 !text-white">
         <div
           onClick={() => {
-            alert("This Future Will add");
+            setIsDateModalOpen(true);
           }}
           className="h-[40px] bg-background-secondary/40 backdrop-blur-sm flex items-center justify-center px-3 gap-0.5 rounded-full rtl:flex-row-reverse"
         >
@@ -43,6 +48,20 @@ export default function TopNavigation({
           <FaCreditCard className="size-4" />
         </div>
       </div>
+      <Modal
+        size="sm"
+        isOpen={isDateModalOpen}
+        onClose={() => {
+          setIsDateModalOpen(false);
+        }}
+        title="sdkhdsfsdhjsdj"
+      >
+        <WheelDatePicker
+          className="text-text"
+          value={date}
+          onChange={setDate}
+        />
+      </Modal>
     </div>
   );
 }
