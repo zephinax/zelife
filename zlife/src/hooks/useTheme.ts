@@ -15,14 +15,29 @@ function getIsDark(theme: Theme): boolean {
   );
 }
 
+function updateMetaThemeColor(isDark: boolean) {
+  const color = isDark ? "#121212" : "#f7f7f7";
+  let meta = document.querySelector(
+    "meta[name=theme-color]"
+  ) as HTMLMetaElement | null;
+
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "theme-color";
+    document.head.appendChild(meta);
+  }
+
+  meta.setAttribute("content", color);
+}
+
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
-  // اعمال کلاس‌ها روی <body>
   const applyTheme = (theme: Theme) => {
     const isDark = getIsDark(theme);
     document.body.classList.toggle("dark", isDark);
     document.body.classList.toggle("light", !isDark);
+    updateMetaThemeColor(isDark);
   };
 
   useEffect(() => {
@@ -31,7 +46,8 @@ export function useTheme() {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const listener = () => {
       const stored = localStorage.getItem("theme") as Theme | null;
-      if (stored === "system") applyTheme("system");
+      const currentTheme = stored ?? "system";
+      if (currentTheme === "system") applyTheme("system");
     };
     mq.addEventListener("change", listener);
     return () => mq.removeEventListener("change", listener);
