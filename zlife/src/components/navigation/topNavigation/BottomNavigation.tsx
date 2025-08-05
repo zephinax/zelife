@@ -34,7 +34,7 @@ export default function BottomNavigation() {
   ];
 
   return (
-    <div className="fixed bottom-0 h-[60px] w-full gap-4 bg-background-secondary items-center flex justify-evenly">
+    <div className="fixed bottom-0 h-[68px] py-5 w-full gap-4 bg-background-secondary items-center flex justify-evenly">
       {routes.map((item) => {
         const isActive = location.pathname === item.route;
         return (
