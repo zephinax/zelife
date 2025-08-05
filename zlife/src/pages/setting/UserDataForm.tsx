@@ -5,6 +5,7 @@ import Input from "../../components/inputs/Input";
 import { useFinanceStore } from "../../store/store";
 import type { Transaction } from "../../store/types";
 import { useEffect } from "react";
+import Paragraph from "../../components/typography/Paragraph";
 
 export default function UserDataForm({
   onSuccess,
@@ -61,6 +62,7 @@ export default function UserDataForm({
         label={t("setting.gistId")}
         {...register("gistId")}
       />
+      <Paragraph>{t("setting.explain")}</Paragraph>
 
       <Button className="w-full mt-2 my-2" type="submit">
         {Boolean(targetTransaction?.id)

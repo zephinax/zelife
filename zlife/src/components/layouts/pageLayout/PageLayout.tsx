@@ -7,7 +7,7 @@ export default function PageLayout({
 }) {
   return (
     <>
-      <div className="p-4 bg-background min-h-[100svh] w-screen">
+      <div className="px-4 bg-background min-h-[100svh] w-screen">
         {children}
       </div>
     </>
