@@ -1,4 +1,4 @@
-import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp, FaEdit, FaTrash } from "react-icons/fa";
 import TopNavigation from "../../components/navigation/topNavigation/TopNavigation";
 import Silk from "../../components/react-bits/Silk";
 import Paragraph from "../../components/typography/Paragraph";
@@ -14,7 +14,9 @@ import TransactionForm from "./TransactionForm";
 import type { Transaction } from "../../store/types";
 import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 import BottomNavigation from "../../components/navigation/topNavigation/BottomNavigation";
-import SwipeableDelete from "../../components/swipeableDelete/SwipeableDelete";
+import SwipeActions, {
+  type SwipeAction,
+} from "../../components/swipeActions/SwipeActions";
 
 export default function Dashboard() {
   const {
@@ -32,11 +34,44 @@ export default function Dashboard() {
   const [addTransactionModal, setAddTransactionModal] = useState(false);
 
   // Add the delete handler
-  const handleDeleteTransaction = (transactionId: string | number) => {
+  const handleDeleteTransaction = (transaction: Transaction) => {
     // Implement your delete logic here
-    console.log("Deleting transaction:", transactionId);
-    // deleteTransaction(transactionId); // Uncomment when you have this method in your store
+    console.log("Deleting transaction:", transaction);
+    // deleteTransaction(transaction.id); // Uncomment when you have this method in your store
   };
+
+  // Add custom action handler
+  const handleDuplicateTransaction = (transaction: Transaction) => {
+    console.log("Duplicating transaction:", transaction);
+    // Implement duplication logic
+  };
+
+  // Define dynamic actions for transactions
+  const getTransactionActions: SwipeAction<Transaction>[] = [
+    {
+      type: "edit",
+      icon: FaEdit,
+      function: (transaction) => {
+        console.log(transaction);
+      },
+      color: "#3B82F6", // Blue
+      label: "Edit Transaction",
+    },
+    {
+      type: "duplicate",
+      icon: IoIosAdd,
+      function: handleDuplicateTransaction,
+      color: "#10B981", // Green
+      label: "Duplicate Transaction",
+    },
+    {
+      type: "delete",
+      icon: FaTrash,
+      function: handleDeleteTransaction,
+      color: "#EF4444", // Red
+      label: "Delete Transaction",
+    },
+  ];
 
   return (
     <div className="w-screen min-h-[100svh] pb-[200px]">
@@ -95,9 +130,11 @@ export default function Dashboard() {
               return (
                 <div key={item.id} className="w-full">
                   <div className="w-full h-[1px] bg-background first:hidden"></div>
-                  <SwipeableDelete
-                    itemId={item.id!}
-                    onDelete={handleDeleteTransaction} // Pass the actual delete handler
+                  <SwipeActions
+                    item={item}
+                    actions={getTransactionActions}
+                    actionWidth={70}
+                    swipeThreshold={60}
                   >
                     <div className="w-full flex items-center gap-4 py-2">
                       <div>
@@ -116,7 +153,7 @@ export default function Dashboard() {
                         )}
                       </div>
                     </div>
-                  </SwipeableDelete>
+                  </SwipeActions>
                 </div>
               );
             })
