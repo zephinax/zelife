@@ -29,8 +29,8 @@ export default function Dashboard() {
   const transactions = getTransactionsByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
   return (
-    <div className="w-screen min-h-screen pb-[200px]">
-      <div className="relative h-[38vh] mx-2 rounded-3xl overflow-hidden">
+    <div className="w-screen min-h-[100svh] pb-[200px]">
+      <div className="sticky top-0 mx-2 rounded-3xl overflow-hidden h-[38vh]">
         <Silk
           speed={8}
           scale={1}
@@ -72,13 +72,14 @@ export default function Dashboard() {
         </div>
         <TopNavigation className="absolute top-0" />
       </div>
-      <div className="mt-2 px-4">
-        <div className="">
+
+      <div className="mt-2 px-4 flex-1 flex flex-col">
+        <div>
           <Paragraph className="font-medium" size="lg">
             {t("dashboard.transactions")}
           </Paragraph>
         </div>
-        <div className="p-4 mt-2 flex flex-col-reverse gap-4 bg-background-secondary justify-center items-center rounded-xl">
+        <div className="p-4 mt-2 flex flex-col-reverse gap-4 bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto">
           {transactions?.length && transactions.length > 0 ? (
             transactions.map((item: Transaction) => {
               return (
