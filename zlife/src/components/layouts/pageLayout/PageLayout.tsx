@@ -1,9 +1,17 @@
-import TopNavigation from "../../navigation/topNavigation/TopNavigation";
+import BottomNavigation from "../../navigation/topNavigation/BottomNavigation";
+import React from "react";
 
 export default function PageLayout({
-  hasNavbar = true,
+  children,
 }: {
-  hasNavbar?: boolean;
+  children: React.ReactNode;
 }) {
-  return <div className="p-4">{hasNavbar && <TopNavigation />}</div>;
+  return (
+    <>
+      <div className="p-4 bg-background min-h-[100svh] w-screen">
+        {children}
+      </div>
+      <BottomNavigation />
+    </>
+  );
 }

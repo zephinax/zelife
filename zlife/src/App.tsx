@@ -3,6 +3,8 @@ import { useTheme } from "./hooks/useTheme";
 import { useFinanceStore } from "./store/store";
 import Auth from "./pages/createAccount/CreateAccount";
 import Dashboard from "./pages/dashboard/Dashboard";
+import Tasks from "./pages/tasks/Tasks";
+import Setting from "./pages/setting/Setting";
 
 function App() {
   const { userName } = useFinanceStore();
@@ -13,6 +15,8 @@ function App() {
         {userName ? (
           <>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/setting" element={<Setting />} />
           </>
         ) : (
           <>
