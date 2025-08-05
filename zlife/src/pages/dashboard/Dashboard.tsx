@@ -42,7 +42,7 @@ export default function Dashboard() {
       function: (transaction) => {
         console.log(transaction);
       },
-      color: "#3B82F6", // Blue
+      color: "#427bf5",
       label: "Edit Transaction",
     },
     {
@@ -51,7 +51,7 @@ export default function Dashboard() {
       function: (transaction) => {
         console.log(transaction);
       },
-      color: "#EF4444", // Red
+      color: "#EF4444",
       label: "Delete Transaction",
     },
   ];
@@ -145,7 +145,9 @@ export default function Dashboard() {
                           {numberWithCommas(item.amount)}
                         </Paragraph>
                         {item.description && (
-                          <Paragraph>{item.description}</Paragraph>
+                          <Paragraph className="line-clamp-1">
+                            {item.description}
+                          </Paragraph>
                         )}
                       </div>
                     </div>
@@ -171,7 +173,11 @@ export default function Dashboard() {
           setAddTransactionModal(false);
         }}
       >
-        <TransactionForm />
+        <TransactionForm
+          onSuccess={() => {
+            setAddTransactionModal(false);
+          }}
+        />
       </Modal>
     </div>
   );

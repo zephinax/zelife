@@ -55,14 +55,14 @@ const Modal: React.FC<ModalProps> = ({
   if (!show) return null;
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 z-[999] backdrop-blur-[1px] flex items-center justify-center">
+    <div className="fixed inset-0 z-[99999] backdrop-blur-[1px] flex items-center justify-center">
       <div
-        className={`absolute inset-0 z-[999] bg-[#0000006c] transition-opacity duration-300 ${
+        className={`absolute inset-0 z-[99999] bg-[#0000006c] transition-opacity duration-300 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       ></div>
       <div
-        className={`relative bg-background-secondary z-[9999] rounded-xl border-secondary-200 mx-auto transition-all duration-300 transform ease-in-out ${
+        className={`relative bg-background-secondary z-[999999] rounded-xl border-secondary-200 mx-auto transition-all duration-300 transform ease-in-out ${
           visible
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-8"

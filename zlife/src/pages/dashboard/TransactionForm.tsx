@@ -10,7 +10,11 @@ import {
   removeCommas,
 } from "../../utils/helper";
 
-export default function TransactionForm() {
+export default function TransactionForm({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
   const { addTransaction, selectedDate, defaultDate } = useFinanceStore();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
@@ -40,6 +44,7 @@ export default function TransactionForm() {
           String(PARSE_DATE.day),
           newTransaction
         );
+        onSuccess();
         transactionForm.reset();
       })}
       className="pb-2 flex flex-col gap-2"
