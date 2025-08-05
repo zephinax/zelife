@@ -13,7 +13,6 @@ import { useTranslation } from "../../hooks/useTranslation";
 import TransactionForm from "./TransactionForm";
 import type { Transaction } from "../../store/types";
 import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
-import BottomNavigation from "../../components/navigation/topNavigation/BottomNavigation";
 import SwipeActions, {
   type SwipeAction,
 } from "../../components/swipeActions/SwipeActions";
@@ -75,7 +74,10 @@ export default function Dashboard() {
           noiseIntensity={1.5}
           rotation={0}
         />
-        <div className="absolute z-[9999] top-[50%] flex-col justify-center gap-2 items-center flex left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+        <div
+          dir="ltr"
+          className="absolute z-[9999] top-[50%] flex-col justify-center gap-2 items-center flex left-[50%] translate-x-[-50%] translate-y-[-50%] "
+        >
           <div className="flex items-center gap-1">
             <Paragraph className=" font-semibold !text-white !text-5xl left-0">
               {numberWithCommas(remaining.balance)}
@@ -117,7 +119,10 @@ export default function Dashboard() {
             {t("dashboard.transactions")}
           </Paragraph>
         </div>
-        <div className="p-2 py-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto">
+        <div
+          dir="ltr"
+          className="p-2 py-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto"
+        >
           {transactions?.length && transactions.length > 0 ? (
             transactions.map((item: Transaction, index) => {
               const isLast = index === transactions.length - 1;
