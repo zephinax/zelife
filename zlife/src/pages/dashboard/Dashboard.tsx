@@ -19,6 +19,7 @@ import SwipeActions, {
 } from "../../components/swipeActions/SwipeActions";
 import { FiTrash2 } from "react-icons/fi";
 import { GrEdit } from "react-icons/gr";
+import { MdOutlineSwipeLeft } from "react-icons/md";
 
 export default function Dashboard() {
   const {
@@ -140,7 +141,7 @@ export default function Dashboard() {
                           </div>
                         )}
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <Paragraph size="md" className="font-medium">
                           {numberWithCommas(item.amount)}
                         </Paragraph>
@@ -149,6 +150,9 @@ export default function Dashboard() {
                             {item.description}
                           </Paragraph>
                         )}
+                      </div>
+                      <div className="px-2 text-primary/40">
+                        <MdOutlineSwipeLeft />
                       </div>
                     </div>
                   </SwipeActions>
