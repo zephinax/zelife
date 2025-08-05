@@ -26,6 +26,7 @@ export default function Dashboard() {
     getSummaryByMonth,
     selectedDate,
     defaultDate,
+    removeTransaction,
     getTransactionsByMonth,
   } = useFinanceStore();
   const { t } = useTranslation();
@@ -50,7 +51,14 @@ export default function Dashboard() {
       type: "delete",
       icon: FiTrash2,
       function: (transaction) => {
-        console.log(transaction);
+        if (!transaction.id) return;
+        const transitionDate = parseShamsiDate(transaction.date);
+        removeTransaction(
+          String(transitionDate.year),
+          String(transitionDate.month),
+          String(transitionDate.day),
+          transaction.id
+        );
       },
       color: "#EF4444",
       label: "Delete Transaction",
@@ -108,14 +116,14 @@ export default function Dashboard() {
             {t("dashboard.transactions")}
           </Paragraph>
         </div>
-        <div className="p-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto">
+        <div className="p-2 py-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-xl flex-1 overflow-y-auto">
           {transactions?.length && transactions.length > 0 ? (
             transactions.map((item: Transaction, index) => {
               const isLast = index === transactions.length - 1;
               return (
                 <div key={item.id} className="w-full">
                   {!isLast && (
-                    <div className="w-full h-[1px] my-1 bg-background"></div>
+                    <div className="w-full h-[1px] my-2 bg-background"></div>
                   )}
                   <SwipeActions
                     item={item}
