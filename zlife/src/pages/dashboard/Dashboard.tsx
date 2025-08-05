@@ -35,13 +35,13 @@ export default function Dashboard() {
   const remaining = getSummaryByMonth(String(year), String(month));
   const transactions = getTransactionsByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
-
+  const [targetTransaction, setTargetTransaction] = useState<Transaction>();
   const getTransactionActions: SwipeAction<Transaction>[] = [
     {
       type: "edit",
       icon: GrEdit,
       function: (transaction) => {
-        console.log(transaction);
+        setTargetTransaction(transaction);
       },
       color: "#427bf5",
       label: "Edit Transaction",
@@ -104,7 +104,11 @@ export default function Dashboard() {
             onClick={() => {
               setAddTransactionModal(true);
             }}
-            className="bg-background-secondary/40 pr-3 pl-2 backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
+            className="bg-background-secondary/40 pr-[var(--padding-end)] pl-[var(--padding-start)] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
+            style={{
+              paddingInlineStart: "0.5rem",
+              paddingInlineEnd: "0.75rem",
+            }}
           >
             <IoIosAdd className="size-6" />
             <Paragraph>{t("dashboard.addTransaction")}</Paragraph>
@@ -184,15 +188,22 @@ export default function Dashboard() {
       <Modal
         overflowY="overflow-y-visible"
         size="sm"
-        title={t("dashboard.addTransaction")}
-        isOpen={addTransactionModal}
+        title={
+          targetTransaction
+            ? t("dashboard.editTransaction")
+            : t("dashboard.addTransaction")
+        }
+        isOpen={addTransactionModal || Boolean(targetTransaction)}
         onClose={() => {
           setAddTransactionModal(false);
+          setTargetTransaction(undefined);
         }}
       >
         <TransactionForm
+          targetTransaction={targetTransaction}
           onSuccess={() => {
             setAddTransactionModal(false);
+            setTargetTransaction(undefined);
           }}
         />
       </Modal>

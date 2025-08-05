@@ -9,6 +9,7 @@
   },
   "dashboard": {
     "addTransaction": "Add transaction",
+    "editTransaction": "Edit transaction",
     "transactions": "Transactions",
     "noTransaction": "Create your first transaction!"
   },

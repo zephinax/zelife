@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import SelectBox from "../../components/inputs/SelectBox";
 import { useTranslation } from "../../hooks/useTranslation";
 import Button from "../../components/button/Button";
 import Input from "../../components/inputs/Input";
@@ -10,13 +9,18 @@ import {
   removeCommas,
 } from "../../utils/helper";
 import Paragraph from "../../components/typography/Paragraph";
+import type { Transaction } from "../../store/types";
+import { useEffect } from "react";
 
 export default function TransactionForm({
   onSuccess,
+  targetTransaction,
 }: {
+  targetTransaction?: Transaction;
   onSuccess?: () => void;
 }) {
-  const { addTransaction, selectedDate, defaultDate } = useFinanceStore();
+  const { addTransaction, selectedDate, defaultDate, editTransaction } =
+    useFinanceStore();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
   const transactionOptions = ["income", "expense"];
@@ -29,24 +33,49 @@ export default function TransactionForm({
     watch,
     formState: { errors },
   } = transactionForm;
+
+  useEffect(() => {
+    if (targetTransaction) {
+      setValue("type", targetTransaction.type);
+      setValue("amount", targetTransaction.amount);
+      setValue("description", targetTransaction.description);
+    }
+  }, []);
+
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        const newTransaction = {
-          amount: Number(removeCommas(data.amount)),
-          type: data.type,
-          description: data.description,
-          date: DATE,
-          labels: ["شارژ", "موبایل"],
-        };
-        addTransaction(
-          String(PARSE_DATE.year),
-          String(PARSE_DATE.month),
-          String(PARSE_DATE.day),
-          newTransaction
-        );
-        onSuccess && onSuccess();
-        transactionForm.reset();
+        if (targetTransaction && targetTransaction.id) {
+          const targetTransactionDate = parseShamsiDate(targetTransaction.date);
+          editTransaction(
+            String(targetTransactionDate.year),
+            String(targetTransactionDate.month),
+            String(targetTransactionDate.day),
+            targetTransaction.id,
+            {
+              amount: Number(removeCommas(data.amount)),
+              description: data.description,
+              type: data.type,
+              labels: ["شارژ", "موبایل"],
+            }
+          );
+        } else {
+          const newTransaction = {
+            amount: Number(removeCommas(data.amount)),
+            type: data.type,
+            description: data.description,
+            date: DATE,
+            labels: ["شارژ", "موبایل"],
+          };
+          addTransaction(
+            String(PARSE_DATE.year),
+            String(PARSE_DATE.month),
+            String(PARSE_DATE.day),
+            newTransaction
+          );
+          onSuccess && onSuccess();
+          transactionForm.reset();
+        }
       })}
       className="pb-2 flex flex-col gap-4"
     >
@@ -117,7 +146,9 @@ export default function TransactionForm({
         )}
       </div>
       <Button className="w-full mt-2 my-2" type="submit">
-        {t("dashboard.addTransaction")}
+        {Boolean(targetTransaction?.id)
+          ? t("dashboard.editTransaction")
+          : t("dashboard.addTransaction")}
       </Button>
     </form>
   );

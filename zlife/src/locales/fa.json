@@ -9,6 +9,7 @@
   },
   "dashboard": {
     "addTransaction": "افزودن تراکنش",
+    "editTransaction": "ویرایش تراکنش",
     "transactions": "تراکنش ها",
     "noTransaction": "اولین تراکنشت رو ایجاد کن!"
   },
