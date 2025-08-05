@@ -58,7 +58,7 @@ export default function Dashboard() {
 
   return (
     <div className="w-screen min-h-[100svh] pb-[200px]">
-      <div className="sticky top-0 mx-2 rounded-3xl overflow-hidden h-[38vh] z-[9999]">
+      <div className="sticky top-0 mx-2 rounded-4xl overflow-hidden h-[38vh] z-[9999]">
         <Silk
           speed={8}
           scale={1}
@@ -154,7 +154,9 @@ export default function Dashboard() {
               );
             })
           ) : (
-            <Paragraph>{t("dashboard.noTransaction")}</Paragraph>
+            <div className="py-2">
+              <Paragraph>{t("dashboard.noTransaction")}</Paragraph>
+            </div>
           )}
         </div>
       </div>
