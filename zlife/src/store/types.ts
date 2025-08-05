@@ -67,6 +67,10 @@ export interface FinanceState {
   setIsSyncEnable: (value: boolean) => void;
   getIsSyncEnable: () => boolean;
 
+  avatarUrl: string;
+  setAvatarUrl: (url: string) => void;
+  getAvatarUrl: () => string;
+
   data: {
     [year: string]: YearData;
   };

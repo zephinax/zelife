@@ -113,6 +113,15 @@ export const createFinanceActions: StateCreator<
     set({ isSyncEnable: value });
   },
 
+  avatarUrl: "",
+
+  getAvatarUrl: () => {
+    return get().avatarUrl;
+  },
+  setAvatarUrl: (url: string) => {
+    set({ avatarUrl: url });
+  },
+
   removeYear: (year) => {
     set((state) => {
       if (!state.data[year]) return state;
