@@ -24,7 +24,7 @@ export default function CreateAccountForm() {
         setUserName(data.userName);
         setDefaultDate(formatShamsiDate(year, month, day));
       })}
-      className="w-full lg:mr-20 p-6 lg:p-8 rounded-3xl z-30 bg-background-secondary max-w-[500px]"
+      className="w-full lg:mr-20 p-6 lg:p-8 rounded-4xl z-30 bg-background-secondary max-w-[500px]"
     >
       <div className="p-2">
         <Title>{t("auth.wellcome")}</Title>

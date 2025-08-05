@@ -6,7 +6,7 @@ import { useTranslation } from "../../hooks/useTranslation";
 import { useFinanceStore } from "../../store/store";
 import CreateAccountForm from "./CreateAccountForm";
 
-export default function Auth() {
+export default function CreateAccount() {
   const { t } = useTranslation();
   const { language } = useFinanceStore();
   return (

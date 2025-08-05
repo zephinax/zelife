@@ -7,10 +7,19 @@ import { useTranslation } from "../../../hooks/useTranslation";
 
 type IconType = React.ComponentType<{ className?: string; size?: number }>;
 
+// تابع تشخیص iOS
+const isIOS = () => {
+  if (typeof navigator === "undefined") return false;
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+  );
+};
+
 export default function BottomNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+
   const renderIcon = (Icon: IconType, isActive: boolean) => {
     const iconColor = isActive ? "text-primary" : "text-text-secondary";
     return <Icon size={22} className={`w-6 h-6 ${iconColor}`} />;
@@ -35,7 +44,11 @@ export default function BottomNavigation() {
   ];
 
   return (
-    <div className="fixed bottom-0 h-[68px] py-5 w-full gap-4 bg-background-secondary items-center flex justify-evenly">
+    <div
+      className={`fixed bottom-0 shadow-md h-[68px] py-5 w-full gap-4 bg-background-secondary items-center flex justify-evenly ${
+        isIOS() ? "pb-[26px] h-[70px]" : ""
+      }`}
+    >
       {routes.map((item) => {
         const isActive = location.pathname === item.route;
         return (

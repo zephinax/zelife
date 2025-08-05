@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { useTheme } from "./hooks/useTheme";
 import { useFinanceStore } from "./store/store";
-import Auth from "./pages/createAccount/CreateAccount";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Tasks from "./pages/tasks/Tasks";
 import Setting from "./pages/setting/Setting";
@@ -9,6 +8,7 @@ import BottomNavigation from "./components/navigation/topNavigation/BottomNaviga
 import { useEffect } from "react";
 import { loadFromGist } from "./utils/sync";
 import { useAutoSync } from "./hooks/useAutoSync";
+import CreateAccount from "./pages/createAccount/CreateAccount";
 
 function App() {
   const { userName, isSyncEnable } = useFinanceStore();
@@ -33,11 +33,11 @@ function App() {
           </>
         ) : (
           <>
-            <Route path="/" element={<Auth />} />
+            <Route path="/" element={<CreateAccount />} />
           </>
         )}
       </Routes>
-      <BottomNavigation />
+      {userName && <BottomNavigation />}
     </main>
   );
 }
