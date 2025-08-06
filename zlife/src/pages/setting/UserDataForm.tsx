@@ -3,18 +3,22 @@ import { useTranslation } from "../../hooks/useTranslation";
 import Button from "../../components/button/Button";
 import Input from "../../components/inputs/Input";
 import { useFinanceStore } from "../../store/store";
-import type { Transaction } from "../../store/types";
 import { useEffect } from "react";
 import Paragraph from "../../components/typography/Paragraph";
 
 export default function UserDataForm({
   onSuccess,
-  targetTransaction,
+  targetData,
 }: {
-  targetTransaction?: Transaction;
+  targetData?: {
+    filename: string;
+    token: string;
+    gistId: string;
+  };
   onSuccess?: () => void;
 }) {
-  const { setGistId, setToken, setFilename } = useFinanceStore();
+  const { setGistId, setToken, setFilename, setIsSyncEnable } =
+    useFinanceStore();
   const { t } = useTranslation();
   const userDataForm = useForm();
   const {
@@ -26,10 +30,10 @@ export default function UserDataForm({
   } = userDataForm;
 
   useEffect(() => {
-    if (targetTransaction) {
-      setValue("type", targetTransaction.type);
-      setValue("amount", targetTransaction.amount);
-      setValue("description", targetTransaction.description);
+    if (targetData) {
+      setValue("filename", targetData.filename);
+      setValue("gistId", targetData.gistId);
+      setValue("token", targetData.token);
     }
   }, []);
 
@@ -39,6 +43,7 @@ export default function UserDataForm({
         setFilename(data.filename);
         setToken(data.token);
         setGistId(data.gistId);
+        setIsSyncEnable(true);
         onSuccess && onSuccess();
       })}
       className="pb-2 flex flex-col gap-4"
@@ -65,7 +70,7 @@ export default function UserDataForm({
       <Paragraph>{t("setting.explain")}</Paragraph>
 
       <Button className="w-full mt-2 my-2" type="submit">
-        {Boolean(targetTransaction?.id)
+        {Boolean(targetData?.token)
           ? t("dashboard.editTransaction")
           : t("setting.syncData")}
       </Button>
