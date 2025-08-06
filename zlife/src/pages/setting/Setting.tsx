@@ -68,7 +68,8 @@ export default function Setting({
           <div className="p-4 flex justify-between items-center">
             <Paragraph size="lg">
               {t("setting.syncData")}
-              {lastSyncAt && ` - ${lastSyncAt.toLocaleDateString()}`}
+              {lastSyncAt &&
+                ` - ${lastSyncAt.toLocaleDateString()} at ${lastSyncAt.toLocaleTimeString()}`}
               {lastAction && ` - ${lastAction}`}
             </Paragraph>
 
