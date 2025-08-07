@@ -34,11 +34,23 @@ export const useAutoSync = (
 
   const [syncState, setSyncState] = useState<AutoSyncState>(() => {
     const savedLastSync = localStorage.getItem("lastSyncAt");
+    const savedLastAction = localStorage.getItem("lastAction");
+
+    const isValidAction = (
+      action: string | null
+    ): AutoSyncState["lastAction"] =>
+      action === "created" ||
+      action === "updated" ||
+      action === "merged" ||
+      action === "overwritten" ||
+      action === "no_changes"
+        ? action
+        : null;
     return {
       isLoading: false,
       lastSyncAt: savedLastSync ? new Date(savedLastSync) : null,
       error: null,
-      lastAction: null,
+      lastAction: isValidAction(savedLastAction),
     };
   });
 
@@ -46,9 +58,11 @@ export const useAutoSync = (
     if (syncState.lastSyncAt) {
       localStorage.setItem("lastSyncAt", syncState.lastSyncAt.toISOString());
     }
-  }, [syncState.lastSyncAt]);
+    if (syncState.lastAction) {
+      localStorage.setItem("lastAction", syncState.lastAction);
+    }
+  }, [syncState.lastSyncAt, syncState.lastAction]);
 
-  // Clear any error when sync is disabled
   useEffect(() => {
     if (!isSyncEnable) {
       setSyncState((prev) => ({ ...prev, error: null }));
@@ -57,60 +71,79 @@ export const useAutoSync = (
 
   // Manual sync function that can be called externally
   const triggerSync = useCallback(async () => {
-    if (!isSyncEnable || !token || !filename) {
+    if (!isSyncEnable || !token || !filename || !gistId) {
       return;
     }
 
     setSyncState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      console.log("Manual sync triggered...");
-      const result = await syncToGist(store);
+      console.log("Trigger sync: pulling remote data...");
+      const pullResult = await loadFromGist(store, { merge: true });
 
-      if (result?.success) {
-        console.log(`Sync ${result.action} successfully`);
-        const validAction:
-          | "created"
-          | "updated"
-          | "merged"
-          | "overwritten"
-          | "no_changes"
-          | null =
-          result.action === "created" || result.action === "updated"
-            ? result.action
-            : null;
-
-        setSyncState((prev) => ({
-          ...prev,
-          isLoading: false,
-          lastSyncAt: new Date(),
-          error: null,
-          lastAction: validAction,
-        }));
-
-        // Update the last data reference
-        if (data) {
-          lastDataRef.current = JSON.stringify(data);
-        }
-
-        return result;
-      } else {
-        throw new Error("Sync failed");
+      if (!pullResult.success) {
+        throw new Error(pullResult.reason || "Failed to pull data before sync");
       }
-    } catch (error) {
-      console.error("Sync failed:", error);
+
+      console.log(`Pull ${pullResult.action} successfully`);
+
+      // Update last sync after pulling
+      setSyncState((prev) => ({
+        ...prev,
+        lastSyncAt: new Date(),
+        lastAction:
+          pullResult.action === "merged" ||
+          pullResult.action === "overwritten" ||
+          pullResult.action === "no_changes"
+            ? pullResult.action
+            : prev.lastAction,
+      }));
+
+      console.log("Trigger sync: pushing local data...");
+      const pushResult = await syncToGist(store);
+
+      if (!pushResult?.success) {
+        throw new Error("Push failed after pull");
+      }
+
+      console.log(`Push ${pushResult.action} successfully`);
+      const validPushAction:
+        | "created"
+        | "updated"
+        | "merged"
+        | "overwritten"
+        | "no_changes"
+        | null =
+        pushResult.action === "created" || pushResult.action === "updated"
+          ? pushResult.action
+          : null;
+
       setSyncState((prev) => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : "Sync failed",
+        lastSyncAt: new Date(),
+        error: null,
+        lastAction: validPushAction,
+      }));
+
+      // Update the last data reference
+      if (data) {
+        lastDataRef.current = JSON.stringify(data);
+      }
+
+      return pushResult;
+    } catch (error) {
+      console.error("Trigger sync failed:", error);
+      setSyncState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: error instanceof Error ? error.message : "Trigger sync failed",
       }));
       throw error;
     }
   }, [isSyncEnable, token, filename, gistId, data]);
 
-  // Auto-sync effect - monitors data changes
   useEffect(() => {
-    // Skip if sync is disabled
     if (!isSyncEnable || !data) {
       return;
     }
@@ -243,6 +276,6 @@ export const useAutoSync = (
 
   return {
     ...syncState,
-    triggerSync, // Manual sync function
+    triggerSync,
   };
 };
