@@ -5,16 +5,13 @@ import Input from "../../components/inputs/Input";
 import { useFinanceStore } from "../../store/store";
 import { useEffect } from "react";
 import Paragraph from "../../components/typography/Paragraph";
+import type { Task } from "../../store/types";
 
-export default function CreateTask({
+export default function CreateTaskForm({
   onSuccess,
   targetData,
 }: {
-  targetData?: {
-    filename: string;
-    token: string;
-    gistId: string;
-  };
+  targetData?: Task;
   onSuccess?: () => void;
 }) {
   const { setGistId, setToken, setFilename, setIsSyncEnable } =
@@ -30,9 +27,8 @@ export default function CreateTask({
 
   useEffect(() => {
     if (targetData) {
-      setValue("filename", targetData.filename);
-      setValue("gistId", targetData.gistId);
-      setValue("token", targetData.token);
+      setValue("title", targetData.title);
+      setValue("description", targetData.description);
     }
   }, []);
 
@@ -69,7 +65,7 @@ export default function CreateTask({
       <Paragraph>{t("setting.explain")}</Paragraph>
 
       <Button className="w-full mt-2 my-2" type="submit">
-        {Boolean(targetData?.token)
+        {Boolean(targetData?.id)
           ? t("dashboard.editTransaction")
           : t("setting.syncData")}
       </Button>

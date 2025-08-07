@@ -143,12 +143,12 @@ const Modal: React.FC<ModalProps> = ({
         onTouchMove={(e) => onDragMove(e.touches[0].clientY)}
         onTouchEnd={onDragEnd}
         className={`
-         relative bg-background-secondary px-4 z-[999999] border-secondary-200 mx-auto transition-all duration-300 ease-in-out
+         relative bg-background-secondary  px-4 z-[999999] border-secondary-200 mx-auto transition-all duration-300 ease-in-out
          ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}
          max-w-[90%]
          ${
            size === "sm"
-             ? "w-full"
+             ? "w-full lg:max-w-[400px]"
              : size === "md"
              ? "w-full"
              : size === "lg"

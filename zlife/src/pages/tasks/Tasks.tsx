@@ -15,11 +15,13 @@ import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 import { MdOutlineSwipeLeft } from "react-icons/md";
 import { useState } from "react";
 import Modal from "../../components/modal/Modal";
+import CreateTaskForm from "./createTaskForm";
 
 export default function Tasks() {
   const { selectedDate, defaultDate, getTasksByMonth } = useFinanceStore();
-  const [_createTaskModal, setCreateTaskModal] = useState(false);
+  const [createTaskModal, setCreateTaskModal] = useState(false);
   const { t } = useTranslation();
+  const [targetTask, setTargetTask] = useState<Task | undefined>();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month } = PARSE_DATE;
@@ -133,19 +135,15 @@ export default function Tasks() {
       <Modal
         size="sm"
         title={t("setting.enterYourGithubData")}
-        isOpen={isGetUserDataModalOpen}
+        isOpen={createTaskModal}
         onClose={() => {
-          setIsGetUserDataModalOpen(false);
+          setCreateTaskModal(false);
         }}
       >
-        <c
-          targetData={{
-            token,
-            filename,
-            gistId,
-          }}
+        <CreateTaskForm
+          targetData={targetTask}
           onSuccess={() => {
-            setIsGetUserDataModalOpen(false);
+            setCreateTaskModal(false);
           }}
         />
       </Modal>
