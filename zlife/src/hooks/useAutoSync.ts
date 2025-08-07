@@ -32,13 +32,21 @@ export const useAutoSync = (
   const isInitialRender = useRef(true);
   const lastDataRef = useRef<string>("");
 
-  // State for loading, errors, etc.
-  const [syncState, setSyncState] = useState<AutoSyncState>({
-    isLoading: false,
-    lastSyncAt: null,
-    error: null,
-    lastAction: null,
+  const [syncState, setSyncState] = useState<AutoSyncState>(() => {
+    const savedLastSync = localStorage.getItem("lastSyncAt");
+    return {
+      isLoading: false,
+      lastSyncAt: savedLastSync ? new Date(savedLastSync) : null,
+      error: null,
+      lastAction: null,
+    };
   });
+
+  useEffect(() => {
+    if (syncState.lastSyncAt) {
+      localStorage.setItem("lastSyncAt", syncState.lastSyncAt.toISOString());
+    }
+  }, [syncState.lastSyncAt]);
 
   // Clear any error when sync is disabled
   useEffect(() => {

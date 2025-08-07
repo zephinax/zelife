@@ -14,7 +14,7 @@ export default function Tasks() {
           rotation={0}
         />
         <div className="absolute px-6 gap-4 top-[50%] translate-y-[-50%] w-full flex items-center justify-center">
-          <Title>Task Manager</Title>
+          <Title className="!text-white">Task Manager</Title>
         </div>
       </div>
     </PageLayout>
