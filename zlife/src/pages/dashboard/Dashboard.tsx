@@ -80,7 +80,7 @@ export default function Dashboard({
 
   return (
     <div className="w-screen min-h-[100svh] pb-[85px]">
-      <div className="sticky top-0 mx-2 rounded-4xl overflow-hidden h-[38vh] z-[9999]">
+      <div className="sticky top-0 max-w-screen  mx-2 rounded-4xl overflow-hidden h-[38vh] z-[9999]">
         <Silk
           speed={8}
           scale={1}
@@ -158,7 +158,7 @@ export default function Dashboard({
         </div>
         <div
           dir="ltr"
-          className="p-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
+          className="p-2 mt-2 max-w-screen flex flex-col-reverse bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
         >
           {transactions && transactions?.length && transactions.length > 0 ? (
             transactions?.map((item: Transaction, index) => {

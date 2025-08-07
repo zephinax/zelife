@@ -65,7 +65,7 @@ export default function Setting({
             </Paragraph>
           </div>
         </div>
-        <div>
+        <div className="mx-2">
           <Paragraph className="font-medium" size="lg">
             {t("navbar.setting")}
           </Paragraph>

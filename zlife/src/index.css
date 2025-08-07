@@ -15,3 +15,17 @@
   --color-text: #f1f1f1;
   --color-text-secondary: #a0a0a0;
 }
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+}
+
+body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
