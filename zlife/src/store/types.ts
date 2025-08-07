@@ -1,12 +1,14 @@
 export type TransactionType = "income" | "expense";
 
 export interface Transaction {
-  id?: string;
+  id: string;
   amount: number;
   type: TransactionType;
   description?: string;
   date: string;
   labels?: string[];
+  updatedAt: number;
+  deletedAt?: number;
 }
 
 export interface ReportSettings {
@@ -24,6 +26,8 @@ export interface Task {
   description?: string;
   isDone: boolean;
   priority?: number;
+  updatedAt: number;
+  deletedAt?: number;
 }
 
 export interface MonthData {

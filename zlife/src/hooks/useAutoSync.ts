@@ -1,15 +1,24 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useFinanceStore } from "../store/store";
-import { syncToGist } from "../utils/sync";
+import { syncToGist, loadFromGist } from "../utils/sync";
 
 export interface AutoSyncState {
   isLoading: boolean;
   lastSyncAt: Date | null;
   error: string | null;
-  lastAction: "created" | "updated" | null;
+  lastAction:
+    | "created"
+    | "updated"
+    | "merged"
+    | "overwritten"
+    | "no_changes"
+    | null;
 }
 
-export const useAutoSync = (debounceMs: number = 2000) => {
+export const useAutoSync = (
+  debounceMs: number = 2000,
+  pollIntervalMs: number = 15 * 60 * 1000
+) => {
   const store = useFinanceStore();
   const { isSyncEnable, token, gistId, filename } = store;
 
@@ -52,7 +61,13 @@ export const useAutoSync = (debounceMs: number = 2000) => {
 
       if (result?.success) {
         console.log(`Sync ${result.action} successfully`);
-        const validAction: "created" | "updated" | null =
+        const validAction:
+          | "created"
+          | "updated"
+          | "merged"
+          | "overwritten"
+          | "no_changes"
+          | null =
           result.action === "created" || result.action === "updated"
             ? result.action
             : null;
@@ -128,7 +143,13 @@ export const useAutoSync = (debounceMs: number = 2000) => {
 
         if (result?.success) {
           console.log(`Auto-sync ${result.action} successfully`);
-          const validAction: "created" | "updated" | null =
+          const validAction:
+            | "created"
+            | "updated"
+            | "merged"
+            | "overwritten"
+            | "no_changes"
+            | null =
             result.action === "created" || result.action === "updated"
               ? result.action
               : null;
@@ -160,7 +181,48 @@ export const useAutoSync = (debounceMs: number = 2000) => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [data, isSyncEnable, token, filename, debounceMs]); // Removed store and gistId from deps
+  }, [data, isSyncEnable, token, filename, debounceMs]);
+
+  // Periodic pull effect
+  useEffect(() => {
+    if (!isSyncEnable || !token || !gistId || !filename) {
+      return;
+    }
+
+    const intervalId = setInterval(async () => {
+      setSyncState((prev) => ({ ...prev, isLoading: true, error: null }));
+      try {
+        console.log("Polling remote data...");
+        const result = await loadFromGist(store, { merge: true });
+        if (result.success) {
+          console.log(`Poll ${result.action} successfully`);
+          setSyncState((prev) => ({
+            ...prev,
+            isLoading: false,
+            lastSyncAt: new Date(),
+            error: null,
+            lastAction:
+              result.action === "merged" ||
+              result.action === "overwritten" ||
+              result.action === "no_changes"
+                ? result.action
+                : prev.lastAction,
+          }));
+        } else {
+          throw new Error(result.reason || "Poll failed");
+        }
+      } catch (error) {
+        console.error("Poll failed:", error);
+        setSyncState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: error instanceof Error ? error.message : "Poll failed",
+        }));
+      }
+    }, pollIntervalMs);
+
+    return () => clearInterval(intervalId);
+  }, [isSyncEnable, token, gistId, filename, pollIntervalMs]);
 
   // Cleanup timeout on unmount
   useEffect(() => {

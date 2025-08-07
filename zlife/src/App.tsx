@@ -44,7 +44,7 @@ function App() {
               path="/setting"
               element={
                 <Setting
-                  lastAction={lastAction}
+                  lastAction={"created"}
                   triggerSync={triggerSync}
                   isLoading={isSyncing}
                   error={error}
