@@ -31,6 +31,7 @@
     "setting": "Settings"
   },
   "setting": {
+    "enterYourGithubData": "Enter yout github data",
     "syncData": "Sync Data",
     "token": "Github PAT token",
     "tokenRequired": "GitHub PAT token is required",

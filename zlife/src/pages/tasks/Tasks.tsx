@@ -13,9 +13,11 @@ import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
 import { FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 import { MdOutlineSwipeLeft } from "react-icons/md";
+import { useState } from "react";
 
 export default function Tasks() {
   const { selectedDate, defaultDate, getTasksByMonth } = useFinanceStore();
+  const [_createTaskModal, setCreateTaskModal] = useState(false);
   const { t } = useTranslation();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
@@ -57,6 +59,9 @@ export default function Tasks() {
             {t("tasks.tasks")}
           </Paragraph>
           <Paragraph
+            onClick={() => {
+              setCreateTaskModal(true);
+            }}
             size="sm"
             className="!text-primary flex items-center gap-1"
           >

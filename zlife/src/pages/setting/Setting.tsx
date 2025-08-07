@@ -149,7 +149,7 @@ export default function Setting({
       </div>
       <Modal
         size="sm"
-        title={"Enter yout github data"}
+        title={t("setting.enterYourGithubData")}
         isOpen={isGetUserDataModalOpen}
         onClose={() => {
           setIsGetUserDataModalOpen(false);
@@ -160,6 +160,9 @@ export default function Setting({
             token,
             filename,
             gistId,
+          }}
+          onSuccess={() => {
+            setIsGetUserDataModalOpen(false);
           }}
         />
       </Modal>
