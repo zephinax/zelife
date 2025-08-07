@@ -14,6 +14,7 @@ import { FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 import { MdOutlineSwipeLeft } from "react-icons/md";
 import { useState } from "react";
+import Modal from "../../components/modal/Modal";
 
 export default function Tasks() {
   const { selectedDate, defaultDate, getTasksByMonth } = useFinanceStore();
@@ -129,6 +130,25 @@ export default function Tasks() {
           )}
         </div>
       </div>
+      <Modal
+        size="sm"
+        title={t("setting.enterYourGithubData")}
+        isOpen={isGetUserDataModalOpen}
+        onClose={() => {
+          setIsGetUserDataModalOpen(false);
+        }}
+      >
+        <c
+          targetData={{
+            token,
+            filename,
+            gistId,
+          }}
+          onSuccess={() => {
+            setIsGetUserDataModalOpen(false);
+          }}
+        />
+      </Modal>
     </PageLayout>
   );
 }
