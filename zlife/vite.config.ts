@@ -47,7 +47,7 @@ export default defineConfig({
         clientsClaim: true, // سرویس‌ورکر جدید بلافاصله روی کلاینت‌ها کنترل بگیرد
         skipWaiting: true,
         globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
-
+        navigateFallback: "/offline.html",
         runtimeCaching: [
           {
             urlPattern: /\/fonts\/.*\.(?:woff2|woff|ttf)$/,
@@ -68,18 +68,6 @@ export default defineConfig({
               expiration: {
                 maxEntries: 20,
                 maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/your-api\.com\/.*$/,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-cache",
-              networkTimeoutSeconds: 3,
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60,
               },
             },
           },
