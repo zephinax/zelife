@@ -20,7 +20,13 @@ export default function Setting({
   isLoading: boolean;
   lastSyncAt: Date | null;
   error: string | null;
-  lastAction: "created" | "updated" | null;
+  lastAction:
+    | "created"
+    | "updated"
+    | "merged"
+    | "overwritten"
+    | "no_changes"
+    | null;
   triggerSync: () => void;
 }) {
   const { t } = useTranslation();
@@ -65,52 +71,55 @@ export default function Setting({
           </Paragraph>
         </div>
         <div className="bg-background-secondary  rounded-2xl">
-          <div className="p-4 flex justify-between items-center">
-            <Paragraph size="lg">
-              {t("setting.syncData")}
-              {lastSyncAt &&
-                ` - ${lastSyncAt.toLocaleDateString()} at ${lastSyncAt.toLocaleTimeString()}`}
-              {lastAction && ` - ${lastAction}`}
-            </Paragraph>
-
-            <div className="flex items-center gap-3 justify-center">
-              {token && (
-                <div className="flex items-center gap-3 justify-center">
-                  <div
-                    onClick={() => {
-                      triggerSync();
-                    }}
-                  >
-                    {error ? (
-                      <MdSyncProblem className="text-primary size-5" />
-                    ) : (
-                      <MdOutlineSync
-                        className={`text-primary size-5 ${
-                          isLoading ? "animate-spin" : ""
-                        }`}
-                      />
-                    )}
+          <div className="p-4 flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <Paragraph size="lg">{t("setting.syncData")}</Paragraph>
+              <div className="flex items-center gap-3 justify-center">
+                {token && (
+                  <div className="flex items-center gap-3 justify-center">
+                    <div
+                      onClick={() => {
+                        triggerSync();
+                      }}
+                    >
+                      {error ? (
+                        <MdSyncProblem className="text-primary size-5" />
+                      ) : (
+                        <MdOutlineSync
+                          className={`text-primary size-5 ${
+                            isLoading ? "animate-spin" : ""
+                          }`}
+                        />
+                      )}
+                    </div>
+                    <div
+                      onClick={() => {
+                        setIsGetUserDataModalOpen(true);
+                      }}
+                    >
+                      <GrEdit className="text-primary" />
+                    </div>
                   </div>
-                  <div
-                    onClick={() => {
+                )}
+                <ToggleSwitch
+                  checked={isSyncEnable}
+                  onChange={(value) => {
+                    if (token) {
+                      setIsSyncEnable(value);
+                    } else {
                       setIsGetUserDataModalOpen(true);
-                    }}
-                  >
-                    <GrEdit className="text-primary" />
-                  </div>
-                </div>
-              )}
-              <ToggleSwitch
-                checked={isSyncEnable}
-                onChange={(value) => {
-                  if (token) {
-                    setIsSyncEnable(value);
-                  } else {
-                    setIsGetUserDataModalOpen(true);
-                  }
-                }}
-              />
+                    }
+                  }}
+                />
+              </div>
             </div>
+            {error && <Paragraph>{error}</Paragraph>}
+            {lastSyncAt && (
+              <Paragraph>
+                {`${lastSyncAt.toLocaleDateString()} at ${lastSyncAt.toLocaleTimeString()}`}
+                {lastAction && ` - ${lastAction}`}
+              </Paragraph>
+            )}
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
           <div className="p-4 flex justify-between items-center">

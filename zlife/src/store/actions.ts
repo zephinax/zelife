@@ -1,6 +1,8 @@
 // actions.ts
 import { type StateCreator } from "zustand";
 import {
+  CURRENT_DATA_VERSION,
+  type Backup,
   type DayData,
   type FinanceActions,
   type FinanceState,
@@ -28,7 +30,7 @@ export const createFinanceActions: StateCreator<
     const state = get();
     return {
       state: {
-        data: JSON.parse(JSON.stringify(state.data)),
+        data: JSON.parse(JSON.stringify(state.data)), // Deep copy
         userName: state.userName,
         language: state.language,
         selectedDate: state.selectedDate,
@@ -39,19 +41,55 @@ export const createFinanceActions: StateCreator<
         isSyncEnable: state.isSyncEnable,
         avatarUrl: state.avatarUrl,
       },
-      version: 0,
+      version: CURRENT_DATA_VERSION, // Always use current version
     };
   },
 
-  importData: (backup) => {
+  importData: (backup: Backup) => {
     if (!backup?.state) {
       console.error("Invalid backup format");
       return;
     }
 
+    let migratedData = backup.state.data;
+
+    // Handle versioning
+    if (backup.version < CURRENT_DATA_VERSION) {
+      // Apply migrations for older versions
+      if (backup.version === 0) {
+        // Migrate from Version 0 (no updatedAt/deletedAt) to Version 1
+        const newData: { [year: string]: YearData } = {};
+        for (const year in backup.state.data) {
+          newData[year] = {};
+          for (const month in backup.state.data[year]) {
+            newData[year][month] = {};
+            for (const day in backup.state.data[year][month]) {
+              const dayData = backup.state.data[year][month][day];
+              newData[year][month][day] = {
+                transactions: dayData.transactions.map((tx) => ({
+                  ...tx,
+                  id: tx.id || uuidv4(),
+                  updatedAt: (tx as any).updatedAt || Date.now(),
+                  deletedAt: (tx as any).deletedAt ?? undefined,
+                })),
+                tasks: dayData.tasks.map((task) => ({
+                  ...task,
+                  id: task.id || uuidv4(),
+                  updatedAt: (task as any).updatedAt || Date.now(),
+                  deletedAt: (task as any).deletedAt ?? undefined,
+                })),
+              };
+            }
+          }
+        }
+        migratedData = newData;
+      }
+      // Add future version migrations here (e.g., if (backup.version === 1) { ... })
+    }
+
     set((state) => ({
       ...state,
-      data: backup.state.data || {},
+      data: migratedData || {},
       userName: backup.state.userName || state.userName,
       language: backup.state.language || state.language,
       selectedDate: backup.state.selectedDate || state.selectedDate,

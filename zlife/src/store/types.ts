@@ -1,4 +1,21 @@
+export const CURRENT_DATA_VERSION = 1;
 export type TransactionType = "income" | "expense";
+
+export interface Backup {
+  state: {
+    data: { [year: string]: YearData };
+    userName: string;
+    language: string;
+    selectedDate: string;
+    defaultDate: string;
+    token: string;
+    gistId: string;
+    filename: string;
+    isSyncEnable: boolean;
+    avatarUrl: string;
+  };
+  version: number;
+}
 
 export interface Transaction {
   id: string;
@@ -81,41 +98,8 @@ export interface FinanceState {
 }
 
 export interface FinanceActions {
-  exportData: () => {
-    state: {
-      data: {
-        [year: string]: YearData;
-      };
-      userName: string;
-      language: string;
-      selectedDate: string;
-      defaultDate: string;
-      token: string;
-      gistId: string;
-      filename: string;
-      isSyncEnable: boolean;
-      avatarUrl: string;
-    };
-    version: number;
-  };
-
-  importData: (backup: {
-    state: {
-      data: {
-        [year: string]: YearData;
-      };
-      userName: string;
-      language: string;
-      selectedDate: string;
-      defaultDate: string;
-      token: string;
-      gistId: string;
-      filename: string;
-      isSyncEnable: boolean;
-      avatarUrl: string;
-    };
-    version: number;
-  }) => void;
+  exportData: () => Backup;
+  importData: (backup: Backup) => void;
   createYear: (year: string) => void;
   removeYear: (year: string) => void;
   createMonth: (year: string, month: string) => void;

@@ -1,4 +1,9 @@
-import type { FinanceActions, FinanceState, YearData } from "../store/types";
+import {
+  CURRENT_DATA_VERSION,
+  type FinanceActions,
+  type FinanceState,
+  type YearData,
+} from "../store/types";
 import {
   fetchGistContent,
   updateGistContent,
@@ -165,8 +170,14 @@ export async function loadFromGist(
     const remoteBackup = JSON.parse(content);
     const localBackup = store.exportData();
 
+    // Validate backup version
+    if (!remoteBackup.version) {
+      console.warn("Backup has no version, assuming Version 0");
+      remoteBackup.version = 0;
+    }
+
     if (options.merge) {
-      // Check for differences
+      // Check for differences (only compare data, as other fields are preserved)
       const hasDifferences =
         JSON.stringify(localBackup.state.data) !==
         JSON.stringify(remoteBackup.state.data);
@@ -193,11 +204,21 @@ export async function loadFromGist(
               gistId: store.gistId,
               isSyncEnable: store.isSyncEnable,
             },
+            version: CURRENT_DATA_VERSION, // Ensure merged data is current version
           });
           return { success: true, action: "merged" };
         } else {
           // Replace
-          store.importData(remoteBackup);
+          store.importData({
+            ...remoteBackup,
+            state: {
+              ...remoteBackup.state,
+              token: store.token,
+              gistId: store.gistId,
+              isSyncEnable: store.isSyncEnable,
+            },
+            version: CURRENT_DATA_VERSION, // Ensure replaced data is current version
+          });
           return { success: true, action: "overwritten" };
         }
       } else {
@@ -206,7 +227,16 @@ export async function loadFromGist(
       }
     } else {
       // Full overwrite
-      store.importData(remoteBackup);
+      store.importData({
+        ...remoteBackup,
+        state: {
+          ...remoteBackup.state,
+          token: store.token,
+          gistId: store.gistId,
+          isSyncEnable: store.isSyncEnable,
+        },
+        version: CURRENT_DATA_VERSION, // Ensure overwritten data is current version
+      });
       return { success: true, action: "overwritten" };
     }
   } catch (error) {
