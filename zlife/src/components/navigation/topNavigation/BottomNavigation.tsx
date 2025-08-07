@@ -45,6 +45,7 @@ export default function BottomNavigation() {
 
   return (
     <div
+      dir="ltr"
       className={`fixed bottom-0 shadow-md h-[68px] py-5 w-full gap-4 bg-background-secondary items-center flex justify-evenly ${
         isIOS() ? "pb-[26px] h-[70px]" : ""
       }`}

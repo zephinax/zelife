@@ -11,7 +11,7 @@
     "addTransaction": "افزودن تراکنش",
     "editTransaction": "ویرایش تراکنش",
     "transactions": "تراکنش ها",
-    "noTransaction": "اولین تراکنشت رو ایجاد کن!"
+    "noTransaction": "اولین تراکنشت رو ایجاد کن"
   },
   "transaction": {
     "transactionType": "نوع تراکنش",
@@ -27,7 +27,7 @@
   },
   "navbar": {
     "finance": "مالی",
-    "tasks": "فعالیت‌ها",
+    "tasks": "تسک‌ها",
     "setting": "تنظیمات"
   },
   "setting": {
@@ -40,5 +40,11 @@
     "filenameRequired": "نام فایل الزامی است",
     "language": "زبان",
     "explain": "برای استفاده، شناسه Gist را از انتهای لینک Share کپی کنید، یک توکن از github.com/settings/tokens بسازید (با دسترسی gist)، و یک نام فایل مثل data.json وارد کنید."
+  },
+  "tasks": {
+    "taskManager": "مدیریت تسک‌ها",
+    "tasks": "تسک‌ها",
+    "createTask": "ایجاد تسک",
+    "noTask": "اولین تسکت رو ایجاد کن"
   }
 }

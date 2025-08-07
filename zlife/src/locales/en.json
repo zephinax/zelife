@@ -40,5 +40,11 @@
     "filenameRequired": "File name is required",
     "language": "Language",
     "explain": "To use, copy the Gist ID from the end of the Share link, create a token at github.com/settings/tokens (with gist scope), and enter a file name like data.json."
+  },
+  "tasks": {
+    "taskManager": "Task Manager",
+    "tasks": "Tasks",
+    "createTask": "Create task",
+    "noTask": "Create your first task!"
   }
 }

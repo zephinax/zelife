@@ -7,6 +7,7 @@ import {
   type FinanceActions,
   type FinanceState,
   type MonthData,
+  type Task,
   type Transaction,
   type YearData,
 } from "./types";
@@ -373,6 +374,39 @@ export const createFinanceActions: StateCreator<
       txs[idx] = { ...txs[idx], ...updated, updatedAt: Date.now() };
       return { data: { ...state.data } };
     });
+  },
+
+  getTasksByDay: (year, month, day) => {
+    const dayData = get().data?.[year]?.[month]?.[day];
+    return (dayData?.tasks || []).filter((task) => !task.deletedAt);
+  },
+
+  getTasksByMonth: (year, month) => {
+    const monthData = get().data?.[year]?.[month];
+    if (!monthData) return [];
+
+    const tasks: Task[] = [];
+    for (const day in monthData) {
+      const dayTasks = monthData[day].tasks.filter((task) => !task.deletedAt);
+      tasks.push(...dayTasks);
+    }
+    return tasks;
+  },
+
+  getTasksByYear: (year) => {
+    const yearData = get().data?.[year];
+    if (!yearData) return [];
+
+    const tasks: Task[] = [];
+    for (const month in yearData) {
+      for (const day in yearData[month]) {
+        const dayTasks = yearData[month][day].tasks.filter(
+          (task) => !task.deletedAt
+        );
+        tasks.push(...dayTasks);
+      }
+    }
+    return tasks;
   },
 
   addTask: (year, month, day, task) => {

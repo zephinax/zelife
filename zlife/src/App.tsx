@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { useTheme } from "./hooks/useTheme";
 import { useFinanceStore } from "./store/store";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -52,10 +52,12 @@ function App() {
                 />
               }
             />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (
           <>
             <Route path="/" element={<CreateAccount />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </>
         )}
       </Routes>

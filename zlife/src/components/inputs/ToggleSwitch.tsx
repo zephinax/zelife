@@ -73,9 +73,10 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
             width: size * 2,
             height: size,
             transition: "background-image 0.3s ease",
+            boxShadow: "inset 0 4px 8px rgba(0, 0, 0, 0.1.5)",
           }}
           className={`
-            group peer ring-0 bg-gradient-to-bl from-neutral-800 via-neutral-700 to-neutral-600
+            group peer ring-0 bg-[var(--color-background)]
             rounded-full outline-none duration-1000 shadow-md
             peer-focus:outline-none
             after:content-[''] after:rounded-full after:absolute
@@ -112,9 +113,13 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         className="sr-only peer"
       />
       <div
-        style={{ ...checkedBgStyle, transition: "background-image 0.3s ease" }}
+        style={{
+          ...checkedBgStyle,
+          transition: "background-image 0.3s ease",
+          boxShadow: "inset 0 4px 8px rgba(0, 0, 0, 0.1.5)",
+        }}
         className={`
-          group peer ring-0 bg-gradient-to-bl from-neutral-800 via-neutral-700 to-neutral-600
+          group peer ring-0 bg-[var(--color-background)]
           rounded-full outline-none duration-1000 shadow-md
           peer-focus:outline-none
           ${currentSize.container}

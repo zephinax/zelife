@@ -74,7 +74,7 @@ export default function Setting({
           <div className="p-4 flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <Paragraph size="lg">{t("setting.syncData")}</Paragraph>
-              <div className="flex items-center gap-3 justify-center">
+              <div className="flex items-center gap-4 justify-center">
                 {token && (
                   <div className="flex items-center gap-3 justify-center">
                     <div

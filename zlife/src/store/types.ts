@@ -145,6 +145,10 @@ export interface FinanceActions {
     updated: Partial<Omit<Transaction, "id">>
   ) => void;
 
+  getTasksByDay: (year: string, month: string, day: string) => Task[];
+  getTasksByMonth: (year: string, month: string) => Task[];
+  getTasksByYear: (year: string) => Task[];
+
   addTask: (year: string, month: string, day: string, task: Task) => void;
   removeTask: (
     year: string,
