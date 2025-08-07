@@ -116,8 +116,8 @@ export default function Setting({
             {error && <Paragraph>{error}</Paragraph>}
             {lastSyncAt && (
               <Paragraph>
+                {lastAction && `${lastAction} : `}
                 {`${lastSyncAt.toLocaleDateString()} at ${lastSyncAt.toLocaleTimeString()}`}
-                {lastAction && ` - ${lastAction}`}
               </Paragraph>
             )}
           </div>
