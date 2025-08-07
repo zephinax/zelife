@@ -11,6 +11,7 @@ export interface SwipeAction<T = any> {
   icon: React.ComponentType<any> | React.ReactNode;
   function: (item: T) => void;
   color: string;
+  textColor?: string;
   hoverColor?: string;
   label?: string;
 }
@@ -206,6 +207,7 @@ const SwipeActions = <T,>({
                 width: `${actionWidth}px`,
                 minHeight: "60px",
                 backgroundColor: action.color,
+                color: action.textColor,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = hoverColor;

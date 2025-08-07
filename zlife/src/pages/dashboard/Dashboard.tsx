@@ -18,9 +18,21 @@ import SwipeActions, {
 } from "../../components/swipeActions/SwipeActions";
 import { FiTrash2 } from "react-icons/fi";
 import { GrEdit } from "react-icons/gr";
-import { MdOutlineSwipeLeft } from "react-icons/md";
+import {
+  MdOutlineSwipeLeft,
+  MdOutlineSync,
+  MdSyncProblem,
+} from "react-icons/md";
 
-export default function Dashboard() {
+export default function Dashboard({
+  isLoading,
+  error,
+  triggerSync,
+}: {
+  isLoading: boolean;
+  error: string | null;
+  triggerSync: () => void;
+}) {
   const {
     getSummaryByMonth,
     selectedDate,
@@ -43,7 +55,8 @@ export default function Dashboard() {
       function: (transaction) => {
         setTargetTransaction(transaction);
       },
-      color: "#427bf5",
+      color: "var(--color-background-secondary)",
+      textColor: "var(--color-primary)",
       label: "Edit Transaction",
     },
     {
@@ -59,7 +72,8 @@ export default function Dashboard() {
           transaction.id
         );
       },
-      color: "#EF4444",
+      color: "var(--color-background-secondary)",
+      textColor: "var(--color-primary)",
       label: "Delete Transaction",
     },
   ];
@@ -114,6 +128,23 @@ export default function Dashboard() {
             <Paragraph className="!text-white">
               {t("dashboard.addTransaction")}
             </Paragraph>
+          </div>
+          <div className="bg-background-secondary/40 backdrop-blur-sm h-[40px] w-[40px] flex items-center justify-center rounded-full">
+            <div
+              onClick={() => {
+                triggerSync();
+              }}
+            >
+              {error ? (
+                <MdSyncProblem className="text-white size-5" />
+              ) : (
+                <MdOutlineSync
+                  className={`text-white size-5 ${
+                    isLoading ? "animate-spin" : ""
+                  }`}
+                />
+              )}
+            </div>
           </div>
         </div>
         <TopNavigation className="absolute top-0" />

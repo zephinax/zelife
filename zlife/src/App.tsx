@@ -38,7 +38,16 @@ function App() {
       <Routes>
         {userName ? (
           <>
-            <Route path="/" element={<Dashboard />} />
+            <Route
+              path="/"
+              element={
+                <Dashboard
+                  triggerSync={triggerSync}
+                  error={error}
+                  isLoading={isSyncing}
+                />
+              }
+            />
             <Route path="/tasks" element={<Tasks />} />
             <Route
               path="/setting"
