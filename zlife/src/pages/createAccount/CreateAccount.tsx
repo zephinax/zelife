@@ -46,7 +46,7 @@ export default function CreateAccount() {
       </div>
       <LanguageSwitch className="fixed bottom-4 left-4" />
       <Paragraph className="fixed bottom-4 right-4 !text-primary">
-        Zlife – Take Control of Your Life
+        Zelife – Take Control of Your Life
       </Paragraph>
     </div>
   );

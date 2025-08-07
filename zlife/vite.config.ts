@@ -17,8 +17,8 @@ export default defineConfig({
         "icons/*.png",
       ],
       manifest: {
-        name: "Zlife – Take Control of Your Life",
-        short_name: "Zlife",
+        name: "Zelife – Take Control of Your Life",
+        short_name: "Zelife",
         description: "Take Control of Your Life",
         theme_color: "#000000",
         background_color: "#000000",
