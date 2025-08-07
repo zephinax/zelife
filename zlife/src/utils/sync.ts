@@ -16,7 +16,6 @@ function mergeData(
 ): { [year: string]: YearData } {
   const mergedData: { [year: string]: YearData } = {};
 
-  // Helper to merge transactions or tasks
   const mergeItems = <
     T extends { id: string; updatedAt: number; deletedAt?: number }
   >(
@@ -25,46 +24,36 @@ function mergeData(
   ): T[] => {
     const itemMap = new Map<string, T>();
 
-    // Process local items
     for (const item of localItems) {
       itemMap.set(item.id, { ...item });
     }
 
-    // Process remote items
     for (const remoteItem of remoteItems) {
       const localItem = itemMap.get(remoteItem.id);
       if (localItem) {
-        // Item exists in both
         if (
           remoteItem.deletedAt &&
           (!localItem.deletedAt || remoteItem.deletedAt > localItem.deletedAt)
         ) {
-          // Remote deletion is newer
           itemMap.set(remoteItem.id, { ...remoteItem });
         } else if (
           localItem.deletedAt &&
           (!remoteItem.deletedAt || localItem.deletedAt > remoteItem.deletedAt)
         ) {
-          // Local deletion is newer
           itemMap.set(remoteItem.id, { ...localItem });
         } else if (remoteItem.updatedAt > localItem.updatedAt) {
-          // Remote item is newer
           itemMap.set(remoteItem.id, { ...remoteItem });
         } else {
-          // Local item is newer or equal
           itemMap.set(remoteItem.id, { ...localItem });
         }
       } else if (!remoteItem.deletedAt) {
-        // Item only in remote and not deleted
         itemMap.set(remoteItem.id, { ...remoteItem });
       }
     }
 
-    // Filter out deleted items
     return Array.from(itemMap.values()).filter((item) => !item.deletedAt);
   };
 
-  // Get all years from both datasets
   const years = new Set([
     ...Object.keys(localData),
     ...Object.keys(remoteData),
@@ -75,7 +64,6 @@ function mergeData(
     const localYear = localData[year] || {};
     const remoteYear = remoteData[year] || {};
 
-    // Get all months
     const months = new Set([
       ...Object.keys(localYear),
       ...Object.keys(remoteYear),
@@ -86,7 +74,6 @@ function mergeData(
       const localMonth = localYear[month] || {};
       const remoteMonth = remoteYear[month] || {};
 
-      // Get all days
       const days = new Set([
         ...Object.keys(localMonth),
         ...Object.keys(remoteMonth),
@@ -96,7 +83,6 @@ function mergeData(
         const localDay = localMonth[day] || { transactions: [], tasks: [] };
         const remoteDay = remoteMonth[day] || { transactions: [], tasks: [] };
 
-        // Merge transactions and tasks
         mergedData[year][month][day] = {
           transactions: mergeItems(
             localDay.transactions,
@@ -170,63 +156,39 @@ export async function loadFromGist(
     const remoteBackup = JSON.parse(content);
     const localBackup = store.exportData();
 
-    // Validate backup version
     if (!remoteBackup.version) {
       console.warn("Backup has no version, assuming Version 0");
       remoteBackup.version = 0;
     }
 
     if (options.merge) {
-      // Check for differences (only compare data, as other fields are preserved)
       const hasDifferences =
         JSON.stringify(localBackup.state.data) !==
         JSON.stringify(remoteBackup.state.data);
 
       if (hasDifferences) {
-        const userChoice = window.confirm(
-          "The remote data differs from your local data.\n" +
-            'Click "OK" to MERGE the data (combining both with conflict resolution).\n' +
-            'Click "Cancel" to REPLACE your local data with the remote data.'
+        const mergedData = mergeData(
+          localBackup.state.data,
+          remoteBackup.state.data
         );
 
-        if (userChoice) {
-          // Merge
-          const mergedData = mergeData(
-            localBackup.state.data,
-            remoteBackup.state.data
-          );
-          store.importData({
-            ...remoteBackup,
-            state: {
-              ...remoteBackup.state,
-              data: mergedData,
-              token: store.token,
-              gistId: store.gistId,
-              isSyncEnable: store.isSyncEnable,
-            },
-            version: CURRENT_DATA_VERSION, // Ensure merged data is current version
-          });
-          return { success: true, action: "merged" };
-        } else {
-          // Replace
-          store.importData({
-            ...remoteBackup,
-            state: {
-              ...remoteBackup.state,
-              token: store.token,
-              gistId: store.gistId,
-              isSyncEnable: store.isSyncEnable,
-            },
-            version: CURRENT_DATA_VERSION, // Ensure replaced data is current version
-          });
-          return { success: true, action: "overwritten" };
-        }
+        store.importData({
+          ...remoteBackup,
+          state: {
+            ...remoteBackup.state,
+            data: mergedData,
+            token: store.token,
+            gistId: store.gistId,
+            isSyncEnable: store.isSyncEnable,
+          },
+          version: CURRENT_DATA_VERSION,
+        });
+
+        return { success: true, action: "merged" };
       } else {
-        // No differences, no action needed
         return { success: true, action: "no_changes" };
       }
     } else {
-      // Full overwrite
       store.importData({
         ...remoteBackup,
         state: {
@@ -235,7 +197,7 @@ export async function loadFromGist(
           gistId: store.gistId,
           isSyncEnable: store.isSyncEnable,
         },
-        version: CURRENT_DATA_VERSION, // Ensure overwritten data is current version
+        version: CURRENT_DATA_VERSION,
       });
       return { success: true, action: "overwritten" };
     }

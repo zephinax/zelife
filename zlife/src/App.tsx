@@ -23,7 +23,7 @@ function App() {
 
   const fetch = async () => {
     if (isSyncEnable) {
-      await loadFromGist(useFinanceStore.getState());
+      await loadFromGist(useFinanceStore.getState(), { merge: true });
     }
   };
 

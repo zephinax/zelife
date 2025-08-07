@@ -230,7 +230,7 @@ export const createFinanceActions: StateCreator<
 
   getTransactionsByDay: (year, month, day) => {
     const dayData = get().data?.[year]?.[month]?.[day];
-    return dayData?.transactions || [];
+    return (dayData?.transactions || []).filter((tx) => !tx.deletedAt);
   },
 
   getTransactionsByMonth: (year, month) => {
@@ -239,7 +239,8 @@ export const createFinanceActions: StateCreator<
 
     const transactions: Transaction[] = [];
     for (const day in monthData) {
-      transactions.push(...monthData[day].transactions);
+      const dayTxs = monthData[day].transactions.filter((tx) => !tx.deletedAt);
+      transactions.push(...dayTxs);
     }
     return transactions;
   },
@@ -251,7 +252,10 @@ export const createFinanceActions: StateCreator<
     const transactions: Transaction[] = [];
     for (const month in yearData) {
       for (const day in yearData[month]) {
-        transactions.push(...yearData[month][day].transactions);
+        const dayTxs = yearData[month][day].transactions.filter(
+          (tx) => !tx.deletedAt
+        );
+        transactions.push(...dayTxs);
       }
     }
     return transactions;
@@ -490,6 +494,7 @@ export const createFinanceActions: StateCreator<
     let income = 0;
     let expense = 0;
     for (const tx of dayData.transactions) {
+      if (tx.deletedAt) continue;
       if (tx.type === "income") income += tx.amount;
       else if (tx.type === "expense") expense += tx.amount;
     }
@@ -505,6 +510,7 @@ export const createFinanceActions: StateCreator<
     for (const day in monthData) {
       const dayData = monthData[day];
       for (const tx of dayData.transactions) {
+        if (tx.deletedAt) continue;
         if (tx.type === "income") income += tx.amount;
         else if (tx.type === "expense") expense += tx.amount;
       }
@@ -523,6 +529,7 @@ export const createFinanceActions: StateCreator<
       for (const day in monthData) {
         const dayData = monthData[day];
         for (const tx of dayData.transactions) {
+          if (tx.deletedAt) continue;
           if (tx.type === "income") income += tx.amount;
           else if (tx.type === "expense") expense += tx.amount;
         }
