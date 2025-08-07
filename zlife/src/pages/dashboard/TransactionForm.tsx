@@ -3,6 +3,7 @@ import { useTranslation } from "../../hooks/useTranslation";
 import Button from "../../components/button/Button";
 import Input from "../../components/inputs/Input";
 import { useFinanceStore } from "../../store/store";
+import { v4 as uuidv4 } from "uuid";
 import {
   numberWithCommas,
   parseShamsiDate,
@@ -62,7 +63,9 @@ export default function TransactionForm({
           onSuccess && onSuccess();
           transactionForm.reset();
         } else {
-          const newTransaction = {
+          const newTransaction: Transaction = {
+            updatedAt: Date.now(),
+            id: uuidv4(),
             amount: Number(removeCommas(data.amount)),
             type: data.type,
             description: data.description,
