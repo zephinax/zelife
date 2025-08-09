@@ -71,7 +71,7 @@ export default function Setting({
           <Paragraph className="font-medium" size="lg">
             {t("navbar.setting")}
           </Paragraph>
-          <Paragraph className="!text-primary">V1.0.1</Paragraph>
+          <Paragraph className="!text-primary">V1.0.2</Paragraph>
         </div>
         <div className="bg-background-secondary mx-2 rounded-2xl">
           <div className="p-4 flex flex-col gap-2">
