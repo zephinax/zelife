@@ -43,7 +43,7 @@ export default function CreateTaskForm({
         if (targetData) {
           editTask(String(year), String(month), String(day), targetData.id, {
             title: data.title,
-            isDone: false,
+            isDone: targetData.isDone,
             priority: data.priority,
             updatedAt: Date.now(),
             description: data.description,
