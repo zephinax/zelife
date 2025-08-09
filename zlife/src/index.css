@@ -37,3 +37,20 @@ body {
   height: 38px;
   border-radius: 24px !important;
 }
+
+.wd-modal {
+  background-color: var(--color-background-secondary) !important;
+  color: var(--color-text) !important;
+}
+
+.wd-wheel-picker-item-unselected {
+  color: var(--color-text-secondary) !important;
+}
+
+.wd-wheel-picker-item-selected {
+  color: var(--color-text) !important;
+}
+
+.wd-button {
+  background-color: var(--color-primary) !important;
+}

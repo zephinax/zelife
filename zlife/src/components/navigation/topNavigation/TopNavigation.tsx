@@ -70,6 +70,7 @@ export default function TopNavigation({
           button={{
             size: "medium",
             text: `${t("setting.selectDate")}`,
+            className: "button w-full",
           }}
           input={{
             placeholder: "select date",
