@@ -11,21 +11,25 @@ import { useFinanceStore } from "../../store/store";
 import type { Task } from "../../store/types";
 import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
 import { FiPlusCircle, FiTrash2 } from "react-icons/fi";
-import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
-import { MdOutlineSwipeLeft } from "react-icons/md";
+import {
+  MdOutlineCheckBox,
+  MdOutlineCheckBoxOutlineBlank,
+  MdOutlineSwipeLeft,
+} from "react-icons/md";
 import { useState } from "react";
 import Modal from "../../components/modal/Modal";
 import CreateTaskForm from "./CreateTaskForm";
 import { GiLongLeggedSpider } from "react-icons/gi";
 
 export default function Tasks() {
-  const { selectedDate, defaultDate, getTasksByMonth } = useFinanceStore();
+  const { selectedDate, defaultDate, getTasksByMonth, toggleTaskDone } =
+    useFinanceStore();
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const { t } = useTranslation();
   const [targetTask, setTargetTask] = useState<Task | undefined>();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
-  const { year, month } = PARSE_DATE;
+  const { year, month, day } = PARSE_DATE;
   const tasks = getTasksByMonth(String(year), String(month));
   const getTransactionActions: SwipeAction<Task>[] = [
     {
@@ -34,15 +38,17 @@ export default function Tasks() {
       function: (task) => {
         setTargetTask(task);
       },
-      color: "#427bf5",
-      label: "Edit Transaction",
+      color: "var(--color-background-secondary)",
+      textColor: "var(--color-primary)",
+      label: "Edit Task",
     },
     {
       type: "delete",
       icon: FiTrash2,
       function: () => {},
-      color: "#EF4444",
-      label: "Delete Transaction",
+      color: "var(--color-background-secondary)",
+      textColor: "var(--color-primary)",
+      label: "Delete Task",
     },
   ];
   return (
@@ -93,17 +99,27 @@ export default function Tasks() {
                     swipeThreshold={60}
                   >
                     <div className="w-full flex items-center gap-2 py-2">
-                      <div className="px-2">
+                      <div
+                        className="px-2"
+                        onClick={() => {
+                          toggleTaskDone(
+                            String(year),
+                            String(month),
+                            String(day),
+                            item.id
+                          );
+                        }}
+                      >
                         {item.isDone ? (
                           <div className="flex flex-col gap-1 justify-center items-center">
-                            <FaCircleArrowDown className="!text-green-400 size-6" />
+                            <MdOutlineCheckBox className="!text-primary size-8" />
                             <p className="text-[9px] font-medium">
                               {item.priority}
                             </p>
                           </div>
                         ) : (
                           <div className="flex flex-col gap-1 justify-center items-center">
-                            <FaCircleArrowUp className="!text-red-500 size-6" />
+                            <MdOutlineCheckBoxOutlineBlank className="!text-primary size-8" />
                             <p className="text-[9px] font-medium">
                               {item.priority}
                             </p>
