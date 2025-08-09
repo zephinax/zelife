@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import Paragraph from "../../components/typography/Paragraph";
 import type { Task } from "../../store/types";
 import { parseShamsiDate } from "../../utils/helper";
+import { v4 as uuidv4 } from "uuid";
 
 export default function CreateTaskForm({
   onSuccess,
@@ -32,6 +33,7 @@ export default function CreateTaskForm({
     if (targetData) {
       setValue("title", targetData.title);
       setValue("description", targetData.description);
+      setValue("priority", targetData.priority);
     }
   }, []);
 
@@ -41,9 +43,10 @@ export default function CreateTaskForm({
         addTask(String(year), String(month), String(day), {
           title: data.title,
           isDone: false,
-          updatedAt: 232,
-          id: "3434234sdfs342",
-          description: "",
+          priority: 1,
+          updatedAt: Date.now(),
+          id: uuidv4(),
+          description: data.description,
         });
         onSuccess && onSuccess();
       })}
@@ -51,22 +54,22 @@ export default function CreateTaskForm({
     >
       <Input
         type="text"
-        errorText={errors.filename?.message as string}
-        label={t("setting.filename")}
-        {...register("filename", { required: "" })}
-      />
-
-      <Input
-        type="text"
-        errorText={errors.token?.message as string}
-        label={t("setting.token")}
-        {...register("token")}
+        errorText={errors.title?.message as string}
+        label={t("setting.title")}
+        {...register("title", { required: "" })}
       />
       <Input
         type="text"
-        errorText={errors.gistId?.message as string}
-        label={t("setting.gistId")}
-        {...register("gistId")}
+        errorText={errors.description?.message as string}
+        label={t("setting.description")}
+        {...register("description")}
+      />
+      <Input
+        type="number"
+        inputMode="numeric"
+        errorText={errors.priority?.message as string}
+        label={t("setting.priority")}
+        {...register("priority")}
       />
       <Paragraph>{t("setting.explain")}</Paragraph>
 
