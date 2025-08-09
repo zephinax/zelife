@@ -9,7 +9,7 @@ import Title from "../../components/typography/Title";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useFinanceStore } from "../../store/store";
 import type { Task } from "../../store/types";
-import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
+import { parseShamsiDate } from "../../utils/helper";
 import { FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import {
   MdOutlineCheckBox,
