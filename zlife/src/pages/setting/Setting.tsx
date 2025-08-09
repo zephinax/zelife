@@ -175,6 +175,7 @@ export default function Setting({
       </div>
       <Modal
         size="sm"
+        overflowY="overflow-y-visible"
         title={t("setting.enterYourGithubData")}
         isOpen={isGetUserDataModalOpen}
         onClose={() => {

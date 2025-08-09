@@ -172,6 +172,7 @@ export default function Tasks() {
       </div>
       <Modal
         size="sm"
+        overflowY="overflow-y-visible"
         title={
           Boolean(targetTask?.id) ? t("tasks.editTask") : t("tasks.createTask")
         }

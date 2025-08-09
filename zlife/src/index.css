@@ -41,6 +41,7 @@ body {
 .wd-modal {
   background-color: var(--color-background-secondary) !important;
   color: var(--color-text) !important;
+  border-radius: 16px !important;
 }
 
 .wd-wheel-picker-item-unselected {
@@ -53,4 +54,8 @@ body {
 
 .wd-button {
   background-color: var(--color-primary) !important;
+}
+
+.wd-modal-overlay {
+  background-color: transparent !important;
 }

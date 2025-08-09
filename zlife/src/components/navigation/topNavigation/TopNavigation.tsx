@@ -28,12 +28,12 @@ export default function TopNavigation({
     >
       <img
         width={40}
-        className="rounded-full bg-background-secondary"
+        className="rounded-full bg-background-secondary z-[9999]"
         height={40}
         src={avatarUrl ? avatarUrl : "/logo.svg"}
       ></img>
 
-      <div className="flex items-center gap-2 !text-white">
+      <div className="flex items-center gap-2 !text-white z-[9999]">
         <div
           onClick={() => {
             setIsDateModalOpen(true);
@@ -66,41 +66,43 @@ export default function TopNavigation({
         }}
         title={`${t("setting.selectDate")}`}
       >
-        <WheelDatePicker
-          button={{
-            size: "medium",
-            text: `${t("setting.selectDate")}`,
-            className: "button w-full",
-          }}
-          input={{
-            placeholder: "select date",
-          }}
-          indicatorClassName={"rounded-xl bg-primary opacity-20"}
-          className={`text-text ${
-            language === "fa" ? "!font-[Vazirmatn]" : "!font-[Ubuntu]"
-          }`}
-          value={date}
-          onChange={setDate}
-        />
-        <div className="flex mt-4 gap-4">
-          <Button
-            onClick={() => {
-              setSelectedDate(date);
-              setIsDateModalOpen(false);
+        <div className="py-4">
+          <WheelDatePicker
+            button={{
+              size: "medium",
+              text: `${t("setting.selectDate")}`,
+              className: "button w-full",
             }}
-            className="w-full"
-          >
-            {t("setting.changeDate")}
-          </Button>
-          <Button
-            onClick={() => {
-              setSelectedDate("");
-              setIsDateModalOpen(false);
+            input={{
+              placeholder: "select date",
             }}
-            className="w-full"
-          >
-            {t("setting.today")}
-          </Button>
+            indicatorClassName={"rounded-xl bg-primary opacity-20"}
+            className={`text-text ${
+              language === "fa" ? "!font-[Vazirmatn]" : "!font-[Ubuntu]"
+            }`}
+            value={date}
+            onChange={setDate}
+          />
+          <div className="flex mt-4 gap-4">
+            <Button
+              onClick={() => {
+                setSelectedDate(date);
+                setIsDateModalOpen(false);
+              }}
+              className="w-full"
+            >
+              {t("setting.changeDate")}
+            </Button>
+            <Button
+              onClick={() => {
+                setSelectedDate("");
+                setIsDateModalOpen(false);
+              }}
+              className="w-full"
+            >
+              {t("setting.today")}
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>
