@@ -5,13 +5,17 @@ import Modal from "../../modal/Modal";
 import { WheelDatePicker } from "@buildix/wheel-datepicker";
 import { useState } from "react";
 import "@buildix/wheel-datepicker/dist/index.css";
+import Button from "../../button/Button";
+import { useTranslation } from "../../../hooks/useTranslation";
 export default function TopNavigation({
   className = "",
 }: {
   className?: string;
 }) {
-  const { defaultDate, selectedDate, avatarUrl } = useFinanceStore();
+  const { defaultDate, selectedDate, avatarUrl, setSelectedDate } =
+    useFinanceStore();
   const [date, setDate] = useState("");
+  const { t } = useTranslation();
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const DATE = selectedDate ? selectedDate : defaultDate;
   return (
@@ -56,11 +60,12 @@ export default function TopNavigation({
         onClose={() => {
           setIsDateModalOpen(false);
         }}
-        title="sdkhdsfsdhjsdj"
+        title={`${t("setting.selectDate")}`}
       >
         <WheelDatePicker
           button={{
             size: "medium",
+            text: `${t("setting.selectDate")}`,
           }}
           input={{
             placeholder: "select date",
@@ -69,6 +74,15 @@ export default function TopNavigation({
           value={date}
           onChange={setDate}
         />
+        <Button
+          onClick={() => {
+            setSelectedDate(date);
+            setIsDateModalOpen(false);
+          }}
+          className="w-full mt-4"
+        >
+          {t("setting.changeDate")}
+        </Button>
       </Modal>
     </div>
   );

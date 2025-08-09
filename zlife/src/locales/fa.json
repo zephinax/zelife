@@ -40,6 +40,8 @@
     "filename": "نام فایل",
     "filenameRequired": "نام فایل الزامی است",
     "language": "زبان",
+    "selectDate": "انتخاب تاریخ",
+    "changeDate": "تغییر تاریخ",
     "explain": "برای استفاده، شناسه Gist را از انتهای لینک Share کپی کنید، یک توکن از github.com/settings/tokens بسازید (با دسترسی gist)، و یک نام فایل مثل data.json وارد کنید."
   },
   "tasks": {

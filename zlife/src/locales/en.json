@@ -40,6 +40,8 @@
     "filename": "File name",
     "filenameRequired": "File name is required",
     "language": "Language",
+    "selectDate": "Select date",
+    "changeDate": "Change date",
     "explain": "To use, copy the Gist ID from the end of the Share link, create a token at github.com/settings/tokens (with gist scope), and enter a file name like data.json."
   },
   "tasks": {
