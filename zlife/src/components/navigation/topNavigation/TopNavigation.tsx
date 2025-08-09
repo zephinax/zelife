@@ -93,15 +93,6 @@ export default function TopNavigation({
             >
               {t("setting.changeDate")}
             </Button>
-            <Button
-              onClick={() => {
-                setSelectedDate("");
-                setIsDateModalOpen(false);
-              }}
-              className="w-full"
-            >
-              {t("setting.today")}
-            </Button>
           </div>
         </div>
       </Modal>

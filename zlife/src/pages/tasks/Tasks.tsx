@@ -36,6 +36,39 @@ export default function Tasks() {
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month, day } = PARSE_DATE;
   const tasks = getTasksByMonth(String(year), String(month));
+
+  // ---- SORTING LOGIC ----
+  // Groups:
+  // 0 = undone && has priority  (sorted by priority asc)
+  // 1 = undone && no priority   (kept original order)
+  // 2 = done                    (kept original order)
+  const sortedTasks: Task[] = tasks?.length
+    ? (
+        tasks.map((t, idx) => ({ ...t, __originalIndex: idx })) as (Task & {
+          __originalIndex: number;
+        })[]
+      )
+        .sort((a, b) => {
+          const group = (x: Task & { __originalIndex?: number }) =>
+            x.isDone ? 2 : x.priority == null ? 1 : 0;
+
+          const ga = group(a);
+          const gb = group(b);
+          if (ga !== gb) return ga - gb;
+
+          // both in group 0 → both undone with priority: sort by numeric priority
+          if (ga === 0) {
+            const pa = Number(a.priority);
+            const pb = Number(b.priority);
+            if (pa !== pb) return pa - pb;
+          }
+
+          // tie-breaker: stable sort using original index
+          return (a.__originalIndex ?? 0) - (b.__originalIndex ?? 0);
+        })
+        .map(({ __originalIndex, ...rest }) => rest as Task)
+    : [];
+
   const getTransactionActions: SwipeAction<Task>[] = [
     {
       type: "edit",
@@ -59,6 +92,7 @@ export default function Tasks() {
       label: "Delete Task",
     },
   ];
+
   return (
     <PageLayout>
       <div className="relative rounded-full h-[90px] overflow-hidden flex justify-start gap-4 items-center">
@@ -90,16 +124,13 @@ export default function Tasks() {
         </div>
         <div
           dir="ltr"
-          className="p-2 mt-2 flex flex-col-reverse bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
+          className="p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
         >
-          {tasks && tasks?.length && tasks.length > 0 ? (
-            tasks?.map((item: Task, index) => {
-              const isLast = index === tasks.length - 1;
+          {sortedTasks && sortedTasks.length > 0 ? (
+            sortedTasks.map((item: Task, index) => {
+              const isLast = index === sortedTasks.length - 1;
               return (
                 <div key={item.id} className="w-full">
-                  {!isLast && (
-                    <div className="w-full h-[1px] my-2 bg-background"></div>
-                  )}
                   <SwipeActions
                     item={item}
                     actions={getTransactionActions}
@@ -109,7 +140,6 @@ export default function Tasks() {
                     <div className="w-full flex items-center gap-2 py-2">
                       <div
                         onClick={() => {
-                          console.log(item.id);
                           toggleTaskDone(
                             String(year),
                             String(month),
@@ -122,16 +152,10 @@ export default function Tasks() {
                         {item.isDone ? (
                           <div className="flex flex-col gap-1 justify-center items-center">
                             <MdOutlineCheckBox className="!text-primary size-8" />
-                            <p className="text-[9px] font-medium">
-                              {item.priority}
-                            </p>
                           </div>
                         ) : (
                           <div className="flex flex-col gap-1 justify-center items-center">
                             <MdOutlineCheckBoxOutlineBlank className="!text-primary size-8" />
-                            <p className="text-[9px] font-medium">
-                              {item.priority}
-                            </p>
                           </div>
                         )}
                       </div>
@@ -159,6 +183,9 @@ export default function Tasks() {
                       </div>
                     </div>
                   </SwipeActions>
+                  {!isLast && (
+                    <div className="w-full h-[1px] my-2 bg-background"></div>
+                  )}
                 </div>
               );
             })
