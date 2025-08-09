@@ -3,7 +3,7 @@ import { useFinanceStore } from "../../../store/store";
 import { BiChevronDown } from "react-icons/bi";
 import Modal from "../../modal/Modal";
 import { WheelDatePicker } from "@buildix/wheel-datepicker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "@buildix/wheel-datepicker/dist/index.css";
 import Button from "../../button/Button";
 import { useTranslation } from "../../../hooks/useTranslation";
@@ -14,14 +14,10 @@ export default function TopNavigation({
 }) {
   const { defaultDate, selectedDate, avatarUrl, setSelectedDate, language } =
     useFinanceStore();
-  const [date, setDate] = useState("");
   const { t } = useTranslation();
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const DATE = selectedDate ? selectedDate : defaultDate;
 
-  useEffect(() => {
-    setDate(DATE);
-  }, []);
   return (
     <div
       className={`flex p-4 w-full justify-between items-center ${className}`}
@@ -80,20 +76,12 @@ export default function TopNavigation({
             className={`text-text ${
               language === "fa" ? "!font-[Vazirmatn]" : "!font-[Ubuntu]"
             }`}
-            value={date}
-            onChange={setDate}
+            value={DATE}
+            onChange={(date) => {
+              setSelectedDate(date);
+              setIsDateModalOpen(false);
+            }}
           />
-          <div className="flex mt-4 gap-4">
-            <Button
-              onClick={() => {
-                setSelectedDate(date);
-                setIsDateModalOpen(false);
-              }}
-              className="w-full"
-            >
-              {t("setting.changeDate")}
-            </Button>
-          </div>
         </div>
       </Modal>
     </div>
