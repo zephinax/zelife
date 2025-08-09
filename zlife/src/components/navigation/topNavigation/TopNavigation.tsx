@@ -4,7 +4,7 @@ import { BiChevronDown } from "react-icons/bi";
 import Modal from "../../modal/Modal";
 import { WheelDatePicker } from "@buildix/wheel-datepicker";
 import { useState } from "react";
-
+import "@buildix/wheel-datepicker/dist/index.css";
 export default function TopNavigation({
   className = "",
 }: {
@@ -49,6 +49,8 @@ export default function TopNavigation({
         </div>
       </div>
       <Modal
+        draggable={false}
+        overflowY="overflow-y-visible"
         size="sm"
         isOpen={isDateModalOpen}
         onClose={() => {
@@ -57,6 +59,12 @@ export default function TopNavigation({
         title="sdkhdsfsdhjsdj"
       >
         <WheelDatePicker
+          button={{
+            size: "medium",
+          }}
+          input={{
+            placeholder: "select date",
+          }}
           className="text-text"
           value={date}
           onChange={setDate}

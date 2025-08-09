@@ -172,7 +172,9 @@ export default function Tasks() {
       </div>
       <Modal
         size="sm"
-        title={t("setting.enterYourGithubData")}
+        title={
+          Boolean(targetTask?.id) ? t("tasks.editTask") : t("tasks.createTask")
+        }
         isOpen={createTaskModal}
         onClose={() => {
           setCreateTaskModal(false);

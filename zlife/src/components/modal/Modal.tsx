@@ -14,6 +14,7 @@ export interface ModalProps {
     | "overflow-y-visible"
     | "overflow-y-scroll"
     | "overflow-y-clip";
+  draggable?: boolean;
   size?: "sm" | "md" | "lg" | "xl" | "full" | "fit";
 }
 
@@ -23,6 +24,7 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
   size = "fit",
+  draggable = true,
   overflowY = "overflow-y-auto",
 }) => {
   const [show, setShow] = useState(false);
@@ -77,7 +79,7 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   const onDragStart = (clientY: number) => {
-    if (!isSmallScreen) return;
+    if (!isSmallScreen || !draggable) return;
     draggingRef.current = true;
     startYRef.current = clientY;
   };
@@ -86,7 +88,8 @@ const Modal: React.FC<ModalProps> = ({
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const onDragMove = (clientY: number) => {
-    if (!draggingRef.current || startYRef.current === null) return;
+    if (!draggingRef.current || startYRef.current === null || !draggable)
+      return;
     const diff = clientY - startYRef.current;
     if (diff > 0) {
       dragYRef.current = diff;
@@ -97,7 +100,7 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   const onDragEnd = () => {
-    if (!draggingRef.current) return;
+    if (!draggingRef.current || !draggable) return;
     draggingRef.current = false;
     if (dragYRef.current > 100) {
       handleClose();

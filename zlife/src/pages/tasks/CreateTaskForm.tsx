@@ -4,7 +4,6 @@ import Button from "../../components/button/Button";
 import Input from "../../components/inputs/Input";
 import { useFinanceStore } from "../../store/store";
 import { useEffect } from "react";
-import Paragraph from "../../components/typography/Paragraph";
 import type { Task } from "../../store/types";
 import { parseShamsiDate } from "../../utils/helper";
 import { v4 as uuidv4 } from "uuid";
@@ -82,12 +81,8 @@ export default function CreateTaskForm({
         label={t("setting.priority")}
         {...register("priority")}
       />
-      <Paragraph>{t("setting.explain")}</Paragraph>
-
       <Button className="w-full mt-2 my-2" type="submit">
-        {Boolean(targetData?.id)
-          ? t("dashboard.editTransaction")
-          : t("setting.syncData")}
+        {Boolean(targetData?.id) ? t("tasks.editTask") : t("tasks.createTask")}
       </Button>
     </form>
   );

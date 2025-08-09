@@ -46,6 +46,7 @@
     "taskManager": "Task Manager",
     "tasks": "Tasks",
     "createTask": "Create task",
+    "editTask": "Edit task",
     "noTask": "Create your first task!"
   }
 }
