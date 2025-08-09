@@ -1,3 +1,5 @@
+// Modified sync.ts with inline cleanup - no changes to actions needed
+
 import {
   CURRENT_DATA_VERSION,
   type FinanceActions,
@@ -9,6 +11,50 @@ import {
   updateGistContent,
   createNewGist,
 } from "./gistController";
+
+const DELETED_ITEM_RETENTION_DAYS = 30; // Keep deleted items for 30 days
+
+function cleanupOldDeletedItems(data: { [year: string]: YearData }): {
+  [year: string]: YearData;
+} {
+  const cutoffTime =
+    Date.now() - DELETED_ITEM_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+  const cleanedData = { ...data };
+  let cleanupCount = 0;
+
+  // Iterate through all years/months/days
+  for (const year in cleanedData) {
+    for (const month in cleanedData[year]) {
+      for (const day in cleanedData[year][month]) {
+        const dayData = cleanedData[year][month][day];
+
+        // Clean up old deleted transactions
+        dayData.transactions = dayData.transactions.filter((tx) => {
+          if (tx.deletedAt && tx.deletedAt < cutoffTime) {
+            cleanupCount++;
+            return false; // Remove this old deleted item
+          }
+          return true; // Keep this item
+        });
+
+        // Clean up old deleted tasks
+        dayData.tasks = dayData.tasks.filter((task) => {
+          if (task.deletedAt && task.deletedAt < cutoffTime) {
+            cleanupCount++;
+            return false; // Remove this old deleted task
+          }
+          return true; // Keep this task
+        });
+      }
+    }
+  }
+
+  if (cleanupCount > 0) {
+    console.log(`Cleaned up ${cleanupCount} old deleted items before sync`);
+  }
+
+  return cleanedData;
+}
 
 function mergeData(
   localData: { [year: string]: YearData },
@@ -24,34 +70,52 @@ function mergeData(
   ): T[] => {
     const itemMap = new Map<string, T>();
 
+    // Add all local items (including deleted ones for merge comparison)
     for (const item of localItems) {
       itemMap.set(item.id, { ...item });
     }
 
+    // Process remote items
     for (const remoteItem of remoteItems) {
       const localItem = itemMap.get(remoteItem.id);
+
       if (localItem) {
-        if (
-          remoteItem.deletedAt &&
-          (!localItem.deletedAt || remoteItem.deletedAt > localItem.deletedAt)
-        ) {
-          itemMap.set(remoteItem.id, { ...remoteItem });
-        } else if (
-          localItem.deletedAt &&
-          (!remoteItem.deletedAt || localItem.deletedAt > remoteItem.deletedAt)
-        ) {
-          itemMap.set(remoteItem.id, { ...localItem });
-        } else if (remoteItem.updatedAt > localItem.updatedAt) {
-          itemMap.set(remoteItem.id, { ...remoteItem });
+        // Both items exist - compare timestamps to decide which version wins
+        const remoteIsDeleted = remoteItem.deletedAt != null;
+        const localIsDeleted = localItem.deletedAt != null;
+
+        if (remoteIsDeleted && localIsDeleted) {
+          // Both deleted - keep the one with latest deletion timestamp
+          if (remoteItem.deletedAt! >= localItem.deletedAt!) {
+            itemMap.set(remoteItem.id, { ...remoteItem });
+          }
+        } else if (remoteIsDeleted && !localIsDeleted) {
+          // Remote deleted, local not - remote deletion wins if it's newer than local update
+          if (remoteItem.deletedAt! >= localItem.updatedAt) {
+            itemMap.set(remoteItem.id, { ...remoteItem });
+          }
+        } else if (!remoteIsDeleted && localIsDeleted) {
+          // Local deleted, remote not - local deletion wins if it's newer than remote update
+          if (localItem.deletedAt! >= remoteItem.updatedAt) {
+            // Keep local (already in map)
+          } else {
+            // Remote update is newer than local deletion - restore item
+            itemMap.set(remoteItem.id, { ...remoteItem });
+          }
         } else {
-          itemMap.set(remoteItem.id, { ...localItem });
+          // Neither deleted - normal timestamp comparison
+          if (remoteItem.updatedAt >= localItem.updatedAt) {
+            itemMap.set(remoteItem.id, { ...remoteItem });
+          }
         }
-      } else if (!remoteItem.deletedAt) {
+      } else {
+        // Item doesn't exist locally - add it (even if deleted, for sync purposes)
         itemMap.set(remoteItem.id, { ...remoteItem });
       }
     }
 
-    return Array.from(itemMap.values()).filter((item) => !item.deletedAt);
+    // Return ALL items including deleted ones (filtering happens in UI)
+    return Array.from(itemMap.values());
   };
 
   const years = new Set([
@@ -104,8 +168,20 @@ export async function syncToGist(store: FinanceState & FinanceActions) {
   }
 
   try {
+    // Get current data and clean up old deleted items
     const backup = store.exportData();
-    const content = JSON.stringify(backup, null, 2);
+    const cleanedData = cleanupOldDeletedItems(backup.state.data);
+
+    // Create backup with cleaned data
+    const cleanedBackup = {
+      ...backup,
+      state: {
+        ...backup.state,
+        data: cleanedData,
+      },
+    };
+
+    const content = JSON.stringify(cleanedBackup, null, 2);
 
     if (store.gistId) {
       await updateGistContent(
