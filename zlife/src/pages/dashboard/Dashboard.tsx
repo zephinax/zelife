@@ -23,6 +23,7 @@ import {
   MdOutlineSync,
   MdSyncProblem,
 } from "react-icons/md";
+import { GiLongLeggedSpider } from "react-icons/gi";
 
 export default function Dashboard({
   isLoading,
@@ -37,6 +38,7 @@ export default function Dashboard({
     getSummaryByMonth,
     selectedDate,
     defaultDate,
+    token,
     removeTransaction,
     getTransactionsByMonth,
   } = useFinanceStore();
@@ -129,23 +131,25 @@ export default function Dashboard({
               {t("dashboard.addTransaction")}
             </Paragraph>
           </div>
-          <div className="bg-background-secondary/40 backdrop-blur-sm h-[40px] w-[40px] flex items-center justify-center rounded-full">
-            <div
-              onClick={() => {
-                triggerSync();
-              }}
-            >
-              {error ? (
-                <MdSyncProblem className="text-white size-5" />
-              ) : (
-                <MdOutlineSync
-                  className={`text-white size-5 ${
-                    isLoading ? "animate-spin" : ""
-                  }`}
-                />
-              )}
+          {token && (
+            <div className="bg-background-secondary/40 backdrop-blur-sm h-[40px] w-[40px] flex items-center justify-center rounded-full">
+              <div
+                onClick={() => {
+                  triggerSync();
+                }}
+              >
+                {error ? (
+                  <MdSyncProblem className="text-white size-5" />
+                ) : (
+                  <MdOutlineSync
+                    className={`text-white size-5 ${
+                      isLoading ? "animate-spin" : ""
+                    }`}
+                  />
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <TopNavigation className="absolute top-0" />
       </div>
@@ -211,8 +215,9 @@ export default function Dashboard({
               );
             })
           ) : (
-            <div className="py-2">
-              <Paragraph>{t("dashboard.noTransaction")}</Paragraph>
+            <div className="py-2 flex items-center justify-center flex-col gap-4">
+              <GiLongLeggedSpider className="!text-primary size-14 opacity-75" />
+              <Paragraph size="lg">{t("dashboard.noTransaction")}</Paragraph>
             </div>
           )}
         </div>

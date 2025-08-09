@@ -16,6 +16,7 @@ import { MdOutlineSwipeLeft } from "react-icons/md";
 import { useState } from "react";
 import Modal from "../../components/modal/Modal";
 import CreateTaskForm from "./CreateTaskForm";
+import { GiLongLeggedSpider } from "react-icons/gi";
 
 export default function Tasks() {
   const { selectedDate, defaultDate, getTasksByMonth } = useFinanceStore();
@@ -46,7 +47,7 @@ export default function Tasks() {
   ];
   return (
     <PageLayout>
-      <div className="relative rounded-full h-[75px] overflow-hidden flex justify-start gap-4 items-center">
+      <div className="relative rounded-full h-[90px] overflow-hidden flex justify-start gap-4 items-center">
         <Silk
           speed={8}
           scale={0.6}
@@ -128,8 +129,9 @@ export default function Tasks() {
               );
             })
           ) : (
-            <div className="py-2">
-              <Paragraph>{t("tasks.noTask")}</Paragraph>
+            <div className="py-2 flex items-center justify-center flex-col gap-4">
+              <GiLongLeggedSpider className="!text-primary size-14 opacity-75" />
+              <Paragraph size="lg">{t("tasks.noTask")}</Paragraph>
             </div>
           )}
         </div>
