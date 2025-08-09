@@ -7,7 +7,7 @@ import { numberWithCommas, parseShamsiDate } from "../../utils/helper";
 import { BiDollar } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
 import Modal from "../../components/modal/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "../../hooks/useTranslation";
 
 import TransactionForm from "./TransactionForm";
@@ -79,6 +79,12 @@ export default function Dashboard({
       label: "Delete Transaction",
     },
   ];
+
+  useEffect(() => {
+    console.log("selected Date", selectedDate);
+    console.log("default Date", defaultDate);
+    console.log("date", DATE);
+  }, [selectedDate, defaultDate, DATE]);
 
   return (
     <div className="w-screen min-h-[100svh] pb-[85px]">
