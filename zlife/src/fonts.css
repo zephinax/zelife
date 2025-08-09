@@ -103,3 +103,11 @@ body:lang(fa) {
 body:lang(en) {
   font-family: "Ubuntu", sans-serif;
 }
+
+*:lang(fa) {
+  font-family: "Vazirmatn", Tahoma, sans-serif;
+}
+
+*:lang(en) {
+  font-family: "Ubuntu", sans-serif;
+}
