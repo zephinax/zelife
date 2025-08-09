@@ -30,7 +30,9 @@ export default function Tasks() {
     {
       type: "edit",
       icon: GrEdit,
-      function: () => {},
+      function: (task) => {
+        setTargetTask(task);
+      },
       color: "#427bf5",
       label: "Edit Transaction",
     },
