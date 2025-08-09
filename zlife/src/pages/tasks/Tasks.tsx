@@ -15,7 +15,7 @@ import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 import { MdOutlineSwipeLeft } from "react-icons/md";
 import { useState } from "react";
 import Modal from "../../components/modal/Modal";
-import CreateTaskForm from "./createTaskForm";
+import CreateTaskForm from "./CreateTaskForm";
 
 export default function Tasks() {
   const { selectedDate, defaultDate, getTasksByMonth } = useFinanceStore();

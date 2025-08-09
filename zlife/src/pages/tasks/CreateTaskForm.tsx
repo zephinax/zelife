@@ -6,6 +6,7 @@ import { useFinanceStore } from "../../store/store";
 import { useEffect } from "react";
 import Paragraph from "../../components/typography/Paragraph";
 import type { Task } from "../../store/types";
+import { parseShamsiDate } from "../../utils/helper";
 
 export default function CreateTaskForm({
   onSuccess,
@@ -14,9 +15,19 @@ export default function CreateTaskForm({
   targetData?: Task;
   onSuccess?: () => void;
 }) {
-  const { setGistId, setToken, setFilename, setIsSyncEnable } =
-    useFinanceStore();
+  const {
+    setGistId,
+    setToken,
+    setFilename,
+    setIsSyncEnable,
+    addTask,
+    defaultDate,
+    selectedDate,
+  } = useFinanceStore();
   const { t } = useTranslation();
+  const DATE = selectedDate ? selectedDate : defaultDate;
+  const PARSE_DATE = parseShamsiDate(DATE);
+  const { year, month, day } = PARSE_DATE;
   const userDataForm = useForm();
   const {
     register,
@@ -35,11 +46,13 @@ export default function CreateTaskForm({
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        setFilename(data.filename);
-        setToken(data.token);
-        setGistId(data.gistId);
-        setIsSyncEnable(true);
-        onSuccess && onSuccess();
+        addTask(String(year), String(month), String(day), {
+          title: "adasdasdfssdas",
+          isDone: false,
+          updatedAt: 232,
+          id: "3434234sdfs342",
+          description: "",
+        });
       })}
       className="pb-2 flex flex-col gap-4"
     >
