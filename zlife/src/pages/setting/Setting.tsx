@@ -183,6 +183,7 @@ export default function Setting({
         }}
       >
         <UserDataForm
+          triggerSync={triggerSync}
           targetData={{
             token,
             filename,

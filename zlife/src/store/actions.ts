@@ -34,7 +34,7 @@ export const createFinanceActions: StateCreator<
         data: JSON.parse(JSON.stringify(state.data)), // Deep copy
         userName: state.userName,
         language: state.language,
-        selectedDate: state.selectedDate,
+        selectedDate: "",
         defaultDate: state.defaultDate,
         token: state.token,
         gistId: state.gistId,

@@ -8,6 +8,7 @@ import Paragraph from "../../components/typography/Paragraph";
 
 export default function UserDataForm({
   onSuccess,
+  triggerSync,
   targetData,
 }: {
   targetData?: {
@@ -15,6 +16,7 @@ export default function UserDataForm({
     token: string;
     gistId: string;
   };
+  triggerSync: () => void;
   onSuccess?: () => void;
 }) {
   const { setGistId, setToken, setFilename, setIsSyncEnable } =
@@ -43,6 +45,7 @@ export default function UserDataForm({
         setToken(data.token);
         setGistId(data.gistId);
         setIsSyncEnable(true);
+        triggerSync();
         onSuccess && onSuccess();
       })}
       className="pb-2 flex flex-col gap-4"
