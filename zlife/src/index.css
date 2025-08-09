@@ -29,3 +29,11 @@ body {
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
+
+.wd-input-field {
+  background-color: var(--color-background) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-text-secondary);
+  height: 38px;
+  border-radius: 24px !important;
+}
