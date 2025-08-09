@@ -15,15 +15,7 @@ export default function CreateTaskForm({
   targetData?: Task;
   onSuccess?: () => void;
 }) {
-  const {
-    setGistId,
-    setToken,
-    setFilename,
-    setIsSyncEnable,
-    addTask,
-    defaultDate,
-    selectedDate,
-  } = useFinanceStore();
+  const { addTask, defaultDate, selectedDate } = useFinanceStore();
   const { t } = useTranslation();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
@@ -47,12 +39,13 @@ export default function CreateTaskForm({
     <form
       onSubmit={handleSubmit((data) => {
         addTask(String(year), String(month), String(day), {
-          title: "adasdasdfssdas",
+          title: data.title,
           isDone: false,
           updatedAt: 232,
           id: "3434234sdfs342",
           description: "",
         });
+        onSuccess && onSuccess();
       })}
       className="pb-2 flex flex-col gap-4"
     >
