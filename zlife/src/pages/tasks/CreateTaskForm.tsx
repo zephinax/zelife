@@ -16,7 +16,7 @@ export default function CreateTaskForm({
   targetData?: Task;
   onSuccess?: () => void;
 }) {
-  const { addTask, defaultDate, selectedDate } = useFinanceStore();
+  const { addTask, defaultDate, selectedDate, editTask } = useFinanceStore();
   const { t } = useTranslation();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
@@ -40,14 +40,25 @@ export default function CreateTaskForm({
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        addTask(String(year), String(month), String(day), {
-          title: data.title,
-          isDone: false,
-          priority: 1,
-          updatedAt: Date.now(),
-          id: uuidv4(),
-          description: data.description,
-        });
+        if (targetData) {
+          editTask(String(year), String(month), String(day), targetData.id, {
+            title: data.title,
+            isDone: false,
+            priority: data.priority,
+            updatedAt: Date.now(),
+            description: data.description,
+          });
+        } else {
+          addTask(String(year), String(month), String(day), {
+            title: data.title,
+            isDone: false,
+            priority: data.priority,
+            updatedAt: Date.now(),
+            id: uuidv4(),
+            description: data.description,
+          });
+        }
+        userDataForm.reset();
         onSuccess && onSuccess();
       })}
       className="pb-2 flex flex-col gap-4"

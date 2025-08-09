@@ -22,8 +22,13 @@ import CreateTaskForm from "./CreateTaskForm";
 import { GiLongLeggedSpider } from "react-icons/gi";
 
 export default function Tasks() {
-  const { selectedDate, defaultDate, getTasksByMonth, toggleTaskDone } =
-    useFinanceStore();
+  const {
+    selectedDate,
+    defaultDate,
+    getTasksByMonth,
+    toggleTaskDone,
+    removeTask,
+  } = useFinanceStore();
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const { t } = useTranslation();
   const [targetTask, setTargetTask] = useState<Task | undefined>();
@@ -37,6 +42,7 @@ export default function Tasks() {
       icon: GrEdit,
       function: (task) => {
         setTargetTask(task);
+        setCreateTaskModal(true);
       },
       color: "var(--color-background-secondary)",
       textColor: "var(--color-primary)",
@@ -45,7 +51,9 @@ export default function Tasks() {
     {
       type: "delete",
       icon: FiTrash2,
-      function: () => {},
+      function: (task) => {
+        removeTask(String(year), String(month), String(day), task.id);
+      },
       color: "var(--color-background-secondary)",
       textColor: "var(--color-primary)",
       label: "Delete Task",
@@ -100,8 +108,8 @@ export default function Tasks() {
                   >
                     <div className="w-full flex items-center gap-2 py-2">
                       <div
-                        className="px-2"
                         onClick={() => {
+                          console.log(item.id);
                           toggleTaskDone(
                             String(year),
                             String(month),
@@ -109,6 +117,7 @@ export default function Tasks() {
                             item.id
                           );
                         }}
+                        className="px-2"
                       >
                         {item.isDone ? (
                           <div className="flex flex-col gap-1 justify-center items-center">
@@ -128,7 +137,7 @@ export default function Tasks() {
                       </div>
                       <div className="flex-1">
                         <Paragraph size="md" className="font-medium">
-                          {numberWithCommas(item.title)}
+                          {item.title}
                         </Paragraph>
                         {item.description && (
                           <Paragraph className="line-clamp-1">

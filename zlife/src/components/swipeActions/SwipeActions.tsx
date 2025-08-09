@@ -95,22 +95,27 @@ const SwipeActions = <T,>({
     }
   }, [showActionButtons]);
 
-  // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>): void => {
-    e.preventDefault();
-    handleStart(e.touches[0].clientX);
+    setStartX(e.touches[0].clientX);
+    setIsDragging(false); // not dragging yet
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>): void => {
-    if (isDragging) {
-      e.preventDefault();
+    const deltaX = startX - e.touches[0].clientX;
+
+    // Only treat as swipe if moved enough horizontally
+    if (Math.abs(deltaX) > 5) {
+      e.preventDefault(); // block scroll only during horizontal swipe
+      setIsDragging(true);
       handleMove(e.touches[0].clientX);
     }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>): void => {
-    e.preventDefault();
-    handleEnd();
+  const handleTouchEnd = (): void => {
+    if (isDragging) {
+      handleEnd(); // complete swipe
+    }
+    setIsDragging(false);
   };
 
   // Mouse event handlers

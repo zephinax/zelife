@@ -60,8 +60,6 @@ export default function TransactionForm({
               labels: ["شارژ", "موبایل"],
             }
           );
-          onSuccess && onSuccess();
-          transactionForm.reset();
         } else {
           const newTransaction: Transaction = {
             updatedAt: Date.now(),
@@ -78,9 +76,9 @@ export default function TransactionForm({
             String(PARSE_DATE.day),
             newTransaction
           );
-          onSuccess && onSuccess();
-          transactionForm.reset();
         }
+        onSuccess && onSuccess();
+        transactionForm.reset();
       })}
       className="pb-2 flex flex-col gap-4"
     >
