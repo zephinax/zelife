@@ -6,6 +6,7 @@ import { WheelDatePicker } from "@buildix/wheel-datepicker";
 import { useState } from "react";
 import "@buildix/wheel-datepicker/dist/index.css";
 import { useTranslation } from "../../../hooks/useTranslation";
+import Paragraph from "../../typography/Paragraph";
 export default function TopNavigation({
   className = "",
 }: {
@@ -61,7 +62,7 @@ export default function TopNavigation({
         }}
         title={`${t("setting.selectDate")}`}
       >
-        <div className="py-4">
+        <div className="pb-4">
           <WheelDatePicker
             button={{
               size: "medium",
@@ -70,6 +71,7 @@ export default function TopNavigation({
             }}
             input={{
               placeholder: "select date",
+              label: "",
             }}
             indicatorClassName={"rounded-xl bg-primary opacity-20"}
             className={`text-text ${
@@ -81,6 +83,7 @@ export default function TopNavigation({
               setIsDateModalOpen(false);
             }}
           />
+          <Paragraph className="mt-2">{t("setting.dateExplain")}</Paragraph>
         </div>
       </Modal>
     </div>
