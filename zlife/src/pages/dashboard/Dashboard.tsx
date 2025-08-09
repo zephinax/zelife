@@ -39,15 +39,25 @@ export default function Dashboard({
     selectedDate,
     defaultDate,
     token,
+    settings,
     removeTransaction,
     getTransactionsByMonth,
+    getTransactionsByDay,
+    getSummaryByDay,
   } = useFinanceStore();
   const { t } = useTranslation();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
-  const { year, month } = PARSE_DATE;
-  const remaining = getSummaryByMonth(String(year), String(month));
-  const transactions = getTransactionsByMonth(String(year), String(month));
+  const { year, month, day } = PARSE_DATE;
+  const remaining =
+    settings.defaultView === "daily"
+      ? getSummaryByDay(String(year), String(month), String(day))
+      : getSummaryByMonth(String(year), String(month));
+
+  const transactions =
+    settings.defaultView === "daily"
+      ? getTransactionsByDay(String(year), String(month), String(day))
+      : getTransactionsByMonth(String(year), String(month));
   const [addTransactionModal, setAddTransactionModal] = useState(false);
   const [targetTransaction, setTargetTransaction] = useState<Transaction>();
   const getTransactionActions: SwipeAction<Transaction>[] = [

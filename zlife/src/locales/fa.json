@@ -43,7 +43,8 @@
     "selectDate": "انتخاب تاریخ",
     "changeDate": "تغییر تاریخ",
     "today": "انتخاب امروز",
-    "explain": "برای استفاده، شناسه Gist را از انتهای لینک Share کپی کنید، یک توکن از github.com/settings/tokens بسازید (با دسترسی gist)، و یک نام فایل مثل data.json وارد کنید."
+    "explain": "برای استفاده، شناسه Gist را از انتهای لینک Share کپی کنید، یک توکن از github.com/settings/tokens بسازید (با دسترسی gist)، و یک نام فایل مثل data.json وارد کنید.",
+    "viewType": "نوع گزارش مالی"
   },
   "tasks": {
     "taskManager": "مدیریت تسک‌ها",

@@ -43,7 +43,8 @@
     "selectDate": "Select date",
     "changeDate": "Change date",
     "today": "Set today",
-    "explain": "To use, copy the Gist ID from the end of the Share link, create a token at github.com/settings/tokens (with gist scope), and enter a file name like data.json."
+    "explain": "To use, copy the Gist ID from the end of the Share link, create a token at github.com/settings/tokens (with gist scope), and enter a file name like data.json.",
+    "viewType": "Financial report type"
   },
   "tasks": {
     "taskManager": "Task Manager",

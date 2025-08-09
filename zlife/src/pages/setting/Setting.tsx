@@ -36,8 +36,10 @@ export default function Setting({
     isSyncEnable,
     setIsSyncEnable,
     language,
+    settings,
     setLanguage,
     token,
+    setDefaultView,
     gistId,
     filename,
   } = useFinanceStore();
@@ -142,6 +144,30 @@ export default function Setting({
               >
                 <Paragraph className="text-[8px]">En</Paragraph>
                 <Paragraph className="text-[8px]">Fa</Paragraph>
+              </div>
+            </div>
+          </div>
+          <div className="w-full h-[1px] bg-background mx-2"></div>
+          <div className="p-4 flex justify-between items-center">
+            <Paragraph size="lg">{t("setting.viewType")}</Paragraph>
+            <div className="flex items-center relative justify-cente gap-4">
+              <ToggleSwitch
+                checked={settings.defaultView === "daily"}
+                onChange={(value) => {
+                  if (value === true) {
+                    setDefaultView("daily");
+                  } else {
+                    setDefaultView("monthly");
+                  }
+                }}
+              />
+              <div
+                className={`absolute flex bottom-[-12px] w-[40px] justify-between left-1 ${
+                  language === "fa" ? "flex-row-reverse" : ""
+                }`}
+              >
+                <Paragraph className="text-[8px]">M</Paragraph>
+                <Paragraph className="text-[8px]">D</Paragraph>
               </div>
             </div>
           </div>
