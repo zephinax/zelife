@@ -136,11 +136,20 @@ export default function Tasks() {
                         )}
                       </div>
                       <div className="flex-1">
-                        <Paragraph size="md" className="font-medium">
+                        <Paragraph
+                          size="md"
+                          className={`font-medium ${
+                            item.isDone ? "!line-through opacity-70" : ""
+                          }`}
+                        >
                           {item.title}
                         </Paragraph>
                         {item.description && (
-                          <Paragraph className="line-clamp-1">
+                          <Paragraph
+                            className={`line-clamp-1 ${
+                              item.isDone ? "line-through opacity-70" : ""
+                            }`}
+                          >
                             {item.description}
                           </Paragraph>
                         )}

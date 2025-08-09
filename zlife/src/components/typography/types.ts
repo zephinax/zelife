@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export type ThemeType =
   | "secondary"
@@ -17,6 +17,7 @@ export type ThemeType =
 export interface Paraghrap_Props_Type {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
   theme?: ThemeType;
   size?: "lg" | "sm" | "md" | "base" | "xs";
   onClick?: () => void;
