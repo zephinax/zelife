@@ -40,7 +40,14 @@ const SwipeActions = <T,>({
 
   const TOTAL_ACTIONS_WIDTH = actions.length * actionWidth;
 
-  const handleStart = (clientX: number): void => {
+  const handleStart = (
+    clientX: number,
+    event: React.MouseEvent | React.TouchEvent
+  ): void => {
+    // Skip swipe handling if the target is the checkbox
+    if ((event.target as HTMLElement).closest(".checkbox-container")) {
+      return;
+    }
     setStartX(clientX);
     setIsDragging(true);
   };
@@ -101,7 +108,7 @@ const SwipeActions = <T,>({
   }, [showActionButtons]);
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>): void => {
-    handleStart(e.touches[0].clientX);
+    handleStart(e.touches[0].clientX, e);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>): void => {
@@ -121,7 +128,7 @@ const SwipeActions = <T,>({
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
-    handleStart(e.clientX);
+    handleStart(e.clientX, e);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>): void => {

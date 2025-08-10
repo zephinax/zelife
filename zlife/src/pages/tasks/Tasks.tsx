@@ -144,7 +144,7 @@ export default function Tasks() {
                             item.id
                           );
                         }}
-                        className="px-2"
+                        className="px-2 checkbox-container"
                       >
                         {item.isDone ? (
                           <div className="flex flex-col gap-1 justify-center items-center">
