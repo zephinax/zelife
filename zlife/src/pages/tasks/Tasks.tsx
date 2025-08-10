@@ -26,8 +26,10 @@ export default function Tasks() {
     selectedDate,
     defaultDate,
     getTasksByMonth,
+    getTasksByDay,
     toggleTaskDone,
     removeTask,
+    settings,
   } = useFinanceStore();
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const { t } = useTranslation();
@@ -35,7 +37,10 @@ export default function Tasks() {
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month, day } = PARSE_DATE;
-  const tasks = getTasksByMonth(String(year), String(month));
+  const tasks =
+    settings.defaultView === "daily"
+      ? getTasksByDay(String(year), String(month), String(day))
+      : getTasksByMonth(String(year), String(month));
   const getTransactionActions: SwipeAction<Task>[] = [
     {
       type: "edit",
