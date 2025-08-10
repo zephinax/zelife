@@ -151,18 +151,18 @@ export default function Tasks() {
                     actionWidth={50}
                     swipeThreshold={40}
                   >
-                    <div className="w-full flex items-center gap-2 py-2">
-                      <div
-                        onClick={() => {
-                          toggleTaskDone(
-                            String(year),
-                            String(month),
-                            String(day),
-                            item.id
-                          );
-                        }}
-                        className="px-2"
-                      >
+                    <div
+                      onClick={() => {
+                        toggleTaskDone(
+                          String(year),
+                          String(month),
+                          String(day),
+                          item.id
+                        );
+                      }}
+                      className="w-full flex items-center gap-2 py-2"
+                    >
+                      <div className="px-2">
                         {item.isDone ? (
                           <div className="flex flex-col gap-1 justify-center items-center">
                             <MdOutlineCheckBox className="!text-primary size-8" />
