@@ -5,7 +5,7 @@ import React, {
   type ReactNode,
   type JSX,
 } from "react";
-import "./swipe.css";
+
 export interface SwipeAction<T = any> {
   type: string;
   icon: React.ComponentType<any> | React.ReactNode;
@@ -33,63 +33,35 @@ const SwipeActions = <T,>({
 }: SwipeActionsProps<T>): JSX.Element => {
   const [translateX, setTranslateX] = useState(0);
   const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
   const [showActionButtons, setShowActionButtons] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const TOTAL_ACTIONS_WIDTH = actions.length * actionWidth;
 
-  const handleStart = (clientX: number, clientY?: number): void => {
+  const handleStart = (clientX: number): void => {
     setStartX(clientX);
-    if (clientY !== undefined) {
-      setStartY(clientY);
-    }
-    setIsDragging(false);
-    setIsScrolling(false);
+    setIsDragging(true);
   };
 
-  const handleMove = (clientX: number, clientY?: number): void => {
+  const handleMove = (clientX: number): void => {
+    if (!isDragging) return;
     const deltaX = startX - clientX;
-    const deltaY = clientY !== undefined ? Math.abs(clientY - startY) : 0;
-
-    // Determine if this is a vertical scroll or horizontal swipe
-    if (!isDragging && !isScrolling) {
-      if (Math.abs(deltaX) > 10 || deltaY > 10) {
-        if (deltaY > Math.abs(deltaX)) {
-          setIsScrolling(true);
-          return;
-        } else if (Math.abs(deltaX) > 5) {
-          setIsDragging(true);
-        }
-      }
-    }
-
-    if (isDragging && !isScrolling) {
-      const newTranslateX = Math.max(0, Math.min(TOTAL_ACTIONS_WIDTH, deltaX));
-      setTranslateX(newTranslateX);
-    }
+    const newTranslateX = Math.max(0, Math.min(TOTAL_ACTIONS_WIDTH, deltaX));
+    setTranslateX(newTranslateX);
   };
 
   const handleEnd = (): void => {
-    if (isScrolling) {
-      setIsScrolling(false);
-      return;
-    }
-
-    if (isDragging) {
-      if (translateX > swipeThreshold) {
-        setTranslateX(TOTAL_ACTIONS_WIDTH);
-        setShowActionButtons(true);
-      } else {
-        setTranslateX(0);
-        setShowActionButtons(false);
-      }
-    }
-
     setIsDragging(false);
-    setIsScrolling(false);
+
+    if (translateX > swipeThreshold) {
+      setTranslateX(TOTAL_ACTIONS_WIDTH);
+      setShowActionButtons(true);
+    } else {
+      setTranslateX(0);
+      setShowActionButtons(false);
+    }
   };
 
   const handleActionClick =
@@ -102,12 +74,11 @@ const SwipeActions = <T,>({
       e.preventDefault();
       e.stopPropagation();
       action.function(item);
-      // Hide actions after click
       setTranslateX(0);
       setShowActionButtons(false);
     };
 
-  const handleClickOutside = (e: Event): void => {
+  const handleClickOutside = (e: MouseEvent | TouchEvent): void => {
     if (
       showActionButtons &&
       containerRef.current &&
@@ -130,33 +101,34 @@ const SwipeActions = <T,>({
   }, [showActionButtons]);
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>): void => {
-    // Prevent default to avoid scrolling issues in PWA
-    const touch = e.touches[0];
-    handleStart(touch.clientX, touch.clientY);
+    handleStart(e.touches[0].clientX);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>): void => {
-    const touch = e.touches[0];
-    handleMove(touch.clientX, touch.clientY);
-
-    // Prevent scrolling only if we're swiping horizontally
-    if (isDragging && !isScrolling) {
+    if (!isDragging) return;
+    const deltaX = startX - e.touches[0].clientX;
+    if (Math.abs(deltaX) > 5) {
       e.preventDefault();
+      handleMove(e.touches[0].clientX);
     }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>): void => {
-    e.preventDefault();
-    handleEnd();
+  const handleTouchEnd = (): void => {
+    if (isDragging) {
+      handleEnd();
+    }
+    setIsDragging(false);
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
-    e.preventDefault();
-    handleStart(e.clientX, e.clientY);
+    handleStart(e.clientX);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>): void => {
-    handleMove(e.clientX, e.clientY);
+    if (isDragging) {
+      e.preventDefault();
+      handleMove(e.clientX);
+    }
   };
 
   const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -167,15 +139,6 @@ const SwipeActions = <T,>({
   const handleMouseLeave = (): void => {
     if (isDragging) {
       handleEnd();
-    }
-  };
-
-  // Handle content click (like checkbox toggle)
-  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    // Only allow clicks if we're not dragging and actions aren't shown
-    if (isDragging || showActionButtons || translateX > 0) {
-      e.preventDefault();
-      e.stopPropagation();
     }
   };
 
@@ -221,11 +184,7 @@ const SwipeActions = <T,>({
     <div
       ref={containerRef}
       className="relative overflow-hidden rounded-lg"
-      style={{
-        touchAction: isScrolling ? "pan-y" : "none",
-        userSelect: "none",
-        WebkitUserSelect: "none",
-      }}
+      style={{ touchAction: "pan-y" }}
     >
       {/* Action buttons container */}
       <div
@@ -269,13 +228,12 @@ const SwipeActions = <T,>({
         })}
       </div>
 
-      {/* Main content */}
+      {/* Main content - REMOVED onClick handler completely */}
       <div
-        className="relative transition-transform duration-200 ease-out"
+        className="relative transition-transform duration-200 ease-out select-none"
         style={{
           transform: `translateX(-${translateX}px)`,
           cursor: isDragging ? "grabbing" : "grab",
-          pointerEvents: isDragging ? "none" : "auto",
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -284,7 +242,6 @@ const SwipeActions = <T,>({
         onMouseMove={isDragging ? handleMouseMove : undefined}
         onMouseUp={isDragging ? handleMouseUp : undefined}
         onMouseLeave={handleMouseLeave}
-        onClick={handleContentClick}
       >
         {children}
       </div>
