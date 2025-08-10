@@ -116,7 +116,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         style={{
           ...checkedBgStyle,
           transition: "background-image 0.3s ease",
-          boxShadow: "inset 0 4px 8px rgba(0, 0, 0, 0.1.5)",
+          boxShadow: "inset 0 4px 8px rgba(0, 0, 0, 0.15)",
         }}
         className={`
           group peer ring-0 bg-[var(--color-background)]
