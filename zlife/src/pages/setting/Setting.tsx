@@ -10,6 +10,8 @@ import { useTranslation } from "../../hooks/useTranslation";
 import { GrEdit } from "react-icons/gr";
 import { MdOutlineSync, MdSyncProblem } from "react-icons/md";
 import version from "./../../../config.json";
+import { FiTrash2 } from "react-icons/fi";
+import Button from "../../components/button/Button";
 export default function Setting({
   lastSyncAt,
   isLoading,
@@ -42,8 +44,10 @@ export default function Setting({
     setDefaultView,
     gistId,
     filename,
+    resetFinance,
   } = useFinanceStore();
   const [isGetUserDataModalOpen, setIsGetUserDataModalOpen] = useState(false);
+  const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
   return (
     <PageLayout>
       <div className="flex flex-col gap-2">
@@ -172,6 +176,20 @@ export default function Setting({
               </div>
             </div>
           </div>
+          <div className="w-full h-[1px] bg-background mx-2"></div>
+          <div className="p-4 flex justify-between items-center">
+            <Paragraph className="!text-primary" size="lg">
+              {t("setting.resetData")}
+            </Paragraph>
+            <div
+              onClick={() => {
+                setIsResetDataModalOpen(true);
+              }}
+              className="flex items-center relative justify-cente gap-4"
+            >
+              <FiTrash2 size={20} className="text-primary" />
+            </div>
+          </div>
         </div>
       </div>
       <Modal
@@ -194,6 +212,26 @@ export default function Setting({
             triggerSync();
           }}
         />
+      </Modal>
+      <Modal
+        overflowY="overflow-y-visible"
+        size="sm"
+        title={t("setting.resetData")}
+        onClose={() => {
+          setIsResetDataModalOpen(false);
+        }}
+        isOpen={isResetDataModalOpen}
+      >
+        <Paragraph>{t("setting.resetWarn")}</Paragraph>
+        <Button
+          onClick={() => {
+            resetFinance();
+            setIsResetDataModalOpen(false);
+          }}
+          className="w-full my-5"
+        >
+          {t("setting.resetData")}
+        </Button>
       </Modal>
     </PageLayout>
   );
