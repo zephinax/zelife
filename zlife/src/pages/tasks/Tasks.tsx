@@ -136,7 +136,8 @@ export default function Tasks() {
                   >
                     <div className="w-full flex items-center gap-2 py-2">
                       <div
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           toggleTaskDone(
                             String(year),
                             String(month),
