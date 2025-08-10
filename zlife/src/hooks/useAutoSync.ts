@@ -1,3 +1,4 @@
+// Fixed useAutoSync.ts - Auto-sync now pulls before pushing
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useFinanceStore } from "../store/store";
 import { syncToGist, loadFromGist } from "../utils/sync";
@@ -69,8 +70,8 @@ export const useAutoSync = (
     }
   }, [isSyncEnable]);
 
-  // Manual sync function that can be called externally
-  const triggerSync = useCallback(async () => {
+  // Extracted common sync logic
+  const performFullSync = useCallback(async () => {
     if (!isSyncEnable || !token || !filename || !gistId) {
       return;
     }
@@ -78,7 +79,7 @@ export const useAutoSync = (
     setSyncState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      console.log("Trigger sync: pulling remote data...");
+      console.log("Full sync: pulling remote data...");
       const pullResult = await loadFromGist(store, { merge: true });
 
       if (!pullResult.success) {
@@ -99,7 +100,7 @@ export const useAutoSync = (
             : prev.lastAction,
       }));
 
-      console.log("Trigger sync: pushing local data...");
+      console.log("Full sync: pushing local data...");
       const pushResult = await syncToGist(store);
 
       if (!pushResult?.success) {
@@ -133,16 +134,22 @@ export const useAutoSync = (
 
       return pushResult;
     } catch (error) {
-      console.error("Trigger sync failed:", error);
+      console.error("Full sync failed:", error);
       setSyncState((prev) => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : "Trigger sync failed",
+        error: error instanceof Error ? error.message : "Full sync failed",
       }));
       throw error;
     }
-  }, [isSyncEnable, token, filename, gistId, data]);
+  }, [isSyncEnable, token, filename, gistId, data, store]);
 
+  // Manual sync function that can be called externally
+  const triggerSync = useCallback(async () => {
+    return await performFullSync();
+  }, [performFullSync]);
+
+  // FIXED: Auto-sync now uses full sync (pull + push) instead of just push
   useEffect(() => {
     if (!isSyncEnable || !data) {
       return;
@@ -156,7 +163,7 @@ export const useAutoSync = (
     }
 
     // Skip if missing credentials
-    if (!token || !filename) {
+    if (!token || !filename || !gistId) {
       return;
     }
 
@@ -174,45 +181,17 @@ export const useAutoSync = (
     // Clear any previous errors since we're about to try again
     setSyncState((prev) => ({ ...prev, error: null }));
 
-    // Set new debounced sync
+    // Set new debounced sync - NOW USES FULL SYNC!
     timeoutRef.current = window.setTimeout(async () => {
-      setSyncState((prev) => ({ ...prev, isLoading: true }));
-
       try {
-        console.log("Auto-syncing data...");
-        const result = await syncToGist(store);
+        console.log("Auto-syncing with full sync (pull + push)...");
+        await performFullSync();
 
-        if (result?.success) {
-          console.log(`Auto-sync ${result.action} successfully`);
-          const validAction:
-            | "created"
-            | "updated"
-            | "merged"
-            | "overwritten"
-            | "no_changes"
-            | null =
-            result.action === "created" || result.action === "updated"
-              ? result.action
-              : null;
-
-          setSyncState((prev) => ({
-            ...prev,
-            isLoading: false,
-            lastSyncAt: new Date(),
-            error: null,
-            lastAction: validAction,
-          }));
-
-          // Update the last synced data reference
-          lastDataRef.current = currentDataString;
-        }
+        // Update the last synced data reference only on success
+        lastDataRef.current = currentDataString;
       } catch (error) {
         console.error("Auto-sync failed:", error);
-        setSyncState((prev) => ({
-          ...prev,
-          isLoading: false,
-          error: error instanceof Error ? error.message : "Auto-sync failed",
-        }));
+        // Note: performFullSync already handles error state updates
       }
     }, debounceMs);
 
@@ -222,9 +201,17 @@ export const useAutoSync = (
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [data, isSyncEnable, token, filename, debounceMs]);
+  }, [
+    data,
+    isSyncEnable,
+    token,
+    filename,
+    gistId,
+    debounceMs,
+    performFullSync,
+  ]);
 
-  // Periodic pull effect
+  // Periodic pull effect (unchanged)
   useEffect(() => {
     if (!isSyncEnable || !token || !gistId || !filename) {
       return;
@@ -263,7 +250,7 @@ export const useAutoSync = (
     }, pollIntervalMs);
 
     return () => clearInterval(intervalId);
-  }, [isSyncEnable, token, gistId, filename, pollIntervalMs]);
+  }, [isSyncEnable, token, gistId, filename, pollIntervalMs, store]);
 
   // Cleanup timeout on unmount
   useEffect(() => {

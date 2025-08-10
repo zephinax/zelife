@@ -3,10 +3,10 @@ import { useFinanceStore } from "../../../store/store";
 import { BiChevronDown } from "react-icons/bi";
 import Modal from "../../modal/Modal";
 import { WheelDatePicker } from "@buildix/wheel-datepicker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "@buildix/wheel-datepicker/dist/index.css";
-import Button from "../../button/Button";
 import { useTranslation } from "../../../hooks/useTranslation";
+import Paragraph from "../../typography/Paragraph";
 export default function TopNavigation({
   className = "",
 }: {
@@ -14,26 +14,22 @@ export default function TopNavigation({
 }) {
   const { defaultDate, selectedDate, avatarUrl, setSelectedDate, language } =
     useFinanceStore();
-  const [date, setDate] = useState("");
   const { t } = useTranslation();
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const DATE = selectedDate ? selectedDate : defaultDate;
 
-  useEffect(() => {
-    setDate(DATE);
-  }, []);
   return (
     <div
       className={`flex p-4 w-full justify-between items-center ${className}`}
     >
       <img
         width={40}
-        className="rounded-full bg-background-secondary"
+        className="rounded-full bg-background-secondary z-[9999]"
         height={40}
         src={avatarUrl ? avatarUrl : "/logo.svg"}
       ></img>
 
-      <div className="flex items-center gap-2 !text-white">
+      <div className="flex items-center gap-2 !text-white z-[9999]">
         <div
           onClick={() => {
             setIsDateModalOpen(true);
@@ -66,41 +62,28 @@ export default function TopNavigation({
         }}
         title={`${t("setting.selectDate")}`}
       >
-        <WheelDatePicker
-          button={{
-            size: "medium",
-            text: `${t("setting.selectDate")}`,
-            className: "button w-full",
-          }}
-          input={{
-            placeholder: "select date",
-          }}
-          indicatorClassName={"rounded-xl bg-primary opacity-20"}
-          className={`text-text ${
-            language === "fa" ? "!font-[Vazirmatn]" : "!font-[Ubuntu]"
-          }`}
-          value={date}
-          onChange={setDate}
-        />
-        <div className="flex mt-4 gap-4">
-          <Button
-            onClick={() => {
+        <div className="pb-4">
+          <WheelDatePicker
+            button={{
+              size: "medium",
+              text: `${t("setting.selectDate")}`,
+              className: "button w-full",
+            }}
+            input={{
+              placeholder: "select date",
+              label: "",
+            }}
+            indicatorClassName={"rounded-xl bg-primary opacity-20"}
+            className={`text-text ${
+              language === "fa" ? "!font-[Vazirmatn]" : "!font-[Ubuntu]"
+            }`}
+            value={DATE}
+            onChange={(date) => {
               setSelectedDate(date);
               setIsDateModalOpen(false);
             }}
-            className="w-full"
-          >
-            {t("setting.changeDate")}
-          </Button>
-          <Button
-            onClick={() => {
-              setSelectedDate("");
-              setIsDateModalOpen(false);
-            }}
-            className="w-full"
-          >
-            {t("setting.today")}
-          </Button>
+          />
+          <Paragraph className="mt-2">{t("setting.dateExplain")}</Paragraph>
         </div>
       </Modal>
     </div>

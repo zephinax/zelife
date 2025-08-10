@@ -11,7 +11,7 @@ import { useAutoSync } from "./hooks/useAutoSync";
 import CreateAccount from "./pages/createAccount/CreateAccount";
 
 function App() {
-  const { userName, isSyncEnable } = useFinanceStore();
+  const { userName, isSyncEnable, setSelectedDate } = useFinanceStore();
 
   const {
     isLoading: isSyncing,
@@ -29,6 +29,7 @@ function App() {
 
   useEffect(() => {
     fetch();
+    setSelectedDate("");
   }, []);
 
   useTheme();

@@ -67,10 +67,11 @@ export default function Setting({
             </Paragraph>
           </div>
         </div>
-        <div className="mx-2">
+        <div className="mx-2 flex items-center justify-between">
           <Paragraph className="font-medium" size="lg">
             {t("navbar.setting")}
           </Paragraph>
+          <Paragraph className="!text-primary">V1.0.2</Paragraph>
         </div>
         <div className="bg-background-secondary mx-2 rounded-2xl">
           <div className="p-4 flex flex-col gap-2">
@@ -175,6 +176,7 @@ export default function Setting({
       </div>
       <Modal
         size="sm"
+        overflowY="overflow-y-visible"
         title={t("setting.enterYourGithubData")}
         isOpen={isGetUserDataModalOpen}
         onClose={() => {
@@ -189,6 +191,7 @@ export default function Setting({
           }}
           onSuccess={() => {
             setIsGetUserDataModalOpen(false);
+            triggerSync();
           }}
         />
       </Modal>

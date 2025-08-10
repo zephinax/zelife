@@ -65,20 +65,20 @@ export default function CreateTaskForm({
       <Input
         type="text"
         errorText={errors.title?.message as string}
-        label={t("setting.title")}
+        label={t("tasks.title")}
         {...register("title", { required: "" })}
       />
       <Input
         type="text"
         errorText={errors.description?.message as string}
-        label={t("setting.description")}
+        label={t("tasks.description")}
         {...register("description")}
       />
       <Input
         type="number"
         inputMode="numeric"
         errorText={errors.priority?.message as string}
-        label={t("setting.priority")}
+        label={t("tasks.priority")}
         {...register("priority")}
       />
       <Button className="w-full mt-2 my-2" type="submit">

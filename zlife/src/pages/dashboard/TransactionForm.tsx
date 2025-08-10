@@ -57,7 +57,7 @@ export default function TransactionForm({
               amount: Number(removeCommas(data.amount)),
               description: data.description,
               type: data.type,
-              labels: ["شارژ", "موبایل"],
+              labels: [],
             }
           );
         } else {
@@ -68,7 +68,7 @@ export default function TransactionForm({
             type: data.type,
             description: data.description,
             date: DATE,
-            labels: ["شارژ", "موبایل"],
+            labels: [],
           };
           addTransaction(
             String(PARSE_DATE.year),

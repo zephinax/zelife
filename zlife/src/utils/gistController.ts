@@ -1,3 +1,5 @@
+import { useFinanceStore } from "../store/store";
+
 type GistOptions = {
   token: string;
   gistId: string;
@@ -18,6 +20,14 @@ export async function fetchGistContent({
   }
 
   const data = await res.json();
+  if (data?.owner?.avatar_url) {
+    console.log(data?.owner?.avatar_url);
+    useFinanceStore.getState().setAvatarUrl(data?.owner?.avatar_url || "");
+  }
+  if (data?.owner?.login) {
+    console.log(data?.owner?.login);
+    useFinanceStore.getState().setUserName(data?.owner?.login || "");
+  }
   return data.files[filename]?.content ?? null;
 }
 

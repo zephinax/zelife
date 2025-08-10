@@ -44,13 +44,17 @@
     "changeDate": "Change date",
     "today": "Set today",
     "explain": "To use, copy the Gist ID from the end of the Share link, create a token at github.com/settings/tokens (with gist scope), and enter a file name like data.json.",
-    "viewType": "Financial report type"
+    "viewType": "Financial report type",
+    "dateExplain": "By clicking on the date above, you can view or edit the reports for that date. You can also change the report display from monthly to daily mode in the settings section."
   },
   "tasks": {
     "taskManager": "Task Manager",
     "tasks": "Tasks",
     "createTask": "Create task",
     "editTask": "Edit task",
-    "noTask": "Create your first task!"
+    "noTask": "Create your first task!",
+    "title": "Title",
+    "description": "Description",
+    "priority": "Priority"
   }
 }
