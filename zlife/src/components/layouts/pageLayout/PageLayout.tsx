@@ -1,4 +1,5 @@
 import React from "react";
+import PageTransition from "../../pageTransition/PageTransition";
 
 export default function PageLayout({
   children,
@@ -7,9 +8,12 @@ export default function PageLayout({
 }) {
   return (
     <>
-      <div className="px-2 bg-background min-h-[100svh] w-screen">
+      <PageTransition
+        variant="slide"
+        className="px-2 bg-background min-h-[100svh] w-screen"
+      >
         {children}
-      </div>
+      </PageTransition>
     </>
   );
 }

@@ -24,6 +24,7 @@ import {
   MdSyncProblem,
 } from "react-icons/md";
 import { GiLongLeggedSpider } from "react-icons/gi";
+import PageTransition from "../../components/pageTransition/PageTransition";
 
 export default function Dashboard({
   isLoading,
@@ -97,7 +98,7 @@ export default function Dashboard({
   }, [selectedDate, defaultDate, DATE]);
 
   return (
-    <div className="w-screen min-h-[100svh] pb-[85px]">
+    <PageTransition variant="slide" className="w-full min-h-[100svh] pb-[85px]">
       <div className="sticky top-0 max-w-screen  mx-2 rounded-4xl overflow-hidden h-[38vh] z-[9999]">
         <Silk
           speed={8}
@@ -261,6 +262,6 @@ export default function Dashboard({
           }}
         />
       </Modal>
-    </div>
+    </PageTransition>
   );
 }
