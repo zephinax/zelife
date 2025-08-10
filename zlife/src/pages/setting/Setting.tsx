@@ -9,7 +9,7 @@ import Silk from "../../components/react-bits/Silk";
 import { useTranslation } from "../../hooks/useTranslation";
 import { GrEdit } from "react-icons/gr";
 import { MdOutlineSync, MdSyncProblem } from "react-icons/md";
-
+import version from "./../../../config.json";
 export default function Setting({
   lastSyncAt,
   isLoading,
@@ -71,7 +71,7 @@ export default function Setting({
           <Paragraph className="font-medium" size="lg">
             {t("navbar.setting")}
           </Paragraph>
-          <Paragraph className="!text-primary">V1.0.2</Paragraph>
+          <Paragraph className="!text-primary">V{version.version}</Paragraph>
         </div>
         <div className="bg-background-secondary mx-2 rounded-2xl">
           <div className="p-4 flex flex-col gap-2">

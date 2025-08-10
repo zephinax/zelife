@@ -5,7 +5,6 @@ import SwipeActions, {
   type SwipeAction,
 } from "../../components/swipeActions/SwipeActions";
 import Paragraph from "../../components/typography/Paragraph";
-import Title from "../../components/typography/Title";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useFinanceStore } from "../../store/store";
 import type { Task } from "../../store/types";
@@ -20,6 +19,7 @@ import { useState } from "react";
 import Modal from "../../components/modal/Modal";
 import CreateTaskForm from "./CreateTaskForm";
 import { GiLongLeggedSpider } from "react-icons/gi";
+import TrueFocus from "../../components/reactBits/trueFocus/TrueFocus";
 
 export default function Tasks() {
   const {
@@ -108,8 +108,14 @@ export default function Tasks() {
           noiseIntensity={1.5}
           rotation={0}
         />
-        <div className="absolute px-6 gap-4 top-[50%] translate-y-[-50%] w-full flex items-center justify-center">
-          <Title className="!text-white">{t("tasks.taskManager")}</Title>
+        <div className="!text-white text-2xl absolute px-6 gap-4 top-[50%] translate-y-[-50%] w-full flex items-center justify-center">
+          {/* <Title className="!text-white">{t("tasks.taskManager")}</Title> */}
+          <TrueFocus
+            blurAmount={2.5}
+            manualMode={false}
+            borderColor="var(--color-primary)"
+            sentence={t("tasks.taskManager")}
+          />
         </div>
       </div>
       <div className="mt-2 mx-2 flex-1 flex flex-col">
