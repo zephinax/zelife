@@ -20,6 +20,7 @@ import Modal from "../../components/modal/Modal";
 import CreateTaskForm from "./CreateTaskForm";
 import { GiLongLeggedSpider } from "react-icons/gi";
 import TrueFocus from "../../components/reactBits/trueFocus/TrueFocus";
+import { useForm } from "react-hook-form";
 
 export default function Tasks() {
   const {
@@ -41,7 +42,7 @@ export default function Tasks() {
     settings.defaultView === "daily"
       ? getTasksByDay(String(year), String(month), String(day))
       : getTasksByMonth(String(year), String(month));
-
+  const userDataForm = useForm();
   // ---- SORTING LOGIC ----
   // Groups:
   // 0 = undone && has priority  (sorted by priority asc)
@@ -125,6 +126,8 @@ export default function Tasks() {
           </Paragraph>
           <Paragraph
             onClick={() => {
+              userDataForm.reset();
+              setTargetTask(undefined);
               setCreateTaskModal(true);
             }}
             size="sm"
@@ -220,6 +223,7 @@ export default function Tasks() {
         }}
       >
         <CreateTaskForm
+          userDataForm={userDataForm}
           targetData={targetTask}
           onSuccess={() => {
             setCreateTaskModal(false);

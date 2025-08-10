@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import { useTranslation } from "../../hooks/useTranslation";
 import Button from "../../components/button/Button";
 import Input from "../../components/inputs/Input";
@@ -11,16 +10,18 @@ import { v4 as uuidv4 } from "uuid";
 export default function CreateTaskForm({
   onSuccess,
   targetData,
+  userDataForm,
 }: {
   targetData?: Task;
   onSuccess?: () => void;
+  userDataForm: any;
 }) {
   const { addTask, defaultDate, selectedDate, editTask } = useFinanceStore();
   const { t } = useTranslation();
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month, day } = PARSE_DATE;
-  const userDataForm = useForm();
+
   const {
     register,
     handleSubmit,
@@ -38,7 +39,7 @@ export default function CreateTaskForm({
 
   return (
     <form
-      onSubmit={handleSubmit((data) => {
+      onSubmit={handleSubmit((data: any) => {
         if (targetData) {
           editTask(String(year), String(month), String(day), targetData.id, {
             title: data.title,
