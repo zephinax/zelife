@@ -49,30 +49,13 @@ export default function Tasks() {
   // 1 = undone && no priority   (kept original order)
   // 2 = done                    (kept original order)
   const sortedTasks: Task[] = tasks?.length
-    ? (
-        tasks.map((t, idx) => ({ ...t, __originalIndex: idx })) as (Task & {
-          __originalIndex: number;
-        })[]
-      )
-        .sort((a, b) => {
-          const group = (x: Task & { __originalIndex?: number }) =>
-            x.isDone ? 2 : x.priority == null ? 1 : 0;
-
-          const ga = group(a);
-          const gb = group(b);
-          if (ga !== gb) return ga - gb;
-
-          // both in group 0 → both undone with priority: sort by numeric priority
-          if (ga === 0) {
-            const pa = Number(a.priority);
-            const pb = Number(b.priority);
-            if (pa !== pb) return pa - pb;
-          }
-
-          // tie-breaker: stable sort using original index
-          return (a.__originalIndex ?? 0) - (b.__originalIndex ?? 0);
-        })
-        .map(({ __originalIndex, ...rest }) => rest as Task)
+    ? tasks.sort((a, b) => {
+        // فقط بر اساس isDone سورت کن
+        if (a.isDone !== b.isDone) {
+          return a.isDone ? 1 : -1; // undone tasks اول، done tasks آخر
+        }
+        return 0; // ترتیب باقی تسک‌ها تغییر نکند
+      })
     : [];
 
   const getTransactionActions: SwipeAction<Task>[] = [
