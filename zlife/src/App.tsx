@@ -34,6 +34,12 @@ function App() {
 
   useTheme();
 
+  useEffect(() => {
+    if (isSyncEnable) {
+      triggerSync();
+    }
+  }, [isSyncEnable]);
+
   return (
     <main className="text-text bg-background">
       <Routes>

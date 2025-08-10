@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ToggleSwitch from "../../components/inputs/ToggleSwitch";
 import PageLayout from "../../components/layouts/pageLayout/PageLayout";
 import Paragraph from "../../components/typography/Paragraph";
@@ -48,12 +48,6 @@ export default function Setting({
   } = useFinanceStore();
   const [isGetUserDataModalOpen, setIsGetUserDataModalOpen] = useState(false);
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (isSyncEnable) {
-      triggerSync();
-    }
-  }, [isSyncEnable]);
 
   return (
     <PageLayout>
