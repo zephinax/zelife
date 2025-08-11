@@ -10,10 +10,12 @@ import { useEffect, type JSX } from "react";
 import { loadFromGist } from "./utils/sync";
 import { useAutoSync } from "./hooks/useAutoSync";
 import CreateAccount from "./pages/createAccount/CreateAccount";
+import { formatShamsiDate, getCurrentShamsiDate } from "./utils/helper";
 
 function App(): JSX.Element {
   const location = useLocation();
-  const { userName, isSyncEnable, setSelectedDate } = useFinanceStore();
+  const { userName, isSyncEnable, setSelectedDate, setDefaultDate } =
+    useFinanceStore();
   const {
     isLoading: isSyncing,
     error,
@@ -29,8 +31,11 @@ function App(): JSX.Element {
   };
 
   useEffect(() => {
+    const { year, month, day } = getCurrentShamsiDate();
+    const today = formatShamsiDate(year, month, day);
     fetch();
     setSelectedDate("");
+    setDefaultDate(today);
   }, []);
 
   useTheme();
