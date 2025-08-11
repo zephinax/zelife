@@ -84,7 +84,7 @@ export default function Tasks() {
 
   return (
     <PageLayout>
-      <div className="relative rounded-full h-[90px] overflow-hidden flex justify-start gap-4 items-center">
+      <div className="relative rounded-full min-h-[90px] h-[90px] overflow-hidden flex justify-start gap-4 items-center">
         <Silk
           speed={8}
           scale={0.6}

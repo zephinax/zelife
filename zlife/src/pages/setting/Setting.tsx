@@ -52,7 +52,7 @@ export default function Setting({
   return (
     <PageLayout>
       <div className="flex flex-col gap-2">
-        <div className="relative rounded-full h-[90px] overflow-hidden flex justify-start gap-4 items-center">
+        <div className="relative rounded-full min-h-[90px] h-[90px] overflow-hidden flex justify-start gap-4 items-center">
           <Silk
             speed={8}
             scale={0.6}
