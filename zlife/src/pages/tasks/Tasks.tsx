@@ -74,7 +74,7 @@ export default function Tasks() {
       type: "delete",
       icon: FiTrash2,
       function: (task) => {
-        removeTask(String(year), String(month), String(day), task.id);
+        removeTask(task.id);
       },
       color: "var(--color-background-secondary)",
       textColor: "var(--color-primary)",
@@ -138,12 +138,7 @@ export default function Tasks() {
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleTaskDone(
-                            String(year),
-                            String(month),
-                            String(day),
-                            item.id
-                          );
+                          toggleTaskDone(item.id);
                         }}
                         className="px-2 checkbox-container"
                       >

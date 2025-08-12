@@ -47,6 +47,14 @@ export interface Task {
   deletedAt?: number;
 }
 
+export interface TaskLocation {
+  year: string;
+  month: string;
+  day: string;
+  taskIndex: number;
+  task: Task;
+}
+
 export interface MonthData {
   [day: string]: DayData;
 }
@@ -149,27 +157,15 @@ export interface FinanceActions {
   getTasksByMonth: (year: string, month: string) => Task[];
   getTasksByYear: (year: string) => Task[];
 
-  addTask: (year: string, month: string, day: string, task: Task) => void;
-  removeTask: (
-    year: string,
-    month: string,
-    day: string,
-    taskId: string
-  ) => void;
-  editTask: (
-    year: string,
-    month: string,
-    day: string,
-    taskId: string,
-    updated: Partial<Omit<Task, "id">>
-  ) => void;
+  // Task helper function
+  findTaskById: (taskId: string) => TaskLocation | null;
 
-  toggleTaskDone: (
-    year: string,
-    month: string,
-    day: string,
-    taskId: string
-  ) => void;
+  addTask: (year: string, month: string, day: string, task: Task) => void;
+
+  // Task actions - updated to use ID only but keep same names
+  removeTask: (taskId: string) => void;
+  editTask: (taskId: string, updated: Partial<Omit<Task, "id">>) => void;
+  toggleTaskDone: (taskId: string) => void;
 
   resetFinance: () => void;
   resetYear: (year: string) => void;

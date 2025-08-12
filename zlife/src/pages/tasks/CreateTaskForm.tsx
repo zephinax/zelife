@@ -41,7 +41,7 @@ export default function CreateTaskForm({
     <form
       onSubmit={handleSubmit((data: any) => {
         if (targetData) {
-          editTask(String(year), String(month), String(day), targetData.id, {
+          editTask(targetData.id, {
             title: data.title,
             isDone: targetData.isDone,
             priority: data.priority,

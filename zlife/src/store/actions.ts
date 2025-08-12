@@ -429,67 +429,131 @@ export const createFinanceActions: StateCreator<
     });
   },
 
-  removeTask: (year, month, day, taskId) => {
+  findTaskById: (taskId: string) => {
+    // console.log("🔍 Looking for task:", taskId);
+    const state = get();
+
+    for (const year in state.data) {
+      for (const month in state.data[year]) {
+        for (const day in state.data[year][month]) {
+          const dayData = state.data[year][month][day];
+
+          if (dayData.tasks && dayData.tasks.length > 0) {
+            console.log(
+              `📝 ${dayData.tasks.length} tasks in ${year}/${month}/${day}:`,
+              dayData.tasks.map((t) => ({
+                id: t.id,
+                title: t.title,
+                deletedAt: t.deletedAt,
+              }))
+            );
+
+            const taskIndex = dayData.tasks.findIndex(
+              (task) => task.id === taskId && !task.deletedAt
+            );
+
+            if (taskIndex !== -1) {
+              // console.log("✅ Found task at index:", taskIndex);
+              return {
+                year,
+                month,
+                day,
+                taskIndex,
+                task: dayData.tasks[taskIndex],
+              };
+            }
+          }
+        }
+      }
+    }
+
+    // console.log("❌ Task not found");
+    return null;
+  },
+
+  // Updated task actions - same names, but only need taskId
+  removeTask: (taskId: string) => {
+    // console.log("removeTask:", taskId);
+
     set((state) => {
-      if (
-        !state.data[year] ||
-        !state.data[year][month] ||
-        !state.data[year][month][day]
-      ) {
+      const location = get().findTaskById(taskId);
+
+      if (!location) {
+        // console.log("Task not found anywhere:", taskId);
         return state;
       }
+
+      const { year, month, day, taskIndex } = location;
+      // console.log("Found task at:", { year, month, day, taskIndex });
+
       const dayData = state.data[year][month][day];
-      const taskIndex = dayData.tasks.findIndex((t) => t.id === taskId);
-      if (taskIndex === -1) return state;
+      // console.log("Before:", dayData.tasks[taskIndex].deletedAt);
 
       dayData.tasks[taskIndex] = {
         ...dayData.tasks[taskIndex],
         deletedAt: Date.now(),
         updatedAt: Date.now(),
       };
+
+      // console.log("After:", dayData.tasks[taskIndex].deletedAt);
       return { data: { ...state.data } };
     });
   },
 
-  editTask: (year, month, day, taskId, updated) => {
+  editTask: (taskId: string, updated: Partial<Omit<Task, "id">>) => {
+    // console.log("editTask:", taskId, updated);
+
     set((state) => {
-      if (
-        !state.data[year] ||
-        !state.data[year][month] ||
-        !state.data[year][month][day]
-      ) {
+      const location = get().findTaskById(taskId);
+
+      if (!location) {
+        // console.log("Task not found anywhere:", taskId);
         return state;
       }
-      const tasks = state.data[year][month][day].tasks;
-      const idx = tasks.findIndex((t) => t.id === taskId);
-      if (idx === -1) return state;
 
-      tasks[idx] = { ...tasks[idx], ...updated, updatedAt: Date.now() };
-      return { data: { ...state.data } };
-    });
-  },
+      const { year, month, day, taskIndex } = location;
+      const dayData = state.data[year][month][day];
 
-  toggleTaskDone: (year, month, day, taskId) => {
-    set((state) => {
-      if (
-        !state.data[year] ||
-        !state.data[year][month] ||
-        !state.data[year][month][day]
-      ) {
-        return state;
-      }
-      const tasks = state.data[year][month][day].tasks;
-      const idx = tasks.findIndex((t) => t.id === taskId);
-      if (idx === -1) return state;
+      // console.log("Before edit:", dayData.tasks[taskIndex]);
 
-      tasks[idx] = {
-        ...tasks[idx],
-        isDone: !tasks[idx].isDone,
+      dayData.tasks[taskIndex] = {
+        ...dayData.tasks[taskIndex],
+        ...updated,
         updatedAt: Date.now(),
       };
+
+      // console.log("After edit:", dayData.tasks[taskIndex]);
       return { data: { ...state.data } };
     });
   },
+
+  toggleTaskDone: (taskId: string) => {
+    // console.log("toggleTaskDone:", taskId);
+
+    set((state) => {
+      const location = get().findTaskById(taskId);
+
+      if (!location) {
+        // console.log("Task not found anywhere:", taskId);
+        return state;
+      }
+
+      const { year, month, day, taskIndex } = location;
+      const dayData = state.data[year][month][day];
+
+      // console.log("Before toggle:", dayData.tasks[taskIndex].isDone);
+
+      dayData.tasks[taskIndex] = {
+        ...dayData.tasks[taskIndex],
+        isDone: !dayData.tasks[taskIndex].isDone,
+        updatedAt: Date.now(),
+      };
+
+      // console.log("After toggle:", dayData.tasks[taskIndex].isDone);
+      return { data: { ...state.data } };
+    });
+  },
+
   resetFinance: () => set({ data: {} }),
 
   resetYear: (year) => {
