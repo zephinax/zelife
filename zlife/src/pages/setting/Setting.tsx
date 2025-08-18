@@ -51,7 +51,6 @@ export default function Setting({
   } = useFinanceStore();
   const [isGetUserDataModalOpen, setIsGetUserDataModalOpen] = useState(false);
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
-
   const [status, setStatus] = useState(t("setting.check"));
 
   useEffect(() => {
@@ -60,10 +59,8 @@ export default function Setting({
 
   const checkForUpdate = async () => {
     if (!("serviceWorker" in navigator)) return;
-
     const wb = new Workbox("/sw.js");
     setStatus(t("setting.checking"));
-
     wb.addEventListener("waiting", () => {
       setStatus(t("setting.updateAvailable"));
       wb.messageSW({ type: "SKIP_WAITING" });
