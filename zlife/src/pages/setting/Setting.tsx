@@ -9,7 +9,7 @@ import Silk from "../../components/react-bits/Silk";
 import { useTranslation } from "../../hooks/useTranslation";
 import { GrEdit } from "react-icons/gr";
 import { MdOutlineSync, MdSyncProblem } from "react-icons/md";
-import version from "./../../../config.json";
+import version from "./../../../package.json";
 import { FiTrash2 } from "react-icons/fi";
 import Button from "../../components/button/Button";
 export default function Setting({
