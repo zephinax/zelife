@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToggleSwitch from "../../components/inputs/ToggleSwitch";
 import PageLayout from "../../components/layouts/pageLayout/PageLayout";
 import Paragraph from "../../components/typography/Paragraph";
@@ -10,8 +10,10 @@ import { useTranslation } from "../../hooks/useTranslation";
 import { GrEdit } from "react-icons/gr";
 import { MdOutlineSync, MdSyncProblem } from "react-icons/md";
 import version from "./../../../package.json";
-import { FiTrash2 } from "react-icons/fi";
+import { FiDownload, FiTrash2 } from "react-icons/fi";
 import Button from "../../components/button/Button";
+import { Workbox } from "workbox-window";
+
 export default function Setting({
   lastSyncAt,
   isLoading,
@@ -49,6 +51,33 @@ export default function Setting({
   } = useFinanceStore();
   const [isGetUserDataModalOpen, setIsGetUserDataModalOpen] = useState(false);
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
+
+  const [status, setStatus] = useState(t("setting.check"));
+
+  useEffect(() => {
+    setStatus(t("setting.check"));
+  }, [language, t]);
+
+  const checkForUpdate = async () => {
+    if (!("serviceWorker" in navigator)) return;
+
+    const wb = new Workbox("/sw.js");
+    setStatus(t("setting.checking"));
+
+    wb.addEventListener("waiting", () => {
+      setStatus(t("setting.updateAvailable"));
+      wb.messageSW({ type: "SKIP_WAITING" });
+      window.location.reload();
+    });
+
+    try {
+      await wb.register();
+      setStatus(t("setting.upToDate"));
+    } catch (error) {
+      console.error(error);
+      setStatus(t("setting.error"));
+    }
+  };
 
   return (
     <PageLayout>
@@ -200,6 +229,18 @@ export default function Setting({
                 <Paragraph className="text-[8px]">M</Paragraph>
                 <Paragraph className="text-[8px]">D</Paragraph>
               </div>
+            </div>
+          </div>
+          <div className="w-full h-[1px] bg-background mx-2"></div>
+          <div
+            onClick={() => {
+              checkForUpdate();
+            }}
+            className="p-4 flex justify-between items-center"
+          >
+            <Paragraph size="lg">{status}</Paragraph>
+            <div className="flex items-center relative justify-cente gap-4">
+              <FiDownload size={20} />
             </div>
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>

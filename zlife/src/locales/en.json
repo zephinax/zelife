@@ -48,7 +48,12 @@
     "taskViewType": "Task view type",
     "dateExplain": "By clicking on the date above, you can view or edit the reports for that date. You can also change the report display from monthly to daily mode in the settings section.",
     "resetData": "Reset Data",
-    "resetWarn": "Warning, this action will remove all of financial and tasks data"
+    "resetWarn": "Warning, this action will remove all of financial and tasks data",
+    "check": "Check for updates",
+    "checking": "Checking for updates...",
+    "updateAvailable": "Update available!",
+    "upToDate": "App is up to date!",
+    "error": "Error checking for update"
   },
   "tasks": {
     "taskManager": "Task Manager",
