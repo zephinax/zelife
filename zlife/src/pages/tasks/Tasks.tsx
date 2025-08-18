@@ -31,6 +31,7 @@ export default function Tasks() {
     toggleTaskDone,
     removeTask,
     settings,
+    toggleTaskDoneByDate,
   } = useFinanceStore();
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ export default function Tasks() {
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month, day } = PARSE_DATE;
   const tasks =
-    settings.defaultView === "daily"
+    settings.taskDefaultView === "daily"
       ? getTasksByDay(String(year), String(month), String(day))
       : getTasksByMonth(String(year), String(month));
   const userDataForm = useForm();
@@ -138,7 +139,16 @@ export default function Tasks() {
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleTaskDone(item.id);
+                          if (settings.taskDefaultView === "daily") {
+                            toggleTaskDoneByDate(
+                              String(year),
+                              String(month),
+                              String(day),
+                              item.id
+                            );
+                          } else {
+                            toggleTaskDone(item.id);
+                          }
                         }}
                         className="px-2 checkbox-container"
                       >

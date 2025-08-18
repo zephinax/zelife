@@ -29,7 +29,8 @@ export interface Transaction {
 }
 
 export interface ReportSettings {
-  defaultView: "daily" | "monthly" | "yearly";
+  taskDefaultView: "daily" | "monthly";
+  defaultView: "daily" | "monthly";
 }
 
 export interface DayData {
@@ -122,11 +123,16 @@ export interface FinanceActions {
     day: string
   ) => Transaction[];
   setDefaultView: (
-    view: "daily" | "monthly" | "yearly",
+    view: "daily" | "monthly",
     confirm?: boolean
   ) => Promise<void>;
 
-  getDefaultView: () => "daily" | "monthly" | "yearly";
+  setTaskDefaultView: (view: "daily" | "monthly") => Promise<void>;
+
+  getDefaultView: () => "daily" | "monthly";
+
+  getTaskDefaultView: () => "daily" | "monthly";
+
   resetReportSettings: () => void;
 
   // Optionally, you could add filtered versions
@@ -166,6 +172,13 @@ export interface FinanceActions {
   removeTask: (taskId: string) => void;
   editTask: (taskId: string, updated: Partial<Omit<Task, "id">>) => void;
   toggleTaskDone: (taskId: string) => void;
+
+  toggleTaskDoneByDate: (
+    year: string,
+    month: string,
+    day: string,
+    taskId: string
+  ) => void;
 
   resetFinance: () => void;
   resetYear: (year: string) => void;

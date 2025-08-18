@@ -263,6 +263,7 @@ export const createFinanceActions: StateCreator<
   },
 
   settings: {
+    taskDefaultView: "daily",
     defaultView: "monthly",
   },
 
@@ -283,8 +284,28 @@ export const createFinanceActions: StateCreator<
     }));
   },
 
-  // Get the current default view
+  setTaskDefaultView: async (view, confirm = false) => {
+    if (confirm) {
+      const currentView = get().settings.taskDefaultView;
+      const shouldProceed = window.confirm(
+        `Change default view from ${currentView} to ${view}?`
+      );
+      if (!shouldProceed) return;
+    }
+
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        taskDefaultView: view,
+      },
+    }));
+  },
+
   getDefaultView: () => {
+    return get().settings.defaultView;
+  },
+
+  getTaskDefaultView: () => {
     return get().settings.defaultView;
   },
 
@@ -550,6 +571,32 @@ export const createFinanceActions: StateCreator<
       };
 
       // console.log("After toggle:", dayData.tasks[taskIndex].isDone);
+      return { data: { ...state.data } };
+    });
+  },
+
+  toggleTaskDoneByDate: (year, month, day, taskId) => {
+    set((state) => {
+      if (!state.data[year]?.[month]?.[day]) {
+        console.error(`No data found for date ${year}-${month}-${day}`);
+        return state;
+      }
+
+      const dayData = state.data[year][month][day];
+      const taskIndex = dayData.tasks.findIndex(
+        (task) => task.id === taskId && !task.deletedAt
+      );
+
+      if (taskIndex === -1) {
+        console.error(`Task with ID ${taskId} not found for specified date`);
+        return state;
+      }
+      dayData.tasks[taskIndex] = {
+        ...dayData.tasks[taskIndex],
+        isDone: !dayData.tasks[taskIndex].isDone,
+        updatedAt: Date.now(),
+      };
+
       return { data: { ...state.data } };
     });
   },

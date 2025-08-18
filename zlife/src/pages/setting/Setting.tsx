@@ -45,6 +45,7 @@ export default function Setting({
     gistId,
     filename,
     resetFinance,
+    setTaskDefaultView,
   } = useFinanceStore();
   const [isGetUserDataModalOpen, setIsGetUserDataModalOpen] = useState(false);
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
@@ -164,6 +165,30 @@ export default function Setting({
                     setDefaultView("daily");
                   } else {
                     setDefaultView("monthly");
+                  }
+                }}
+              />
+              <div
+                className={`absolute flex bottom-[-12px] w-[40px] justify-between left-1 ${
+                  language === "fa" ? "flex-row-reverse" : ""
+                }`}
+              >
+                <Paragraph className="text-[8px]">M</Paragraph>
+                <Paragraph className="text-[8px]">D</Paragraph>
+              </div>
+            </div>
+          </div>
+          <div className="w-full h-[1px] bg-background mx-2"></div>
+          <div className="p-4 flex justify-between items-center">
+            <Paragraph size="lg">{t("setting.taskViewType")}</Paragraph>
+            <div className="flex items-center relative justify-cente gap-4">
+              <ToggleSwitch
+                checked={settings.taskDefaultView === "daily"}
+                onChange={(value) => {
+                  if (value === true) {
+                    setTaskDefaultView("daily");
+                  } else {
+                    setTaskDefaultView("monthly");
                   }
                 }}
               />
