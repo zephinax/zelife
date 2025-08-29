@@ -60,9 +60,10 @@
     "tasks": "Tasks",
     "createTask": "Create task",
     "editTask": "Edit task",
-    "noTask": "Create your first task!",
+    "noTask": "Nothing here, add a new task!",
     "title": "Title",
     "description": "Description",
-    "priority": "Priority"
+    "priority": "Priority",
+    "doneTasks": "Done Tasks"
   }
 }

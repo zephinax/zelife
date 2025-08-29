@@ -21,6 +21,7 @@ import CreateTaskForm from "./CreateTaskForm";
 import { GiLongLeggedSpider } from "react-icons/gi";
 import TrueFocus from "../../components/reactBits/trueFocus/TrueFocus";
 import { useForm } from "react-hook-form";
+import { BiChevronDown } from "react-icons/bi";
 
 export default function Tasks() {
   const {
@@ -39,16 +40,12 @@ export default function Tasks() {
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month, day } = PARSE_DATE;
+  const [isDoneTaskOpen, setIsDoneTaskOpen] = useState(true);
   const tasks =
     settings.taskDefaultView === "daily"
       ? getTasksByDay(String(year), String(month), String(day))
       : getTasksByMonth(String(year), String(month));
   const userDataForm = useForm();
-  // ---- SORTING LOGIC ----
-  // Groups:
-  // 0 = undone && has priority  (sorted by priority asc)
-  // 1 = undone && no priority   (kept original order)
-  // 2 = done                    (kept original order)
   const sortedTasks: Task[] = tasks?.length
     ? tasks.sort((a, b) => {
         // فقط بر اساس isDone سورت کن
@@ -58,6 +55,81 @@ export default function Tasks() {
         return 0; // ترتیب باقی تسک‌ها تغییر نکند
       })
     : [];
+  const doneTasks = sortedTasks.filter((task: Task) => task.isDone);
+  const pendingTasks = sortedTasks.filter((task: Task) => !task.isDone);
+
+  function renderTask(item: Task, index: number, arr: Task[]) {
+    const isLast = index === arr.length - 1;
+
+    return (
+      <div key={item.id} className="w-full">
+        <SwipeActions
+          item={item}
+          actions={getTransactionActions}
+          actionWidth={50}
+          swipeThreshold={40}
+        >
+          <div className="w-full flex items-center gap-2 py-2">
+            {/* Checkbox */}
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                if (settings.taskDefaultView === "daily") {
+                  toggleTaskDoneByDate(
+                    String(year),
+                    String(month),
+                    String(day),
+                    item.id
+                  );
+                } else {
+                  toggleTaskDone(item.id);
+                }
+              }}
+              className="px-2 checkbox-container"
+            >
+              <div className="flex flex-col items-center justify-center">
+                {item.isDone ? (
+                  <MdOutlineCheckBox className="!text-primary size-8" />
+                ) : (
+                  <MdOutlineCheckBoxOutlineBlank className="!text-primary size-8" />
+                )}
+                <p className="text-[9px] font-medium">
+                  {formatJalali(item.updatedAt)}
+                </p>
+              </div>
+            </div>
+
+            {/* Task content */}
+            <div className="flex-1">
+              <Paragraph
+                size="md"
+                className={`font-medium ${
+                  item.isDone ? "!line-through opacity-70" : ""
+                }`}
+              >
+                {item.title}
+              </Paragraph>
+              {item.description && (
+                <Paragraph
+                  className={`line-clamp-1 ${
+                    item.isDone ? "line-through opacity-70" : ""
+                  }`}
+                >
+                  {item.description}
+                </Paragraph>
+              )}
+            </div>
+
+            <div className="px-2 text-primary/40">
+              <MdOutlineSwipeLeft />
+            </div>
+          </div>
+        </SwipeActions>
+
+        {!isLast && <div className="w-full h-[1px] my-2 bg-background"></div>}
+      </div>
+    );
+  }
 
   const getTransactionActions: SwipeAction<Task>[] = [
     {
@@ -114,96 +186,56 @@ export default function Tasks() {
               setTargetTask(undefined);
               setCreateTaskModal(true);
             }}
-            size="sm"
+            size="md"
             className="!text-primary flex items-center gap-1"
           >
             {t("tasks.createTask")} <FiPlusCircle />
           </Paragraph>
         </div>
-        <div
-          dir="ltr"
-          className="p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
-        >
-          {sortedTasks && sortedTasks.length > 0 ? (
-            sortedTasks.map((item: Task, index) => {
-              const isLast = index === sortedTasks.length - 1;
-              return (
-                <div key={item.id} className="w-full">
-                  <SwipeActions
-                    item={item}
-                    actions={getTransactionActions}
-                    actionWidth={50}
-                    swipeThreshold={40}
-                  >
-                    <div className="w-full flex items-center gap-2 py-2">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (settings.taskDefaultView === "daily") {
-                            toggleTaskDoneByDate(
-                              String(year),
-                              String(month),
-                              String(day),
-                              item.id
-                            );
-                          } else {
-                            toggleTaskDone(item.id);
-                          }
-                        }}
-                        className="px-2 checkbox-container"
-                      >
-                        <div className="flex flex-col items-center justify-center">
-                          {item.isDone ? (
-                            <div className="flex flex-col gap-1 justify-center items-center">
-                              <MdOutlineCheckBox className="!text-primary size-8" />
-                            </div>
-                          ) : (
-                            <div className="flex flex-col gap-1 justify-center items-center">
-                              <MdOutlineCheckBoxOutlineBlank className="!text-primary size-8" />
-                            </div>
-                          )}
-                          <p className="text-[9px] font-medium">
-                            {formatJalali(item.updatedAt)}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <Paragraph
-                          size="md"
-                          className={`font-medium ${
-                            item.isDone ? "!line-through opacity-70" : ""
-                          }`}
-                        >
-                          {item.title}
-                        </Paragraph>
-                        {item.description && (
-                          <Paragraph
-                            className={`line-clamp-1 ${
-                              item.isDone ? "line-through opacity-70" : ""
-                            }`}
-                          >
-                            {item.description}
-                          </Paragraph>
-                        )}
-                      </div>
-                      <div className="px-2 text-primary/40">
-                        <MdOutlineSwipeLeft />
-                      </div>
-                    </div>
-                  </SwipeActions>
-                  {!isLast && (
-                    <div className="w-full h-[1px] my-2 bg-background"></div>
-                  )}
-                </div>
-              );
-            })
-          ) : (
-            <div className="py-2 flex items-center justify-center flex-col gap-4">
-              <GiLongLeggedSpider className="!text-primary size-14 opacity-75" />
-              <Paragraph size="lg">{t("tasks.noTask")}</Paragraph>
+        {sortedTasks && sortedTasks.length > 0 && (
+          <div
+            dir="ltr"
+            className="p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
+          >
+            {pendingTasks && pendingTasks.length > 0 ? (
+              pendingTasks.length > 0 &&
+              pendingTasks.map((item, i, arr) => renderTask(item, i, arr))
+            ) : (
+              <div className="py-2 flex items-center justify-center flex-col gap-4">
+                <GiLongLeggedSpider className="!text-primary size-14 opacity-75" />
+                <Paragraph size="lg">{t("tasks.noTask")}</Paragraph>
+              </div>
+            )}
+          </div>
+        )}
+        {doneTasks.length > 0 && (
+          <div className="my-2">
+            <div
+              className="w-full flex justify-between items-center cursor-pointer"
+              onClick={() => setIsDoneTaskOpen((prev) => !prev)}
+            >
+              <Paragraph className="font-medium" size="lg">
+                {t("tasks.doneTasks")}
+              </Paragraph>
+              <BiChevronDown
+                className={`size-6 transform transition-transform duration-300 !text-primary ${
+                  isDoneTaskOpen ? "rotate-0" : "-rotate-90"
+                }`}
+              />
             </div>
-          )}
-        </div>
+            <div
+              dir="ltr"
+              className={`p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto transition-all duration-500 ease-in-out ${
+                isDoneTaskOpen
+                  ? "max-h-96 opacity-100"
+                  : "max-h-0 opacity-0 overflow-hidden"
+              }`}
+            >
+              {doneTasks.length > 0 &&
+                doneTasks.map((item, i, arr) => renderTask(item, i, arr))}
+            </div>
+          </div>
+        )}
       </div>
       <Modal
         size="sm"
