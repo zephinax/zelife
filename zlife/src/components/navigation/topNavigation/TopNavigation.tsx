@@ -26,6 +26,7 @@ export default function TopNavigation({
         width={40}
         className="rounded-full bg-background-secondary z-[9999]"
         height={40}
+        alt="Z"
         src={avatarUrl ? avatarUrl : "/logo.svg"}
       ></img>
 

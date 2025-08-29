@@ -13,6 +13,9 @@ import version from "./../../../package.json";
 import { FiDownload, FiTrash2 } from "react-icons/fi";
 import Button from "../../components/button/Button";
 import { Workbox } from "workbox-window";
+import { GoCopy } from "react-icons/go";
+import { parseShamsiDate } from "../../utils/helper";
+import { PiCopy, PiCopyFill } from "react-icons/pi";
 
 export default function Setting({
   lastSyncAt,
@@ -45,13 +48,25 @@ export default function Setting({
     token,
     setDefaultView,
     gistId,
+    selectedDate,
     filename,
+    defaultDate,
     resetFinance,
+    getTransactionsByDay,
+    getTransactionsByMonth,
     setTaskDefaultView,
   } = useFinanceStore();
   const [isGetUserDataModalOpen, setIsGetUserDataModalOpen] = useState(false);
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
+  const [copyMessage, setCopyMessage] = useState(false);
   const [status, setStatus] = useState(t("setting.check"));
+  const DATE = selectedDate ? selectedDate : defaultDate;
+  const PARSE_DATE = parseShamsiDate(DATE);
+  const { year, month, day } = PARSE_DATE;
+  const transactions =
+    settings.defaultView === "daily"
+      ? getTransactionsByDay(String(year), String(month), String(day))
+      : getTransactionsByMonth(String(year), String(month));
 
   useEffect(() => {
     setStatus(t("setting.check"));
@@ -76,6 +91,33 @@ export default function Setting({
     }
   };
 
+  const handleCopy = (jsonInput: any) => {
+    try {
+      if (
+        !jsonInput ||
+        (typeof jsonInput !== "object" && !Array.isArray(jsonInput))
+      ) {
+        console.error("Input must be an object or array!");
+        setCopyMessage(false);
+        return;
+      }
+      const minified = JSON.stringify(jsonInput);
+      navigator.clipboard
+        .writeText(minified)
+        .then(() => {
+          setCopyMessage(true);
+          setTimeout(() => setCopyMessage(false), 3000);
+        })
+        .catch((err) => {
+          console.error("Clipboard write failed:", err);
+          setCopyMessage(false);
+        });
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      setCopyMessage(false);
+    }
+  };
+
   return (
     <PageLayout>
       <div className="flex flex-col gap-2">
@@ -92,6 +134,7 @@ export default function Setting({
               width={74}
               className="rounded-full bg-background"
               height={74}
+              alt="Z"
               src={avatarUrl ? avatarUrl : "/logo.svg"}
             ></img>
             <Paragraph size="lg" className="!text-white">
@@ -239,6 +282,20 @@ export default function Setting({
             <div className="flex items-center relative justify-cente gap-4">
               <FiDownload size={20} />
             </div>
+          </div>
+          <div className="w-full h-[1px] bg-background mx-2"></div>
+          <div
+            onClick={() => {
+              handleCopy(transactions);
+            }}
+            className="p-4 flex justify-between items-center"
+          >
+            <Paragraph size="lg">{t("setting.exportFinancial")}</Paragraph>
+            {copyMessage ? (
+              <PiCopyFill className="!text-primary" size={20} />
+            ) : (
+              <PiCopy size={20} />
+            )}
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
           <div className="p-4 flex justify-between items-center">

@@ -53,7 +53,8 @@
     "checking": "Checking for updates...",
     "updateAvailable": "Update available!",
     "upToDate": "App is up to date!",
-    "error": "Error checking for update"
+    "error": "Error checking for update",
+    "exportFinancial": "Export financial data"
   },
   "tasks": {
     "taskManager": "Task Manager",

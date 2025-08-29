@@ -1,7 +1,7 @@
 {
   "name": "zlife",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.4.5",
   "type": "module",
   "scripts": {
     "dev": "vite --host --port 5050",
