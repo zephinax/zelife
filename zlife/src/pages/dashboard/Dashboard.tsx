@@ -99,76 +99,78 @@ export default function Dashboard({
 
   return (
     <PageTransition variant="slide" className="w-full min-h-[100svh] pb-[85px]">
-      <div className="sticky top-0 max-w-screen  mx-2 rounded-4xl overflow-hidden h-[38vh] min-h-[38vh] z-[9999]">
-        <Silk
-          speed={8}
-          scale={1}
-          color="#d24670"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
-        <div
-          dir="ltr"
-          className="absolute z-[9999] top-[50%] flex-col justify-center gap-2 items-center flex left-[50%] translate-x-[-50%] translate-y-[-50%] "
-        >
-          <div className="flex items-center gap-1">
-            <Paragraph className=" font-semibold !text-white !text-5xl left-0">
-              {numberWithCommas(remaining.balance)}
-            </Paragraph>
-            <BiDollar className="!text-white size-6 mt-0.5" />
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 !text-white bg-green-500/30 px-2 rounded-4xl justify-center">
-              <span className="text-[14px]">
-                {numberWithCommas(remaining.income)}
-              </span>
-              <FaArrowDown className="size-2.5" />
-            </div>
-            <div className="flex items-center gap-1 !text-white bg-red-500/30 px-2 rounded-4xl justify-center">
-              <span className="text-[14px]">
-                {numberWithCommas(remaining.expense)}
-              </span>
-              <FaArrowUp className="size-2.5" />
-            </div>
-          </div>
-        </div>
-        <div className="absolute z-[9999] bottom-0 w-full p-4 flex justify-between items-center !text-white">
+      <div className="sticky top-0 max-w-screen z-[9999] bg-background">
+        <div className="sticky top-0 max-w-screen  mx-2 rounded-4xl overflow-hidden h-[38vh] min-h-[38vh] ">
+          <Silk
+            speed={8}
+            scale={1}
+            color="#d24670"
+            noiseIntensity={1.5}
+            rotation={0}
+          />
           <div
-            onClick={() => {
-              setAddTransactionModal(true);
-            }}
-            className="bg-background-secondary/40 pr-[var(--padding-end)] !text-white pl-[var(--padding-start)] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
-            style={{
-              paddingInlineStart: "0.5rem",
-              paddingInlineEnd: "0.75rem",
-            }}
+            dir="ltr"
+            className="absolute z-[9999] top-[50%] flex-col justify-center gap-2 items-center flex left-[50%] translate-x-[-50%] translate-y-[-50%] "
           >
-            <IoIosAdd className="size-6" />
-            <Paragraph className="!text-white">
-              {t("dashboard.addTransaction")}
-            </Paragraph>
-          </div>
-          {token && (
-            <div className="bg-background-secondary/40 backdrop-blur-sm h-[40px] w-[40px] flex items-center justify-center rounded-full">
-              <div
-                onClick={() => {
-                  triggerSync();
-                }}
-              >
-                {error ? (
-                  <MdSyncProblem className="text-white size-5" />
-                ) : (
-                  <MdOutlineSync
-                    className={`text-white size-5 ${
-                      isLoading ? "animate-spin" : ""
-                    }`}
-                  />
-                )}
+            <div className="flex items-center gap-1">
+              <Paragraph className=" font-semibold !text-white !text-5xl left-0">
+                {numberWithCommas(remaining.balance)}
+              </Paragraph>
+              <BiDollar className="!text-white size-6 mt-0.5" />
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1 !text-white bg-green-500/30 px-2 rounded-4xl justify-center">
+                <span className="text-[14px]">
+                  {numberWithCommas(remaining.income)}
+                </span>
+                <FaArrowDown className="size-2.5" />
+              </div>
+              <div className="flex items-center gap-1 !text-white bg-red-500/30 px-2 rounded-4xl justify-center">
+                <span className="text-[14px]">
+                  {numberWithCommas(remaining.expense)}
+                </span>
+                <FaArrowUp className="size-2.5" />
               </div>
             </div>
-          )}
+          </div>
+          <div className="absolute z-[9999] bottom-0 w-full p-4 flex justify-between items-center !text-white">
+            <div
+              onClick={() => {
+                setAddTransactionModal(true);
+              }}
+              className="bg-background-secondary/40 pr-[var(--padding-end)] !text-white pl-[var(--padding-start)] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
+              style={{
+                paddingInlineStart: "0.5rem",
+                paddingInlineEnd: "0.75rem",
+              }}
+            >
+              <IoIosAdd className="size-6" />
+              <Paragraph className="!text-white">
+                {t("dashboard.addTransaction")}
+              </Paragraph>
+            </div>
+            {token && (
+              <div className="bg-background-secondary/40 backdrop-blur-sm h-[40px] w-[40px] flex items-center justify-center rounded-full">
+                <div
+                  onClick={() => {
+                    triggerSync();
+                  }}
+                >
+                  {error ? (
+                    <MdSyncProblem className="text-white size-5" />
+                  ) : (
+                    <MdOutlineSync
+                      className={`text-white size-5 ${
+                        isLoading ? "animate-spin" : ""
+                      }`}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          <TopNavigation className="absolute top-0" />
         </div>
-        <TopNavigation className="absolute top-0" />
       </div>
 
       <div className="mt-2 px-4 flex-1 flex flex-col">
