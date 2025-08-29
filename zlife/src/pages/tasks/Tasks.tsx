@@ -8,7 +8,7 @@ import Paragraph from "../../components/typography/Paragraph";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useFinanceStore } from "../../store/store";
 import type { Task } from "../../store/types";
-import { parseShamsiDate } from "../../utils/helper";
+import { formatJalali, parseShamsiDate } from "../../utils/helper";
 import { FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import {
   MdOutlineCheckBox,
@@ -152,15 +152,20 @@ export default function Tasks() {
                         }}
                         className="px-2 checkbox-container"
                       >
-                        {item.isDone ? (
-                          <div className="flex flex-col gap-1 justify-center items-center">
-                            <MdOutlineCheckBox className="!text-primary size-8" />
-                          </div>
-                        ) : (
-                          <div className="flex flex-col gap-1 justify-center items-center">
-                            <MdOutlineCheckBoxOutlineBlank className="!text-primary size-8" />
-                          </div>
-                        )}
+                        <div className="flex flex-col items-center justify-center">
+                          {item.isDone ? (
+                            <div className="flex flex-col gap-1 justify-center items-center">
+                              <MdOutlineCheckBox className="!text-primary size-8" />
+                            </div>
+                          ) : (
+                            <div className="flex flex-col gap-1 justify-center items-center">
+                              <MdOutlineCheckBoxOutlineBlank className="!text-primary size-8" />
+                            </div>
+                          )}
+                          <p className="text-[9px] font-medium">
+                            {formatJalali(item.updatedAt)}
+                          </p>
+                        </div>
                       </div>
                       <div className="flex-1">
                         <Paragraph
