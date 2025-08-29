@@ -105,7 +105,7 @@ export default function Setting({
         .writeText(minified)
         .then(() => {
           setCopyMessage(true);
-          setTimeout(() => setCopyMessage(false), 3000);
+          setTimeout(() => setCopyMessage(false), 2000);
         })
         .catch((err) => {
           console.error("Clipboard write failed:", err);

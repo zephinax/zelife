@@ -99,7 +99,7 @@ export default function Dashboard({
 
   return (
     <PageTransition variant="slide" className="w-full min-h-[100svh] pb-[85px]">
-      <div className="sticky top-0 max-w-screen z-[9999] bg-background">
+      <div className="sticky top-0 max-w-screen z-[9999] bg-background rounded-b-[40px]">
         <div className="sticky top-0 max-w-screen  mx-2 rounded-4xl overflow-hidden h-[38vh] min-h-[38vh] ">
           <Silk
             speed={8}
