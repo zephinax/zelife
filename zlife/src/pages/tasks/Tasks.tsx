@@ -15,7 +15,7 @@ import {
   MdOutlineCheckBoxOutlineBlank,
   MdOutlineSwipeLeft,
 } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "../../components/modal/Modal";
 import CreateTaskForm from "./CreateTaskForm";
 import { GiLongLeggedSpider } from "react-icons/gi";
@@ -41,6 +41,7 @@ export default function Tasks() {
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month, day } = PARSE_DATE;
   const [isDoneTaskOpen, setIsDoneTaskOpen] = useState(true);
+  const doneTasksRef = useRef<HTMLDivElement>(null);
   const tasks =
     settings.taskDefaultView === "daily"
       ? getTasksByDay(String(year), String(month), String(day))
@@ -48,15 +49,21 @@ export default function Tasks() {
   const userDataForm = useForm();
   const sortedTasks: Task[] = tasks?.length
     ? tasks.sort((a, b) => {
-        // فقط بر اساس isDone سورت کن
-        if (a.isDone !== b.isDone) {
-          return a.isDone ? 1 : -1; // undone tasks اول، done tasks آخر
-        }
-        return 0; // ترتیب باقی تسک‌ها تغییر نکند
+        const priorityA = a.priority && a.priority > 0 ? a.priority : Infinity;
+        const priorityB = b.priority && b.priority > 0 ? b.priority : Infinity;
+
+        return priorityA - priorityB;
       })
     : [];
+
   const doneTasks = sortedTasks.filter((task: Task) => task.isDone);
   const pendingTasks = sortedTasks.filter((task: Task) => !task.isDone);
+
+  useEffect(() => {
+    if (isDoneTaskOpen && doneTasksRef.current) {
+      doneTasksRef.current.scrollTop = 0;
+    }
+  }, [isDoneTaskOpen]);
 
   function renderTask(item: Task, index: number, arr: Task[]) {
     const isLast = index === arr.length - 1;
@@ -175,7 +182,7 @@ export default function Tasks() {
           />
         </div>
       </div>
-      <div className="mt-2 mx-2 flex-1 flex flex-col">
+      <div className="mt-2 mx-2 flex-1 flex flex-col pb-[85px]">
         <div className="w-full flex justify-between items-center">
           <Paragraph className="font-medium" size="lg">
             {t("tasks.tasks")}
@@ -225,14 +232,16 @@ export default function Tasks() {
             </div>
             <div
               dir="ltr"
-              className={`p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto transition-all duration-500 ease-in-out ${
-                isDoneTaskOpen
-                  ? "max-h-96 opacity-100"
-                  : "max-h-0 opacity-0 overflow-hidden"
-              }`}
+              className="mt-2 flex flex-col bg-background-secondary rounded-2xl flex-1 overflow-hidden transition-all duration-500 ease-in-out"
+              style={{ maxHeight: isDoneTaskOpen ? "425px" : "0px" }}
             >
-              {doneTasks.length > 0 &&
-                doneTasks.map((item, i, arr) => renderTask(item, i, arr))}
+              <div
+                ref={doneTasksRef}
+                className="p-2 mt-2 flex flex-col justify-center items-center overflow-y-auto"
+              >
+                {doneTasks.length > 0 &&
+                  doneTasks.map((item, i, arr) => renderTask(item, i, arr))}
+              </div>
             </div>
           </div>
         )}
