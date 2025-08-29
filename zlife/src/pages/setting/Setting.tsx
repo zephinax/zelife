@@ -13,7 +13,6 @@ import version from "./../../../package.json";
 import { FiDownload, FiTrash2 } from "react-icons/fi";
 import Button from "../../components/button/Button";
 import { Workbox } from "workbox-window";
-import { GoCopy } from "react-icons/go";
 import { parseShamsiDate } from "../../utils/helper";
 import { PiCopy, PiCopyFill } from "react-icons/pi";
 
