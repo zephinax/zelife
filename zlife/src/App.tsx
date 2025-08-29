@@ -47,7 +47,7 @@ function App(): JSX.Element {
   }, [isSyncEnable]);
 
   return (
-    <main className="text-text bg-background">
+    <main className="text-text bg-background pt-1">
       <AnimatePresence mode="wait" initial={false}>
         <Routes location={location} key={location.pathname}>
           {userName ? (
