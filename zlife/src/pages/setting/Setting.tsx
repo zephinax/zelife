@@ -13,8 +13,8 @@ import version from "./../../../package.json";
 import { FiDownload, FiTrash2 } from "react-icons/fi";
 import Button from "../../components/button/Button";
 import { parseShamsiDate } from "../../utils/helper";
-import { PiCopy, PiCopyFill } from "react-icons/pi";
 import { useRegisterSW } from "virtual:pwa-register/react";
+import { IoCopy, IoCopyOutline } from "react-icons/io5";
 
 export default function Setting({
   lastSyncAt,
@@ -358,9 +358,9 @@ export default function Setting({
           >
             <Paragraph size="lg">{t("setting.exportFinancial")}</Paragraph>
             {copyMessage ? (
-              <PiCopyFill className="!text-primary" size={20} />
+              <IoCopy className="!text-primary" size={20} />
             ) : (
-              <PiCopy size={20} />
+              <IoCopyOutline size={20} />
             )}
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
