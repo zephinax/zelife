@@ -59,6 +59,11 @@
     "updateNow": "Update Now",
     "later": "Later",
     "cancel": "Cancel",
+    "serviceWorkerNotSupported": "Service Worker is not supported in this browser.",
+    "noServiceWorker": "No Service Worker is registered.",
+    "errorChecking": "An error occurred while checking for updates.",
+    "errorUpdating": "Failed to apply the update. Please try again.",
+    "errorRegistering": "Failed to register Service Worker.",
     "exportFinancial": "Export financial data"
   },
   "tasks": {

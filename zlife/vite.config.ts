@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
       includeAssets: [
         "logo.svg",
         "robots.txt",
@@ -44,8 +44,8 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-        clientsClaim: false,
-        skipWaiting: false,
+        clientsClaim: true,
+        skipWaiting: true,
         globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
         navigateFallback: "/offline.html",
         runtimeCaching: [

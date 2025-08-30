@@ -71,63 +71,77 @@ export default function Setting({
       ? getTransactionsByDay(String(year), String(month), String(day))
       : getTransactionsByMonth(String(year), String(month));
 
-  useEffect(() => {
-    setStatus(t("setting.check"));
-  }, [language, t]);
-
   const {
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r: any) {
-      console.log("SW Registered: " + r);
+      console.log("Service Worker Registered:", r);
     },
     onRegisterError(error: any) {
-      console.log("SW registration error", error);
+      console.error("Service Worker Registration Error:", error);
+      setStatus(t("setting.errorRegistering"));
     },
   });
 
-  // Update status when needRefresh changes
   useEffect(() => {
-    if (needRefresh) {
-      setStatus(t("setting.updateAvailable"));
-    }
+    setStatus(needRefresh ? t("setting.updateAvailable") : t("setting.check"));
   }, [needRefresh, t]);
 
   const checkForUpdate = async () => {
-    if (needRefresh) {
-      setIsUpdateModalOpen(true);
-    } else {
-      setStatus(t("setting.checking"));
+    setStatus(t("setting.checking"));
 
-      // Force check for updates
-      if ("serviceWorker" in navigator) {
-        const registration = await navigator.serviceWorker.ready;
-        registration.update();
+    if (!("serviceWorker" in navigator)) {
+      setStatus(t("setting.serviceWorkerNotSupported"));
+      return;
+    }
 
-        setTimeout(() => {
-          if (needRefresh) {
-            setStatus(t("setting.updateAvailable"));
-            setIsUpdateModalOpen(true);
-          } else {
-            setStatus(t("setting.upToDate"));
-          }
-        }, 2000);
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      if (!registration) {
+        setStatus(t("setting.noServiceWorker"));
+        return;
       }
+
+      registration.addEventListener("updatefound", () => {
+        const newWorker = registration.installing;
+        if (newWorker) {
+          newWorker.addEventListener("statechange", () => {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              setStatus(t("setting.updateAvailable"));
+              setIsUpdateModalOpen(true);
+            }
+          });
+        }
+      });
+
+      await registration.update();
+      setTimeout(() => {
+        if (!needRefresh) {
+          setStatus(t("setting.upToDate"));
+        }
+      }, 1000);
+    } catch (error) {
+      console.error("Error checking for update:", error);
+      setStatus(t("setting.errorChecking"));
     }
   };
-
   const handleUpdate = async () => {
     setIsUpdating(true);
     try {
       await updateServiceWorker(true);
-      // Fallback reload if updateServiceWorker doesn't work
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      const registration = await navigator.serviceWorker.ready;
+      if (registration.waiting) {
+        registration.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
     } catch (error) {
       console.error("Update failed:", error);
-      window.location.reload();
+      setStatus(t("setting.errorUpdating"));
+      setIsUpdating(false);
+      setIsUpdateModalOpen(false);
     }
   };
 
