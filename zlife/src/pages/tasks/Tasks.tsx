@@ -76,7 +76,7 @@ export default function Tasks() {
           actionWidth={50}
           swipeThreshold={40}
         >
-          <div className="w-full flex items-center gap-2 py-2">
+          <div className="w-full flex items-center gap-2 py-1.5">
             {/* Checkbox */}
             <div
               onClick={(e) => {
@@ -185,7 +185,7 @@ export default function Tasks() {
       <div className="mt-2 mx-2 flex-1 flex flex-col pb-[85px]">
         <div className="w-full flex justify-between items-center">
           <Paragraph className="font-medium" size="lg">
-            {t("tasks.tasks")}
+            {t("tasks.tasks")} : {pendingTasks.length}
           </Paragraph>
           <Paragraph
             onClick={() => {
@@ -199,22 +199,22 @@ export default function Tasks() {
             {t("tasks.createTask")} <FiPlusCircle />
           </Paragraph>
         </div>
-        {sortedTasks && sortedTasks.length > 0 && (
-          <div
-            dir="ltr"
-            className="p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
-          >
-            {pendingTasks && pendingTasks.length > 0 ? (
-              pendingTasks.length > 0 &&
-              pendingTasks.map((item, i, arr) => renderTask(item, i, arr))
-            ) : (
-              <div className="py-2 flex items-center justify-center flex-col gap-4">
-                <GiLongLeggedSpider className="!text-primary size-14 opacity-75" />
-                <Paragraph size="lg">{t("tasks.noTask")}</Paragraph>
-              </div>
-            )}
-          </div>
-        )}
+
+        <div
+          dir="ltr"
+          className="p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
+        >
+          {pendingTasks && pendingTasks.length > 0 ? (
+            pendingTasks.length > 0 &&
+            pendingTasks.map((item, i, arr) => renderTask(item, i, arr))
+          ) : (
+            <div className="py-2 flex items-center justify-center flex-col gap-4">
+              <GiLongLeggedSpider className="!text-primary size-14 opacity-75" />
+              <Paragraph size="lg">{t("tasks.noTask")}</Paragraph>
+            </div>
+          )}
+        </div>
+
         {doneTasks.length > 0 && (
           <div className="my-2">
             <div
@@ -222,7 +222,7 @@ export default function Tasks() {
               onClick={() => setIsDoneTaskOpen((prev) => !prev)}
             >
               <Paragraph className="font-medium" size="lg">
-                {t("tasks.doneTasks")}
+                {t("tasks.doneTasks")} : {doneTasks.length}
               </Paragraph>
               <BiChevronDown
                 className={`size-6 transform transition-transform duration-300 !text-primary ${
@@ -232,12 +232,12 @@ export default function Tasks() {
             </div>
             <div
               dir="ltr"
-              className="mt-2 flex flex-col bg-background-secondary rounded-2xl flex-1 overflow-hidden transition-all duration-500 ease-in-out"
+              className="mt-2 flex flex-col bg-background-secondary rounded-2xl flex-1 overflow-hidden transition-all duration-300 ease-in-out"
               style={{ maxHeight: isDoneTaskOpen ? "425px" : "0px" }}
             >
               <div
                 ref={doneTasksRef}
-                className="p-2 mt-2 flex flex-col justify-center items-center overflow-y-auto"
+                className="p-2 flex flex-col justify-center items-center overflow-y-auto"
               >
                 {doneTasks.length > 0 &&
                   doneTasks.map((item, i, arr) => renderTask(item, i, arr))}
