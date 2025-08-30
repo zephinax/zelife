@@ -41,6 +41,8 @@ export default defineConfig({
           ]),
         ],
       },
+      srcDir: "public",
+      filename: "sw.js",
       workbox: {
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
