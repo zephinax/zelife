@@ -12,9 +12,9 @@ import { MdOutlineSync, MdSyncProblem } from "react-icons/md";
 import version from "./../../../package.json";
 import { FiDownload, FiTrash2 } from "react-icons/fi";
 import Button from "../../components/button/Button";
-import { Workbox } from "workbox-window";
 import { parseShamsiDate } from "../../utils/helper";
 import { PiCopy, PiCopyFill } from "react-icons/pi";
+import { useRegisterSW } from "virtual:pwa-register/react";
 
 export default function Setting({
   lastSyncAt,
@@ -55,10 +55,14 @@ export default function Setting({
     getTransactionsByMonth,
     setTaskDefaultView,
   } = useFinanceStore();
+
   const [isGetUserDataModalOpen, setIsGetUserDataModalOpen] = useState(false);
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [copyMessage, setCopyMessage] = useState(false);
   const [status, setStatus] = useState(t("setting.check"));
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
   const { year, month, day } = PARSE_DATE;
@@ -71,22 +75,59 @@ export default function Setting({
     setStatus(t("setting.check"));
   }, [language, t]);
 
-  const checkForUpdate = async () => {
-    if (!("serviceWorker" in navigator)) return;
-    const wb = new Workbox("/sw.js");
-    setStatus(t("setting.checking"));
-    wb.addEventListener("waiting", () => {
-      setStatus(t("setting.updateAvailable"));
-      wb.messageSW({ type: "SKIP_WAITING" });
-      window.location.reload();
-    });
+  const {
+    needRefresh: [needRefresh],
+    updateServiceWorker,
+  } = useRegisterSW({
+    onRegistered(r: any) {
+      console.log("SW Registered: " + r);
+    },
+    onRegisterError(error: any) {
+      console.log("SW registration error", error);
+    },
+  });
 
+  // Update status when needRefresh changes
+  useEffect(() => {
+    if (needRefresh) {
+      setStatus(t("setting.updateAvailable"));
+    }
+  }, [needRefresh, t]);
+
+  const checkForUpdate = async () => {
+    if (needRefresh) {
+      setIsUpdateModalOpen(true);
+    } else {
+      setStatus(t("setting.checking"));
+
+      // Force check for updates
+      if ("serviceWorker" in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        registration.update();
+
+        setTimeout(() => {
+          if (needRefresh) {
+            setStatus(t("setting.updateAvailable"));
+            setIsUpdateModalOpen(true);
+          } else {
+            setStatus(t("setting.upToDate"));
+          }
+        }, 2000);
+      }
+    }
+  };
+
+  const handleUpdate = async () => {
+    setIsUpdating(true);
     try {
-      await wb.register();
-      setStatus(t("setting.upToDate"));
+      await updateServiceWorker(true);
+      // Fallback reload if updateServiceWorker doesn't work
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
-      console.error(error);
-      setStatus(t("setting.error"));
+      console.error("Update failed:", error);
+      window.location.reload();
     }
   };
 
@@ -148,7 +189,7 @@ export default function Setting({
           <Paragraph className="!text-primary">V{version.version}</Paragraph>
         </div>
         <div className="bg-background-secondary mx-2 rounded-2xl">
-          <div className="p-4 flex flex-col gap-2">
+          <div className="p-4 flex flex-col gap-2 cursor-pointer hover:bg-background/30 transition-colors">
             <div className="flex justify-between items-center">
               <Paragraph size="lg">{t("setting.syncData")}</Paragraph>
               <div className="flex items-center gap-4 justify-center">
@@ -199,7 +240,7 @@ export default function Setting({
             )}
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center">
+          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph size="lg">{t("setting.language")}</Paragraph>
             <div className="flex items-center relative justify-cente gap-4">
               <ToggleSwitch
@@ -223,7 +264,7 @@ export default function Setting({
             </div>
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center">
+          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph size="lg">{t("setting.viewType")}</Paragraph>
             <div className="flex items-center relative justify-cente gap-4">
               <ToggleSwitch
@@ -247,7 +288,7 @@ export default function Setting({
             </div>
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center">
+          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph size="lg">{t("setting.taskViewType")}</Paragraph>
             <div className="flex items-center relative justify-cente gap-4">
               <ToggleSwitch
@@ -272,14 +313,26 @@ export default function Setting({
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
           <div
-            onClick={() => {
-              checkForUpdate();
-            }}
-            className="p-4 flex justify-between items-center"
+            onClick={checkForUpdate}
+            className={`p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors`}
           >
-            <Paragraph size="lg">{status}</Paragraph>
-            <div className="flex items-center relative justify-cente gap-4">
-              <FiDownload size={20} />
+            <Paragraph
+              size="lg"
+              className={needRefresh ? "!text-primary font-semibold" : ""}
+            >
+              {status}
+            </Paragraph>
+            <div className="flex items-center relative justify-center gap-4">
+              <FiDownload
+                size={20}
+                className={`${
+                  needRefresh ? "text-primary animate-bounce" : ""
+                } ${
+                  status === t("setting.checking")
+                    ? "animate-spin text-primary"
+                    : ""
+                }`}
+              />
             </div>
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
@@ -287,7 +340,7 @@ export default function Setting({
             onClick={() => {
               handleCopy(transactions);
             }}
-            className="p-4 flex justify-between items-center"
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors"
           >
             <Paragraph size="lg">{t("setting.exportFinancial")}</Paragraph>
             {copyMessage ? (
@@ -297,7 +350,7 @@ export default function Setting({
             )}
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center">
+          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph className="!text-primary" size="lg">
               {t("setting.resetData")}
             </Paragraph>
@@ -305,13 +358,15 @@ export default function Setting({
               onClick={() => {
                 setIsResetDataModalOpen(true);
               }}
-              className="flex items-center relative justify-cente gap-4"
+              className="flex items-center relative justify-center gap-4 cursor-pointer"
             >
               <FiTrash2 size={20} className="text-primary" />
             </div>
           </div>
         </div>
       </div>
+
+      {/* Github Data Modal */}
       <Modal
         size="sm"
         overflowY="overflow-y-visible"
@@ -333,6 +388,8 @@ export default function Setting({
           }}
         />
       </Modal>
+
+      {/* Reset Data Modal */}
       <Modal
         overflowY="overflow-y-visible"
         size="sm"
@@ -342,16 +399,71 @@ export default function Setting({
         }}
         isOpen={isResetDataModalOpen}
       >
-        <Paragraph>{t("setting.resetWarn")}</Paragraph>
-        <Button
-          onClick={() => {
-            resetFinance();
-            setIsResetDataModalOpen(false);
-          }}
-          className="w-full my-5"
-        >
-          {t("setting.resetData")}
-        </Button>
+        <Paragraph className="mb-4">{t("setting.resetWarn")}</Paragraph>
+        <div className="flex gap-3 pb-2">
+          <Button
+            onClick={() => {
+              setIsResetDataModalOpen(false);
+            }}
+            className="flex-1"
+          >
+            {t("setting.cancel")}
+          </Button>
+          <Button
+            onClick={() => {
+              resetFinance();
+              setIsResetDataModalOpen(false);
+            }}
+            className="flex-1"
+          >
+            {t("setting.resetData")}
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Update Available Modal */}
+      <Modal
+        overflowY="overflow-y-visible"
+        size="sm"
+        title={t("setting.updateAvailable")}
+        onClose={() => {
+          setIsUpdateModalOpen(false);
+        }}
+        isOpen={isUpdateModalOpen}
+      >
+        <div className="space-y-4">
+          <Paragraph className="text-center">
+            {t("setting.updateMessage")}
+          </Paragraph>
+
+          {isUpdating && (
+            <div className="flex items-center justify-center gap-2 text-primary">
+              <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>
+              <Paragraph className="text-primary">
+                {t("setting.updating")}
+              </Paragraph>
+            </div>
+          )}
+
+          <div className="flex gap-3 mt-6">
+            <Button
+              onClick={() => {
+                setIsUpdateModalOpen(false);
+              }}
+              className="flex-1"
+              disabled={isUpdating}
+            >
+              {t("setting.later")}
+            </Button>
+            <Button
+              onClick={handleUpdate}
+              className="flex-1"
+              disabled={isUpdating}
+            >
+              {isUpdating ? t("setting.updating") : t("setting.updateNow")}
+            </Button>
+          </div>
+        </div>
       </Modal>
     </PageLayout>
   );

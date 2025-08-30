@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt",
       includeAssets: [
         "logo.svg",
         "robots.txt",
@@ -43,9 +43,9 @@ export default defineConfig({
       },
       workbox: {
         cleanupOutdatedCaches: true,
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB
-        clientsClaim: true, // سرویس‌ورکر جدید بلافاصله روی کلاینت‌ها کنترل بگیرد
-        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+        clientsClaim: false,
+        skipWaiting: false,
         globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
         navigateFallback: "/offline.html",
         runtimeCaching: [

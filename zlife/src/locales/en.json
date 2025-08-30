@@ -54,6 +54,11 @@
     "updateAvailable": "Update available!",
     "upToDate": "App is up to date!",
     "error": "Error checking for update",
+    "updateMessage": "A new version is ready! The app will reload to apply changes.",
+    "updating": "Updating...",
+    "updateNow": "Update Now",
+    "later": "Later",
+    "cancel": "Cancel",
     "exportFinancial": "Export financial data"
   },
   "tasks": {
