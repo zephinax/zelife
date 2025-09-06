@@ -230,19 +230,20 @@ export default function Tasks() {
                 }`}
               />
             </div>
-            <div
-              dir="ltr"
-              className="mt-2 flex flex-col bg-background-secondary rounded-2xl flex-1 overflow-hidden transition-all duration-300 ease-in-out"
-              style={{ maxHeight: isDoneTaskOpen ? "425px" : "0px" }}
-            >
+            {isDoneTaskOpen && (
               <div
-                ref={doneTasksRef}
-                className="p-2 flex flex-col justify-center items-center overflow-y-auto"
+                dir="ltr"
+                className="mt-2 flex flex-col bg-background-secondary rounded-2xl flex-1"
               >
-                {doneTasks.length > 0 &&
-                  doneTasks.map((item, i, arr) => renderTask(item, i, arr))}
+                <div
+                  ref={doneTasksRef}
+                  className="p-2 flex flex-col justify-center items-center overflow-y-auto"
+                >
+                  {doneTasks.length > 0 &&
+                    doneTasks.map((item, i, arr) => renderTask(item, i, arr))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>
