@@ -60,7 +60,7 @@ export default function Setting({
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [copyMessage, setCopyMessage] = useState(false);
-  const [status, setStatus] = useState(t("setting.check"));
+  const [status, setStatus] = useState(t("setting.upToDate"));
   const [isUpdating, setIsUpdating] = useState(false);
 
   const DATE = selectedDate ? selectedDate : defaultDate;
@@ -85,63 +85,25 @@ export default function Setting({
   });
 
   useEffect(() => {
-    setStatus(needRefresh ? t("setting.updateAvailable") : t("setting.check"));
+    if (needRefresh) {
+      setStatus(t("setting.updateAvailable"));
+      setIsUpdateModalOpen(true);
+    } else {
+      setStatus(t("setting.upToDate"));
+    }
   }, [needRefresh, t]);
 
-  const checkForUpdate = async () => {
-    setStatus(t("setting.checking"));
-
-    if (!("serviceWorker" in navigator)) {
-      setStatus(t("setting.serviceWorkerNotSupported"));
-      return;
-    }
-
-    try {
-      const registration = await navigator.serviceWorker.ready;
-      if (!registration) {
-        setStatus(t("setting.noServiceWorker"));
-        return;
-      }
-
-      registration.addEventListener("updatefound", () => {
-        const newWorker = registration.installing;
-        if (newWorker) {
-          newWorker.addEventListener("statechange", () => {
-            if (
-              newWorker.state === "installed" &&
-              navigator.serviceWorker.controller
-            ) {
-              setStatus(t("setting.updateAvailable"));
-              setIsUpdateModalOpen(true);
-            }
-          });
-        }
-      });
-
-      await registration.update();
-      setTimeout(() => {
-        if (!needRefresh) {
-          setStatus(t("setting.upToDate"));
-        }
-      }, 1000);
-    } catch (error) {
-      console.error("Error checking for update:", error);
-      setStatus(t("setting.errorChecking"));
-    }
-  };
   const handleUpdate = async () => {
     setIsUpdating(true);
     try {
       await updateServiceWorker(true);
-      const registration = await navigator.serviceWorker.ready;
-      if (registration.waiting) {
-        registration.waiting.postMessage({ type: "SKIP_WAITING" });
-      }
+      setIsUpdateModalOpen(false);
+      setIsUpdating(false);
+      setStatus(t("setting.upToDate"));
     } catch (error) {
       console.error("Update failed:", error);
       setStatus(t("setting.errorUpdating"));
       setIsUpdating(false);
-      setIsUpdateModalOpen(false);
     }
   };
 
@@ -190,7 +152,7 @@ export default function Setting({
               height={74}
               alt="Z"
               src={avatarUrl ? avatarUrl : "/logo.svg"}
-            ></img>
+            />
             <Paragraph size="lg" className="!text-white">
               {userName}
             </Paragraph>
@@ -256,7 +218,7 @@ export default function Setting({
           <div className="w-full h-[1px] bg-background mx-2"></div>
           <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph size="lg">{t("setting.language")}</Paragraph>
-            <div className="flex items-center relative justify-cente gap-4">
+            <div className="flex items-center relative justify-center gap-4">
               <ToggleSwitch
                 checked={language === "fa"}
                 onChange={(value) => {
@@ -280,7 +242,7 @@ export default function Setting({
           <div className="w-full h-[1px] bg-background mx-2"></div>
           <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph size="lg">{t("setting.viewType")}</Paragraph>
-            <div className="flex items-center relative justify-cente gap-4">
+            <div className="flex items-center relative justify-center gap-4">
               <ToggleSwitch
                 checked={settings.defaultView === "daily"}
                 onChange={(value) => {
@@ -304,7 +266,7 @@ export default function Setting({
           <div className="w-full h-[1px] bg-background mx-2"></div>
           <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph size="lg">{t("setting.taskViewType")}</Paragraph>
-            <div className="flex items-center relative justify-cente gap-4">
+            <div className="flex items-center relative justify-center gap-4">
               <ToggleSwitch
                 checked={settings.taskDefaultView === "daily"}
                 onChange={(value) => {
@@ -326,10 +288,7 @@ export default function Setting({
             </div>
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div
-            onClick={checkForUpdate}
-            className={`p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors`}
-          >
+          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
             <Paragraph
               size="lg"
               className={needRefresh ? "!text-primary font-semibold" : ""}
@@ -339,13 +298,7 @@ export default function Setting({
             <div className="flex items-center relative justify-center gap-4">
               <FiDownload
                 size={20}
-                className={`${
-                  needRefresh ? "text-primary animate-bounce" : ""
-                } ${
-                  status === t("setting.checking")
-                    ? "animate-spin text-primary"
-                    : ""
-                }`}
+                className={needRefresh ? "text-primary animate-bounce" : ""}
               />
             </div>
           </div>
@@ -474,7 +427,7 @@ export default function Setting({
               className="flex-1"
               disabled={isUpdating}
             >
-              {isUpdating ? t("setting.updating") : t("setting.updateNow")}
+              {t("setting.updateNow")}
             </Button>
           </div>
         </div>
