@@ -171,16 +171,15 @@ export async function syncToGist(store: FinanceState & FinanceActions) {
     // Get current data and clean up old deleted items
     const backup = store.exportData();
     const cleanedData = cleanupOldDeletedItems(backup.state.data);
-
+    const { selectedDate, ...stateToSync } = backup.state;
     // Create backup with cleaned data
     const cleanedBackup = {
       ...backup,
       state: {
-        ...backup.state,
+        ...stateToSync,
         data: cleanedData,
       },
     };
-
     const content = JSON.stringify(cleanedBackup, null, 2);
 
     if (store.gistId) {
@@ -237,6 +236,8 @@ export async function loadFromGist(
       remoteBackup.version = 0;
     }
 
+    const currentSelectedDate = store.getSelectedDate();
+
     if (options.merge) {
       const hasDifferences =
         JSON.stringify(localBackup.state.data) !==
@@ -256,6 +257,7 @@ export async function loadFromGist(
             token: store.token,
             gistId: store.gistId,
             isSyncEnable: store.isSyncEnable,
+            selectedDate: currentSelectedDate,
           },
           version: CURRENT_DATA_VERSION,
         });
@@ -272,6 +274,7 @@ export async function loadFromGist(
           token: store.token,
           gistId: store.gistId,
           isSyncEnable: store.isSyncEnable,
+          selectedDate: currentSelectedDate,
         },
         version: CURRENT_DATA_VERSION,
       });
