@@ -148,10 +148,14 @@ export default function Setting({
           <div className="absolute px-2 gap-4 top-[50%] translate-y-[-50%] w-full flex items-center justify-start">
             <img
               width={74}
-              className="rounded-full bg-background"
               height={74}
-              alt="Z"
-              src={avatarUrl ? avatarUrl : "/logo.svg"}
+              alt=""
+              className="rounded-full bg-background"
+              src={avatarUrl || "/logo.svg"}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/logo.svg";
+              }}
             />
             <Paragraph size="lg" className="!text-white">
               {userName}

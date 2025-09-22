@@ -24,11 +24,15 @@ export default function TopNavigation({
     >
       <img
         width={40}
-        className="rounded-full bg-background-secondary z-[9999]"
         height={40}
-        alt="Z"
-        src={avatarUrl ? avatarUrl : "/logo.svg"}
-      ></img>
+        alt=""
+        className="rounded-full bg-background-secondary z-[9999]"
+        src={avatarUrl || "/logo.svg"}
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "/logo.svg";
+        }}
+      />
 
       <div className="flex items-center gap-2 !text-white z-[9999]">
         <div
