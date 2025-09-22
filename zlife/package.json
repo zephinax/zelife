@@ -1,7 +1,7 @@
 {
   "name": "zlife",
   "private": true,
-  "version": "1.5.6",
+  "version": "1.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host --port 5050",
@@ -13,6 +13,7 @@
     "@buildix/wheel-datepicker": "^0.0.11-beta",
     "@react-three/fiber": "^9.3.0",
     "@tailwindcss/vite": "^4.1.11",
+    "@tanstack/react-virtual": "^3.13.12",
     "@types/three": "^0.178.1",
     "framer-motion": "^12.23.12",
     "react": "^19.1.0",
