@@ -83,13 +83,15 @@ export function getCurrentShamsiDate(): {
 export function formatShamsiDate(
   year: number,
   month: number,
-  day: number
+  day: number,
 ): string {
   const pad = (n: number) => n.toString().padStart(2, "0");
   return `${year}/${pad(month)}/${pad(day)}`;
 }
 
-// تبدیل رشته "YYYY/MM/DD" به آبجکت {year, month, day}
+const { year, month, day } = getCurrentShamsiDate();
+export const getCurrentShamsiFormatedDate = formatShamsiDate(year, month, day);
+
 export function parseShamsiDate(dateStr: string): {
   year: number;
   month: number;
@@ -158,7 +160,7 @@ const convertNumberToWords = (num: number): string => {
   let result = "";
 
   for (const [scaleValue, scaleName] of Object.entries(scales).sort(
-    (a, b) => parseInt(b[0]) - parseInt(a[0])
+    (a, b) => parseInt(b[0]) - parseInt(a[0]),
   )) {
     const scale = parseInt(scaleValue);
     if (num >= scale) {
@@ -224,7 +226,7 @@ export function validateIranianNationalCode(input: string): boolean {
       .slice(0, 9)
       .reduce(
         (acc, curr, index) => acc + parseInt(curr, 10) * (10 - index),
-        0
+        0,
       ) % 11;
 
   return (sum < 2 && check === sum) || (sum >= 2 && check === 11 - sum);
@@ -256,7 +258,7 @@ export function splitDateTime(input: string) {
 export const timeFormated = (time: { m: number; h: number }) => {
   return `${String(time?.h).padStart(2, "0")}:${String(time?.m).padStart(
     2,
-    "0"
+    "0",
   )}`;
 };
 
@@ -277,7 +279,7 @@ export const convertOptions = (array: any[]) => {
 export function downloadFile(
   data: any,
   fileType = "application/octet-stream",
-  fileName = `file_${new Date().toISOString()}.xlsx`
+  fileName = `file_${new Date().toISOString()}.xlsx`,
 ) {
   const blob = new Blob([data], { type: fileType });
   const url = window.URL.createObjectURL(blob);
@@ -293,7 +295,7 @@ export const convertShowPriceToWord = (value: string | number) => {
 };
 
 export const enterJustPersianCharacter = (
-  event: React.FormEvent<HTMLInputElement>
+  event: React.FormEvent<HTMLInputElement>,
 ) => {
   let value = event.currentTarget.value;
 
@@ -303,7 +305,7 @@ export const enterJustPersianCharacter = (
 };
 
 export const blockNonPersianKeys = (
-  event: React.KeyboardEvent<HTMLInputElement>
+  event: React.KeyboardEvent<HTMLInputElement>,
 ) => {
   const persianLettersRegex = /^[آ-ی]$/;
   if (!persianLettersRegex.test(event.key)) {

@@ -1,5 +1,3 @@
-// Modified sync.ts with inline cleanup - no changes to actions needed
-
 import {
   CURRENT_DATA_VERSION,
   type FinanceActions,
@@ -11,6 +9,7 @@ import {
   updateGistContent,
   createNewGist,
 } from "./gistController";
+import { getCurrentShamsiFormatedDate } from "./helper";
 
 const DELETED_ITEM_RETENTION_DAYS = 30; // Keep deleted items for 30 days
 
@@ -58,15 +57,15 @@ function cleanupOldDeletedItems(data: { [year: string]: YearData }): {
 
 function mergeData(
   localData: { [year: string]: YearData },
-  remoteData: { [year: string]: YearData }
+  remoteData: { [year: string]: YearData },
 ): { [year: string]: YearData } {
   const mergedData: { [year: string]: YearData } = {};
 
   const mergeItems = <
-    T extends { id: string; updatedAt: number; deletedAt?: number }
+    T extends { id: string; updatedAt: number; deletedAt?: number },
   >(
     localItems: T[],
-    remoteItems: T[]
+    remoteItems: T[],
   ): T[] => {
     const itemMap = new Map<string, T>();
 
@@ -150,7 +149,7 @@ function mergeData(
         mergedData[year][month][day] = {
           transactions: mergeItems(
             localDay.transactions,
-            remoteDay.transactions
+            remoteDay.transactions,
           ),
           tasks: mergeItems(localDay.tasks, remoteDay.tasks),
         };
@@ -171,7 +170,7 @@ export async function syncToGist(store: FinanceState & FinanceActions) {
     // Get current data and clean up old deleted items
     const backup = store.exportData();
     const cleanedData = cleanupOldDeletedItems(backup.state.data);
-    const { selectedDate, ...stateToSync } = backup.state;
+    const { selectedDate, defaultDate, ...stateToSync } = backup.state;
     // Create backup with cleaned data
     const cleanedBackup = {
       ...backup,
@@ -189,7 +188,7 @@ export async function syncToGist(store: FinanceState & FinanceActions) {
           gistId: store.gistId,
           filename: store.filename,
         },
-        content
+        content,
       );
       console.log("Data synced to existing gist");
       return { success: true, action: "updated" };
@@ -198,7 +197,7 @@ export async function syncToGist(store: FinanceState & FinanceActions) {
         store.token,
         store.filename,
         content,
-        false
+        false,
       );
       store.setGistId(id);
       console.log("Created new gist:", url);
@@ -212,7 +211,7 @@ export async function syncToGist(store: FinanceState & FinanceActions) {
 
 export async function loadFromGist(
   store: FinanceState & FinanceActions,
-  options: { merge?: boolean } = { merge: false }
+  options: { merge?: boolean } = { merge: false },
 ) {
   if (!store.isSyncEnable || !store.token || !store.gistId) {
     console.log("Sync disabled or missing credentials");
@@ -246,7 +245,7 @@ export async function loadFromGist(
       if (hasDifferences) {
         const mergedData = mergeData(
           localBackup.state.data,
-          remoteBackup.state.data
+          remoteBackup.state.data,
         );
 
         store.importData({
@@ -258,6 +257,7 @@ export async function loadFromGist(
             gistId: store.gistId,
             isSyncEnable: store.isSyncEnable,
             selectedDate: currentSelectedDate,
+            defaultDate: getCurrentShamsiFormatedDate,
           },
           version: CURRENT_DATA_VERSION,
         });
@@ -275,6 +275,7 @@ export async function loadFromGist(
           gistId: store.gistId,
           isSyncEnable: store.isSyncEnable,
           selectedDate: currentSelectedDate,
+          defaultDate: getCurrentShamsiFormatedDate,
         },
         version: CURRENT_DATA_VERSION,
       });
