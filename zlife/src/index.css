@@ -1,61 +1,62 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #d24670;
-  --color-background: #f7f7f7;
-  --color-background-secondary: #ffffff;
-  --color-text: #191c1f;
-  --color-text-secondary: #75808a;
+    --color-primary: #d24670;
+    --color-background: #f7f7f7;
+    --color-background-secondary: #ffffff;
+    --color-text: #191c1f;
+    --color-text-secondary: #75808a;
 }
 
 .dark {
-  --color-primary: #d24670;
-  --color-background: #121212;
-  --color-background-secondary: #1e1e1e;
-  --color-text: #f1f1f1;
-  --color-text-secondary: #a0a0a0;
+    --color-primary: #d24670;
+    --color-background: #121212;
+    --color-background-secondary: #1e1e1e;
+    --color-text: #f1f1f1;
+    --color-text-secondary: #a0a0a0;
 }
 
 * {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 *::-webkit-scrollbar {
-  display: none !important;
+    display: none !important;
 }
 
 body {
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    background-color: var(--color-background);
 }
 
 .wd-input-field {
-  background-color: var(--color-background) !important;
-  color: var(--color-text) !important;
-  border-color: var(--color-text-secondary);
-  height: 38px;
-  border-radius: 24px !important;
+    background-color: var(--color-background) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-text-secondary);
+    height: 38px;
+    border-radius: 24px !important;
 }
 
 .wd-modal {
-  background-color: var(--color-background-secondary) !important;
-  color: var(--color-text) !important;
-  border-radius: 16px !important;
+    background-color: var(--color-background-secondary) !important;
+    color: var(--color-text) !important;
+    border-radius: 16px !important;
 }
 
 .wd-wheel-picker-item-unselected {
-  color: var(--color-text-secondary) !important;
+    color: var(--color-text-secondary) !important;
 }
 
 .wd-wheel-picker-item-selected {
-  color: var(--color-text) !important;
+    color: var(--color-text) !important;
 }
 
 .wd-button {
-  background-color: var(--color-primary) !important;
+    background-color: var(--color-primary) !important;
 }
 
 .wd-modal-overlay {
-  background-color: transparent !important;
+    background-color: transparent !important;
 }

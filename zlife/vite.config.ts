@@ -20,8 +20,8 @@ export default defineConfig({
         name: "Zelife – Take Control of Your Life",
         short_name: "Zelife",
         description: "Take Control of Your Life",
-        theme_color: "#000000",
-        background_color: "#000000",
+        theme_color: "#121212",
+        background_color: "#121212",
         display: "standalone",
         start_url: "/",
         icons: [
