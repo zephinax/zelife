@@ -2,7 +2,7 @@ services:
   zlife:
     build: ./zlife
     ports:
-      - "5035:5035"
+      - "3008:5035"
     env_file:
       - ./zlife/.env
     restart: unless-stopped
