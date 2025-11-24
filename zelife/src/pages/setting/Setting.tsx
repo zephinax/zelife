@@ -60,7 +60,7 @@ export default function Setting({
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [copyMessage, setCopyMessage] = useState(false);
-  const [status, setStatus] = useState(t("setting.upToDate"));
+  const [status, setStatus] = useState(t("setting.check"));
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
   const [swRegistration, setSwRegistration] =
@@ -81,7 +81,10 @@ export default function Setting({
     onRegistered(r: any) {
       console.log("Service Worker Registered:", r);
     },
-    onRegisteredSW(_swUrl: string, registration: ServiceWorkerRegistration | undefined) {
+    onRegisteredSW(
+      _swUrl: string,
+      registration: ServiceWorkerRegistration | undefined
+    ) {
       if (registration?.waiting) {
         setNeedRefresh(true);
       }
@@ -98,7 +101,7 @@ export default function Setting({
       setStatus(t("setting.updateAvailable"));
       setIsUpdateModalOpen(true);
     } else {
-      setStatus(t("setting.upToDate"));
+      setStatus(t("setting.check"));
     }
   }, [needRefresh, t]);
 
@@ -108,7 +111,7 @@ export default function Setting({
       await updateServiceWorker(true);
       setIsUpdateModalOpen(false);
       setIsUpdating(false);
-      setStatus(t("setting.upToDate"));
+      setStatus(t("setting.check"));
     } catch (error) {
       console.error("Update failed:", error);
       setStatus(t("setting.errorUpdating"));
@@ -130,7 +133,7 @@ export default function Setting({
       }
       await swRegistration.update();
       if (!swRegistration.waiting && !swRegistration.installing) {
-        setStatus(t("setting.upToDate"));
+        setStatus(t("setting.check"));
       }
     } catch (error) {
       console.error("Check update failed:", error);
@@ -325,22 +328,23 @@ export default function Setting({
             </div>
           </div>
           <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
+          <div
+            onClick={() => {
+              if (!needRefresh && !isCheckingUpdate) {
+                handleCheckUpdate();
+              }
+            }}
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors"
+          >
             <Paragraph
               size="lg"
-              className={needRefresh ? "!text-primary font-semibold" : ""}
+              className={`${needRefresh ? "!text-primary font-semibold" : ""} ${
+                !needRefresh ? "cursor-pointer" : ""
+              }`}
             >
               {status}
             </Paragraph>
             <div className="flex items-center relative justify-center gap-4">
-              <Button
-                onClick={handleCheckUpdate}
-                className="px-3 py-2 text-sm"
-                loading={isCheckingUpdate}
-                disabled={isCheckingUpdate}
-              >
-                {t("setting.check")}
-              </Button>
               <FiDownload
                 size={20}
                 className={needRefresh ? "text-primary animate-bounce" : ""}
