@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router";
 import { registerSW } from "virtual:pwa-register";
 import { StrictMode } from "react";
 
-const basename = "/zelife";
+const basename = "/";
 
 registerSW({
   immediate: true,

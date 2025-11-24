@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
-const basePath = "/zelife/";
+const basePath = "/";
 
 export default defineConfig({
   base: basePath,
