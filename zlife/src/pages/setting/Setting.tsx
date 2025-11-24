@@ -62,6 +62,9 @@ export default function Setting({
   const [copyMessage, setCopyMessage] = useState(false);
   const [status, setStatus] = useState(t("setting.upToDate"));
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
+  const [swRegistration, setSwRegistration] =
+    useState<ServiceWorkerRegistration | null>(null);
 
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
@@ -72,11 +75,17 @@ export default function Setting({
       : getTransactionsByMonth(String(year), String(month));
 
   const {
-    needRefresh: [needRefresh],
+    needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r: any) {
       console.log("Service Worker Registered:", r);
+    },
+    onRegisteredSW(_swUrl: string, registration: ServiceWorkerRegistration | undefined) {
+      if (registration?.waiting) {
+        setNeedRefresh(true);
+      }
+      setSwRegistration(registration || null);
     },
     onRegisterError(error: any) {
       console.error("Service Worker Registration Error:", error);
@@ -104,6 +113,30 @@ export default function Setting({
       console.error("Update failed:", error);
       setStatus(t("setting.errorUpdating"));
       setIsUpdating(false);
+    }
+  };
+
+  const handleCheckUpdate = async () => {
+    setIsCheckingUpdate(true);
+    setStatus(t("setting.checking"));
+    try {
+      if (!("serviceWorker" in navigator)) {
+        setStatus(t("setting.serviceWorkerNotSupported"));
+        return;
+      }
+      if (!swRegistration) {
+        setStatus(t("setting.noServiceWorker"));
+        return;
+      }
+      await swRegistration.update();
+      if (!swRegistration.waiting && !swRegistration.installing) {
+        setStatus(t("setting.upToDate"));
+      }
+    } catch (error) {
+      console.error("Check update failed:", error);
+      setStatus(t("setting.errorChecking"));
+    } finally {
+      setIsCheckingUpdate(false);
     }
   };
 
@@ -300,6 +333,14 @@ export default function Setting({
               {status}
             </Paragraph>
             <div className="flex items-center relative justify-center gap-4">
+              <Button
+                onClick={handleCheckUpdate}
+                className="px-3 py-2 text-sm"
+                loading={isCheckingUpdate}
+                disabled={isCheckingUpdate}
+              >
+                {t("setting.check")}
+              </Button>
               <FiDownload
                 size={20}
                 className={needRefresh ? "text-primary animate-bounce" : ""}

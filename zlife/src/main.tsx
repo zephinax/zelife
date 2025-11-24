@@ -6,10 +6,8 @@ import App from "./App.tsx";
 import { BrowserRouter } from "react-router";
 import { registerSW } from "virtual:pwa-register";
 
-const updateSW = registerSW({
-  onNeedRefresh() {
-    updateSW();
-  },
+registerSW({
+  immediate: true,
   onOfflineReady() {
     console.log("Offline ready");
   },
