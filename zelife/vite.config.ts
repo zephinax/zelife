@@ -53,7 +53,8 @@ export default defineConfig({
         clientsClaim: true,
         skipWaiting: false,
         globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
-        navigateFallback: "index.html",
+        // Use an absolute path so Safari correctly serves the SPA shell on deep links
+        navigateFallback: "/index.html",
         runtimeCaching: [
           {
             urlPattern: /\/fonts\/.*\.(?:woff2|woff|ttf)$/,
