@@ -208,7 +208,7 @@ export default function Dashboard({
               </div>
             </div>
           </div>
-          <div className="absolute z-[9999] bottom-0 w-full p-4 flex justify-between items-center !text-white">
+          <div className="absolute z-[9999] bottom-0 left-0 w-full py-4 px-6 flex justify-between items-center !text-white">
             <div
               onClick={() => setAddTransactionModal(true)}
               className="bg-background-secondary/40 pr-[var(--padding-end)] !text-white pl-[var(--padding-start)] backdrop-blur-sm h-[40px] rounded-full flex items-center justify-center"
@@ -238,7 +238,7 @@ export default function Dashboard({
               </div>
             )}
           </div>
-          <TopNavigation className="absolute top-0" />
+          <TopNavigation className="absolute top-0 left-0" />
         </div>
       </div>
 

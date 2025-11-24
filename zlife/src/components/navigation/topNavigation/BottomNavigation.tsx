@@ -47,9 +47,9 @@ export default function BottomNavigation() {
     <div className="p-2 fixed w-full bottom-0">
       <div
         dir="ltr"
-        className={`h-[68px] py-5 w-full rounded-[36px] max-w-5xl mx-auto gap-4 border-background border-[1px] bg-background-secondary/50 backdrop-blur-xl items-center flex justify-evenly
+        className={`h-[68px] py-5 w-full max-w-5xl mx-auto gap-4 border-background border-[1px] bg-background-secondary/50 backdrop-blur-xl items-center flex justify-evenly
     shadow-[0_-8px_20px_rgba(0,0,0,0.05)]
-    ${isIOS() ? "pb-[26px] h-[70px]" : ""}`}
+    ${isIOS() ? "pb-[26px] h-[70px] rounded-[36px]" : "rounded-3xl"}`}
       >
         {routes.map((item) => {
           const isActive = location.pathname === item.route;

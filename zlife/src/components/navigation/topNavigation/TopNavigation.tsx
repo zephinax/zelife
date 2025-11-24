@@ -20,7 +20,7 @@ export default function TopNavigation({
 
   return (
     <div
-      className={`flex p-4 w-full justify-between items-center ${className}`}
+      className={`flex py-4 px-6 w-full justify-between items-center ${className}`}
     >
       <img
         width={40}
