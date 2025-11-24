@@ -44,31 +44,33 @@ export default function BottomNavigation() {
   ];
 
   return (
-    <div
-      dir="ltr"
-      className={`fixed bottom-0 h-[68px] py-5 w-full gap-4 border-t-background border-t-[1px] bg-background-secondary items-center flex justify-evenly
+    <div className="p-2 fixed w-full bottom-0">
+      <div
+        dir="ltr"
+        className={`h-[68px] py-5 w-full rounded-3xl max-w-5xl mx-auto gap-4 border-background border-[1px] bg-background-secondary/50 backdrop-blur-xl items-center flex justify-evenly
     shadow-[0_-8px_20px_rgba(0,0,0,0.05)]
     ${isIOS() ? "pb-[26px] h-[70px]" : ""}`}
-    >
-      {routes.map((item) => {
-        const isActive = location.pathname === item.route;
-        return (
-          <div
-            key={item.name}
-            className="flex flex-col items-center justify-center cursor-pointer"
-            onClick={() => navigate(item.route)}
-          >
-            {renderIcon(item.icon, isActive)}
-            <span
-              className={`text-[11px] ${
-                isActive ? "text-primary" : "text-text-secondary"
-              }`}
+      >
+        {routes.map((item) => {
+          const isActive = location.pathname === item.route;
+          return (
+            <div
+              key={item.name}
+              className="flex min-w-[50px] flex-col items-center justify-center cursor-pointer"
+              onClick={() => navigate(item.route)}
             >
-              {item.name}
-            </span>
-          </div>
-        );
-      })}
+              {renderIcon(item.icon, isActive)}
+              <span
+                className={`text-[11px] max-w-[60px] ${
+                  isActive ? "text-primary" : "text-text-secondary"
+                }`}
+              >
+                {item.name}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

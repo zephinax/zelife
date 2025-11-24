@@ -10,7 +10,7 @@ export default function PageLayout({
     <>
       <PageTransition
         variant="slide"
-        className="px-2 bg-background min-h-[100svh] w-screen"
+        className="px-2 max-w-5xl mx-auto bg-background min-h-[100svh] w-screen"
       >
         {children}
       </PageTransition>

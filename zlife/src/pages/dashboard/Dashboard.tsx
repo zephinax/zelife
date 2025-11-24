@@ -174,8 +174,8 @@ export default function Dashboard({
 
   return (
     <PageTransition variant="slide" className="w-full min-h-[100svh] pb-[85px]">
-      <div className="sticky top-0 max-w-screen z-[9999] bg-background rounded-b-[40px]">
-        <div className="sticky top-0 max-w-screen mx-2 rounded-4xl overflow-hidden h-[38vh] min-h-[38vh]">
+      <div className="sticky top-1 max-w-5xl mx-auto z-[9999] bg-background rounded-b-[40px]">
+        <div className="mx-2 rounded-4xl overflow-hidden h-[38vh] min-h-[38vh]">
           <Silk
             speed={8}
             scale={1}
@@ -242,7 +242,7 @@ export default function Dashboard({
         </div>
       </div>
 
-      <div className="mt-2 px-4 flex-1 flex flex-col">
+      <div className="mt-2 max-w-5xl mx-auto px-4 flex-1 flex flex-col">
         <div>
           <Paragraph className="font-medium" size="lg">
             {t("dashboard.transactions")}
