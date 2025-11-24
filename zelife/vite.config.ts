@@ -53,7 +53,7 @@ export default defineConfig({
         clientsClaim: true,
         skipWaiting: false,
         globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
-        navigateFallback: "offline.html",
+        navigateFallback: "index.html",
         runtimeCaching: [
           {
             urlPattern: /\/fonts\/.*\.(?:woff2|woff|ttf)$/,
