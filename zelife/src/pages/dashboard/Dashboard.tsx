@@ -251,7 +251,7 @@ export default function Dashboard({
         <div
           ref={parentRef}
           dir="ltr"
-          className="p-2 pb-0 mt-2 max-w-screen flex flex-col-reverse bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
+          className="p-2 pb-0 mt-2 max-w-screen flex flex-col-reverse bg-background-secondary justify-center items-center rounded-3xl flex-1 overflow-y-auto"
           style={{ height: "600px" }} // ارتفاع ثابت (می‌توانید دینامیک کنید)
         >
           {transactions && transactions.length > 0 ? (

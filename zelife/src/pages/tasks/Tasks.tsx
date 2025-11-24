@@ -172,7 +172,7 @@ export default function Tasks() {
           noiseIntensity={1.5}
           rotation={0}
         />
-        <div className="!text-white text-2xl absolute px-6 gap-4 top-[50%] translate-y-[-50%] w-full flex items-center justify-center">
+        <div className="!text-white text-3xl absolute px-6 gap-4 top-[50%] translate-y-[-50%] w-full flex items-center justify-center">
           {/* <Title className="!text-white">{t("tasks.taskManager")}</Title> */}
           <TrueFocus
             blurAmount={2.5}
@@ -202,7 +202,7 @@ export default function Tasks() {
 
         <div
           dir="ltr"
-          className="p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-2xl flex-1 overflow-y-auto"
+          className="p-2 mt-2 flex flex-col bg-background-secondary justify-center items-center rounded-3xl flex-1 overflow-y-auto"
         >
           {pendingTasks && pendingTasks.length > 0 ? (
             pendingTasks.length > 0 &&
@@ -233,7 +233,7 @@ export default function Tasks() {
             {isDoneTaskOpen && (
               <div
                 dir="ltr"
-                className="mt-2 flex flex-col bg-background-secondary rounded-2xl flex-1"
+                className="mt-2 flex flex-col bg-background-secondary rounded-3xl flex-1"
               >
                 <div
                   ref={doneTasksRef}

@@ -204,7 +204,7 @@ export default function Setting({
           </Paragraph>
           <Paragraph className="!text-primary">V{version.version}</Paragraph>
         </div>
-        <div className="bg-background-secondary mx-2 rounded-2xl">
+        <div className="bg-background-secondary mx-2 rounded-3xl">
           <div className="p-4 flex flex-col gap-2 cursor-pointer hover:bg-background/30 transition-colors">
             <div className="flex justify-between items-center">
               <Paragraph size="lg">{t("setting.syncData")}</Paragraph>

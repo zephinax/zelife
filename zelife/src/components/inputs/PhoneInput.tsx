@@ -65,7 +65,7 @@ export default function PhoneInput({
           {phoneNumberList.map((item, index) => (
             <div
               key={index}
-              className={`bg-secondary-200 px-2 inline-flex hover:gap-1 rounded-2xl py-1 border ${
+              className={`bg-secondary-200 px-2 inline-flex hover:gap-1 rounded-3xl py-1 border ${
                 item.phone && !isPhoneNumberValid(item.phone)
                   ? "border-red-500"
                   : "border-secondary-200"
