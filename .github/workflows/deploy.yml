@@ -27,18 +27,21 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
+        working-directory: ./zelife
         run: bun install --frozen-lockfile
 
       - name: Build
+        working-directory: ./zelife
         run: bun run build
 
       - name: Add SPA fallback
+        working-directory: ./zelife
         run: cp dist/index.html dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: ./zelife/dist
 
   deploy:
     needs: build
