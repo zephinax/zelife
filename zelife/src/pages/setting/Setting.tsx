@@ -445,9 +445,9 @@ export default function Setting({
         onClose={() => {
           setIsUpdateModalOpen(false);
         }}
-        isOpen={isUpdateModalOpen}
+        isOpen={true}
       >
-        <div className="space-y-4">
+        <div className="space-y-4 pb-3">
           <Paragraph className="text-center">
             {t("setting.updateMessage")}
           </Paragraph>
