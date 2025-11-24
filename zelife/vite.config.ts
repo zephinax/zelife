@@ -3,8 +3,10 @@ import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
+const basePath = "/zelife/";
+
 export default defineConfig({
-  base: "/zelife/",
+  base: basePath,
   plugins: [
     react(),
     tailwindcss(),
@@ -24,8 +26,8 @@ export default defineConfig({
         theme_color: "#121212",
         background_color: "#121212",
         display: "standalone",
-        start_url: "/zelife/",
-        scope: "/zelife/",
+        start_url: basePath,
+        scope: basePath,
         icons: [
           ...[48, 72, 96, 128, 144, 152, 192, 384, 512].flatMap((size) => [
             {

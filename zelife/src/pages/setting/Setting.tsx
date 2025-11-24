@@ -445,7 +445,7 @@ export default function Setting({
         onClose={() => {
           setIsUpdateModalOpen(false);
         }}
-        isOpen={true}
+        isOpen={isUpdateModalOpen}
       >
         <div className="space-y-4 pb-3">
           <Paragraph className="text-center">
