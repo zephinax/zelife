@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  base: "/zlife/",
+  base: "/zelife/",
   plugins: [
     react(),
     tailwindcss(),
@@ -24,8 +24,8 @@ export default defineConfig({
         theme_color: "#121212",
         background_color: "#121212",
         display: "standalone",
-        start_url: "/zlife/",
-        scope: "/zlife/",
+        start_url: "/zelife/",
+        scope: "/zelife/",
         icons: [
           ...[48, 72, 96, 128, 144, 152, 192, 384, 512].flatMap((size) => [
             {

@@ -15,7 +15,7 @@ registerSW({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter basename="/zlife">
+    <BrowserRouter basename="/zelife">
       <App />
     </BrowserRouter>
   </StrictMode>
