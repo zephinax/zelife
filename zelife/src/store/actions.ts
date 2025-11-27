@@ -29,6 +29,7 @@ export const createFinanceActions: StateCreator<
 
   exportData: () => {
     const state = get();
+    // Do not sync sensitive auth info (token/gistId); keep them local-only
     return {
       state: {
         data: JSON.parse(JSON.stringify(state.data)), // Deep copy
@@ -36,8 +37,6 @@ export const createFinanceActions: StateCreator<
         language: state.language,
         selectedDate: "",
         defaultDate: state.defaultDate,
-        token: state.token,
-        gistId: state.gistId,
         filename: state.filename,
         isSyncEnable: state.isSyncEnable,
         avatarUrl: state.avatarUrl,
@@ -95,8 +94,9 @@ export const createFinanceActions: StateCreator<
       language: backup.state.language || state.language,
       selectedDate: backup.state.selectedDate || state.selectedDate,
       defaultDate: backup.state.defaultDate || state.defaultDate,
-      token: backup.state.token || state.token,
-      gistId: backup.state.gistId || state.gistId,
+      // Always keep sensitive fields local-only
+      token: state.token,
+      gistId: state.gistId,
       filename: backup.state.filename || state.filename,
       isSyncEnable: backup.state.isSyncEnable || state.isSyncEnable,
       avatarUrl: backup.state.avatarUrl || state.avatarUrl,

@@ -1,19 +1,22 @@
 export const CURRENT_DATA_VERSION = 1;
 export type TransactionType = "income" | "expense";
 
+export interface BackupState {
+  data: { [year: string]: YearData };
+  userName: string;
+  language: string;
+  selectedDate: string;
+  defaultDate: string;
+  filename: string;
+  isSyncEnable: boolean;
+  avatarUrl: string;
+  // Sensitive fields are kept local-only and excluded from synced backups
+  token?: string;
+  gistId?: string;
+}
+
 export interface Backup {
-  state: {
-    data: { [year: string]: YearData };
-    userName: string;
-    language: string;
-    selectedDate: string;
-    defaultDate: string;
-    token: string;
-    gistId: string;
-    filename: string;
-    isSyncEnable: boolean;
-    avatarUrl: string;
-  };
+  state: BackupState;
   version: number;
 }
 
