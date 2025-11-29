@@ -3,22 +3,17 @@ import "./index.css";
 import "./fonts.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router";
-import { registerSW } from "virtual:pwa-register";
 import { StrictMode } from "react";
+import { ServiceWorkerProvider } from "./providers/ServiceWorkerProvider";
 
 const basename = "/";
-
-registerSW({
-  immediate: true,
-  onOfflineReady() {
-    console.log("Offline ready");
-  },
-});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter basename={basename}>
-      <App />
+      <ServiceWorkerProvider>
+        <App />
+      </ServiceWorkerProvider>
     </BrowserRouter>
   </StrictMode>
 );

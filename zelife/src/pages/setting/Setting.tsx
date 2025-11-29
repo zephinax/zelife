@@ -13,8 +13,8 @@ import version from "./../../../package.json";
 import { FiDownload, FiTrash2 } from "react-icons/fi";
 import Button from "../../components/button/Button";
 import { parseShamsiDate } from "../../utils/helper";
-import { useRegisterSW } from "virtual:pwa-register/react";
 import { IoCopy, IoCopyOutline } from "react-icons/io5";
+import { useServiceWorker } from "../../providers/ServiceWorkerProvider";
 
 export default function Setting({
   lastSyncAt,
@@ -63,8 +63,6 @@ export default function Setting({
   const [status, setStatus] = useState(t("setting.check"));
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
-  const [swRegistration, setSwRegistration] =
-    useState<ServiceWorkerRegistration | null>(null);
 
   const DATE = selectedDate ? selectedDate : defaultDate;
   const PARSE_DATE = parseShamsiDate(DATE);
@@ -74,27 +72,14 @@ export default function Setting({
       ? getTransactionsByDay(String(year), String(month), String(day))
       : getTransactionsByMonth(String(year), String(month));
 
-  const {
-    needRefresh: [needRefresh, setNeedRefresh],
-    updateServiceWorker,
-  } = useRegisterSW({
-    onRegistered(r: any) {
-      console.log("Service Worker Registered:", r);
-    },
-    onRegisteredSW(
-      _swUrl: string,
-      registration: ServiceWorkerRegistration | undefined
-    ) {
-      if (registration?.waiting) {
-        setNeedRefresh(true);
-      }
-      setSwRegistration(registration || null);
-    },
-    onRegisterError(error: any) {
-      console.error("Service Worker Registration Error:", error);
-      setStatus(t("setting.errorRegistering"));
-    },
-  });
+  const { needRefresh, updateServiceWorker, swRegistration } =
+    useServiceWorker();
+
+  useEffect(() => {
+    if (!swRegistration) {
+      setStatus(t("setting.noServiceWorker"));
+    }
+  }, [swRegistration, t]);
 
   useEffect(() => {
     if (needRefresh) {
