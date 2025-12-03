@@ -5,7 +5,6 @@ import Paragraph from "../../components/typography/Paragraph";
 import { useFinanceStore } from "../../store/store";
 import Modal from "../../components/modal/Modal";
 import UserDataForm from "./UserDataForm";
-import Silk from "../../components/react-bits/Silk";
 import { useTranslation } from "../../hooks/useTranslation";
 import { GrEdit } from "react-icons/gr";
 import { MdOutlineSync, MdSyncProblem } from "react-icons/md";
@@ -15,6 +14,29 @@ import Button from "../../components/button/Button";
 import { parseShamsiDate } from "../../utils/helper";
 import { IoCopy, IoCopyOutline } from "react-icons/io5";
 import { useServiceWorker } from "../../providers/ServiceWorkerProvider";
+import {
+  LabeledToggle,
+  SettingCard,
+  SettingDivider,
+  SettingHeader,
+  SettingRow,
+} from "./components/SettingLayout";
+
+type SyncAction =
+  | "created"
+  | "updated"
+  | "merged"
+  | "overwritten"
+  | "no_changes"
+  | null;
+
+type SettingProps = {
+  isLoading: boolean;
+  lastSyncAt: Date | null;
+  error: string | null;
+  lastAction: SyncAction;
+  triggerSync: () => void;
+};
 
 export default function Setting({
   lastSyncAt,
@@ -22,19 +44,7 @@ export default function Setting({
   error,
   lastAction,
   triggerSync,
-}: {
-  isLoading: boolean;
-  lastSyncAt: Date | null;
-  error: string | null;
-  lastAction:
-    | "created"
-    | "updated"
-    | "merged"
-    | "overwritten"
-    | "no_changes"
-    | null;
-  triggerSync: () => void;
-}) {
+}: SettingProps) {
   const { t } = useTranslation();
   const {
     avatarUrl,
@@ -65,8 +75,7 @@ export default function Setting({
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
 
   const DATE = selectedDate ? selectedDate : defaultDate;
-  const PARSE_DATE = parseShamsiDate(DATE);
-  const { year, month, day } = PARSE_DATE;
+  const { year, month, day } = parseShamsiDate(DATE);
   const transactions =
     settings.defaultView === "daily"
       ? getTransactionsByDay(String(year), String(month), String(day))
@@ -95,11 +104,11 @@ export default function Setting({
     try {
       await updateServiceWorker(true);
       setIsUpdateModalOpen(false);
-      setIsUpdating(false);
       setStatus(t("setting.check"));
     } catch (error) {
       console.error("Update failed:", error);
       setStatus(t("setting.errorUpdating"));
+    } finally {
       setIsUpdating(false);
     }
   };
@@ -128,12 +137,13 @@ export default function Setting({
     }
   };
 
-  const handleCopy = (jsonInput: any) => {
+  const handleCopy = (jsonInput: unknown) => {
     try {
-      if (
-        !jsonInput ||
-        (typeof jsonInput !== "object" && !Array.isArray(jsonInput))
-      ) {
+      const isCopyableObject =
+        jsonInput !== null &&
+        (typeof jsonInput === "object" || Array.isArray(jsonInput));
+
+      if (!isCopyableObject) {
         console.error("Input must be an object or array!");
         setCopyMessage(false);
         return;
@@ -155,171 +165,92 @@ export default function Setting({
     }
   };
 
+  const handleSyncToggle = (value: boolean) => {
+    if (token) {
+      setIsSyncEnable(value);
+      return;
+    }
+    setIsGetUserDataModalOpen(true);
+  };
+
+  const handleLanguageToggle = (value: boolean) => {
+    setLanguage(value ? "fa" : "en");
+  };
+
+  const handleDefaultViewToggle = (value: boolean) => {
+    setDefaultView(value ? "daily" : "monthly");
+  };
+
+  const handleTaskViewToggle = (value: boolean) => {
+    setTaskDefaultView(value ? "daily" : "monthly");
+  };
+
+  const handleExportTransactions = () => handleCopy(transactions);
+
+  const handleResetData = () => {
+    resetFinance();
+    setIsResetDataModalOpen(false);
+  };
+
+  const versionLabel = `V${version.version}`;
+  const canCheckForUpdate = !needRefresh && !isCheckingUpdate;
+
   return (
     <PageLayout>
       <div className="flex flex-col gap-2">
-        <div className="relative rounded-[45px] min-h-[90px] h-[90px] overflow-hidden flex justify-start gap-4 items-center">
-          <Silk
-            speed={8}
-            scale={0.6}
-            color="#d24670"
-            noiseIntensity={1.5}
-            rotation={0}
+        <SettingHeader
+          avatarUrl={avatarUrl}
+          userName={userName}
+          title={t("navbar.setting")}
+          versionLabel={versionLabel}
+        />
+        <SettingCard>
+          <SyncRow
+            label={t("setting.syncData")}
+            token={token}
+            isSyncEnable={isSyncEnable}
+            onToggle={handleSyncToggle}
+            onTriggerSync={triggerSync}
+            onEditCredentials={() => setIsGetUserDataModalOpen(true)}
+            isLoading={isLoading}
+            error={error}
+            lastSyncAt={lastSyncAt}
+            lastAction={lastAction}
           />
-          <div className="absolute px-2 gap-4 top-[50%] translate-y-[-50%] w-full flex items-center justify-start">
-            <img
-              width={74}
-              height={74}
-              alt=""
-              className="rounded-full bg-background"
-              src={avatarUrl || "/logo.svg"}
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/logo.svg";
-              }}
-            />
-            <Paragraph size="lg" className="!text-white">
-              {userName}
-            </Paragraph>
-          </div>
-        </div>
-        <div className="mx-2 flex items-center justify-between">
-          <Paragraph className="font-medium" size="lg">
-            {t("navbar.setting")}
-          </Paragraph>
-          <Paragraph className="!text-primary">V{version.version}</Paragraph>
-        </div>
-        <div className="bg-background-secondary mx-2 rounded-3xl">
-          <div className="p-4 flex flex-col gap-2 cursor-pointer hover:bg-background/30 transition-colors">
-            <div className="flex justify-between items-center">
-              <Paragraph size="lg">{t("setting.syncData")}</Paragraph>
-              <div className="flex items-center gap-4 justify-center">
-                {token && (
-                  <div className="flex items-center gap-3 justify-center">
-                    <div
-                      onClick={() => {
-                        triggerSync();
-                      }}
-                    >
-                      {error ? (
-                        <MdSyncProblem className="text-primary size-5" />
-                      ) : (
-                        <MdOutlineSync
-                          className={`text-primary size-5 ${
-                            isLoading ? "animate-spin" : ""
-                          }`}
-                        />
-                      )}
-                    </div>
-                    <div
-                      onClick={() => {
-                        setIsGetUserDataModalOpen(true);
-                      }}
-                    >
-                      <GrEdit className="text-primary" />
-                    </div>
-                  </div>
-                )}
-                <ToggleSwitch
-                  checked={isSyncEnable}
-                  onChange={(value) => {
-                    if (token) {
-                      setIsSyncEnable(value);
-                    } else {
-                      setIsGetUserDataModalOpen(true);
-                    }
-                  }}
-                />
-              </div>
-            </div>
-            {error && <Paragraph>{error}</Paragraph>}
-            {lastSyncAt && (
-              <Paragraph>
-                {lastAction && `${lastAction} : `}
-                {`${lastSyncAt.toLocaleDateString()} at ${lastSyncAt.toLocaleTimeString()}`}
-              </Paragraph>
-            )}
-          </div>
-          <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
+          <SettingDivider />
+          <SettingRow>
             <Paragraph size="lg">{t("setting.language")}</Paragraph>
-            <div className="flex items-center relative justify-center gap-4">
-              <ToggleSwitch
-                checked={language === "fa"}
-                onChange={(value) => {
-                  if (value === true) {
-                    setLanguage("fa");
-                  } else {
-                    setLanguage("en");
-                  }
-                }}
-              />
-              <div
-                className={`absolute flex bottom-[-12px] w-[40px] justify-between left-1 ${
-                  language === "fa" ? "flex-row-reverse" : ""
-                }`}
-              >
-                <Paragraph className="text-[8px]">En</Paragraph>
-                <Paragraph className="text-[8px]">Fa</Paragraph>
-              </div>
-            </div>
-          </div>
-          <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
+            <LabeledToggle
+              checked={language === "fa"}
+              onChange={handleLanguageToggle}
+              leftLabel="En"
+              rightLabel="Fa"
+              reverse={language === "fa"}
+            />
+          </SettingRow>
+          <SettingRow>
             <Paragraph size="lg">{t("setting.viewType")}</Paragraph>
-            <div className="flex items-center relative justify-center gap-4">
-              <ToggleSwitch
-                checked={settings.defaultView === "daily"}
-                onChange={(value) => {
-                  if (value === true) {
-                    setDefaultView("daily");
-                  } else {
-                    setDefaultView("monthly");
-                  }
-                }}
-              />
-              <div
-                className={`absolute flex bottom-[-12px] w-[40px] justify-between left-1 ${
-                  language === "fa" ? "flex-row-reverse" : ""
-                }`}
-              >
-                <Paragraph className="text-[8px]">M</Paragraph>
-                <Paragraph className="text-[8px]">D</Paragraph>
-              </div>
-            </div>
-          </div>
-          <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
+            <LabeledToggle
+              checked={settings.defaultView === "daily"}
+              onChange={handleDefaultViewToggle}
+              leftLabel="M"
+              rightLabel="D"
+              reverse={language === "fa"}
+            />
+          </SettingRow>
+          <SettingRow>
             <Paragraph size="lg">{t("setting.taskViewType")}</Paragraph>
-            <div className="flex items-center relative justify-center gap-4">
-              <ToggleSwitch
-                checked={settings.taskDefaultView === "daily"}
-                onChange={(value) => {
-                  if (value === true) {
-                    setTaskDefaultView("daily");
-                  } else {
-                    setTaskDefaultView("monthly");
-                  }
-                }}
-              />
-              <div
-                className={`absolute flex bottom-[-12px] w-[40px] justify-between left-1 ${
-                  language === "fa" ? "flex-row-reverse" : ""
-                }`}
-              >
-                <Paragraph className="text-[8px]">M</Paragraph>
-                <Paragraph className="text-[8px]">D</Paragraph>
-              </div>
-            </div>
-          </div>
-          <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div
-            onClick={() => {
-              if (!needRefresh && !isCheckingUpdate) {
-                handleCheckUpdate();
-              }
-            }}
-            className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors"
+            <LabeledToggle
+              checked={settings.taskDefaultView === "daily"}
+              onChange={handleTaskViewToggle}
+              leftLabel="M"
+              rightLabel="D"
+              reverse={language === "fa"}
+            />
+          </SettingRow>
+          <SettingRow
+            onClick={canCheckForUpdate ? handleCheckUpdate : undefined}
+            interactive={canCheckForUpdate}
           >
             <Paragraph
               size="lg"
@@ -335,36 +266,30 @@ export default function Setting({
                 className={needRefresh ? "text-primary animate-bounce" : ""}
               />
             </div>
-          </div>
-          <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div
-            onClick={() => {
-              handleCopy(transactions);
-            }}
-            className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors"
-          >
+          </SettingRow>
+          <SettingRow onClick={handleExportTransactions}>
             <Paragraph size="lg">{t("setting.exportFinancial")}</Paragraph>
             {copyMessage ? (
               <IoCopy className="!text-primary" size={20} />
             ) : (
               <IoCopyOutline size={20} />
             )}
-          </div>
-          <div className="w-full h-[1px] bg-background mx-2"></div>
-          <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-background/30 transition-colors">
+          </SettingRow>
+          <SettingRow
+            onClick={() => {
+              setIsResetDataModalOpen(true);
+            }}
+            className="cursor-pointer"
+            isLast
+          >
             <Paragraph className="!text-primary" size="lg">
               {t("setting.resetData")}
             </Paragraph>
-            <div
-              onClick={() => {
-                setIsResetDataModalOpen(true);
-              }}
-              className="flex items-center relative justify-center gap-4 cursor-pointer"
-            >
+            <div className="flex items-center relative justify-center gap-4">
               <FiTrash2 size={20} className="text-primary" />
             </div>
-          </div>
-        </div>
+          </SettingRow>
+        </SettingCard>
       </div>
 
       {/* Github Data Modal */}
@@ -410,13 +335,7 @@ export default function Setting({
           >
             {t("setting.cancel")}
           </Button>
-          <Button
-            onClick={() => {
-              resetFinance();
-              setIsResetDataModalOpen(false);
-            }}
-            className="flex-1"
-          >
+          <Button onClick={handleResetData} className="flex-1">
             {t("setting.resetData")}
           </Button>
         </div>
@@ -467,5 +386,67 @@ export default function Setting({
         </div>
       </Modal>
     </PageLayout>
+  );
+}
+
+type SyncRowProps = {
+  label: string;
+  token: string;
+  isSyncEnable: boolean;
+  onToggle: (value: boolean) => void;
+  onTriggerSync: () => void;
+  onEditCredentials: () => void;
+  isLoading: boolean;
+  error: string | null;
+  lastSyncAt: Date | null;
+  lastAction: SyncAction;
+};
+
+function SyncRow({
+  label,
+  token,
+  isSyncEnable,
+  onToggle,
+  onTriggerSync,
+  onEditCredentials,
+  isLoading,
+  error,
+  lastSyncAt,
+  lastAction,
+}: SyncRowProps) {
+  return (
+    <div className="p-4 flex flex-col gap-2 cursor-pointer hover:bg-background/30 transition-colors">
+      <div className="flex justify-between items-center">
+        <Paragraph size="lg">{label}</Paragraph>
+        <div className="flex items-center gap-4 justify-center">
+          {token && (
+            <div className="flex items-center gap-3 justify-center">
+              <div onClick={onTriggerSync}>
+                {error ? (
+                  <MdSyncProblem className="text-primary size-5" />
+                ) : (
+                  <MdOutlineSync
+                    className={`text-primary size-5 ${
+                      isLoading ? "animate-spin" : ""
+                    }`}
+                  />
+                )}
+              </div>
+              <div onClick={onEditCredentials}>
+                <GrEdit className="text-primary" />
+              </div>
+            </div>
+          )}
+          <ToggleSwitch checked={isSyncEnable} onChange={onToggle} />
+        </div>
+      </div>
+      {error && <Paragraph>{error}</Paragraph>}
+      {lastSyncAt && (
+        <Paragraph>
+          {lastAction && `${lastAction} : `}
+          {`${lastSyncAt.toLocaleDateString()} at ${lastSyncAt.toLocaleTimeString()}`}
+        </Paragraph>
+      )}
+    </div>
   );
 }
