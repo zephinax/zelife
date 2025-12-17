@@ -58,7 +58,7 @@ export function TransactionList({
           ))}
         </div>
       ) : (
-        <div className="py-2 flex items-center justify-center flex-col gap-4">
+        <div className="pt-2 pb-4 flex items-center justify-center flex-col gap-4">
           <GiLongLeggedSpider className="!text-primary size-14 opacity-75" />
           <Paragraph size="lg">{emptyLabel}</Paragraph>
         </div>

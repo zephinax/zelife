@@ -58,7 +58,7 @@ export function SettingCard({ children }: { children: ReactNode }) {
 }
 
 export function SettingDivider() {
-  return <div className="w-full h-[1px] bg-background mx-2"></div>;
+  return <div className="w-full h-[1px] bg-background"></div>;
 }
 
 type SettingRowProps = {
