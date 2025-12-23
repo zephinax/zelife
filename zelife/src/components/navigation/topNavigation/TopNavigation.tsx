@@ -2,9 +2,9 @@ import { FaChartLine, FaCreditCard } from "react-icons/fa";
 import { useFinanceStore } from "../../../store/store";
 import { BiChevronDown } from "react-icons/bi";
 import Modal from "../../modal/Modal";
-import { WheelDatePicker } from "@buildix/wheel-datepicker";
+import { WheelDatePicker } from "@local/wheel-datepicker";
 import { useState } from "react";
-import "@buildix/wheel-datepicker/dist/index.css";
+import "@local/wheel-datepicker/css";
 import { useTranslation } from "../../../hooks/useTranslation";
 import Paragraph from "../../typography/Paragraph";
 export default function TopNavigation({

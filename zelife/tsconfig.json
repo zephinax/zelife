@@ -5,6 +5,11 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@local/wheel-datepicker": ["src/vendor/wheel-datepicker/dist/index.ts"],
+      "@local/wheel-datepicker/css": ["src/vendor/wheel-datepicker/dist/index.css"]
+    },
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,

@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { resolve } from "node:path";
 import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -7,6 +8,24 @@ const basePath = "/";
 
 export default defineConfig({
   base: basePath,
+  resolve: {
+    alias: [
+      {
+        find: /^@local\/wheel-datepicker$/,
+        replacement: resolve(
+          __dirname,
+          "src/vendor/wheel-datepicker/dist/index.ts"
+        ),
+      },
+      {
+        find: /^@local\/wheel-datepicker\/css$/,
+        replacement: resolve(
+          __dirname,
+          "src/vendor/wheel-datepicker/dist/index.css"
+        ),
+      },
+    ],
+  },
   plugins: [
     react(),
     tailwindcss(),
