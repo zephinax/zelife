@@ -173,7 +173,10 @@ export default function Setting({
         }
       }, pollIntervalMs);
 
-      timer = setTimeout(() => finish(Boolean(registration.waiting)), timeoutMs);
+      timer = setTimeout(
+        () => finish(Boolean(registration.waiting)),
+        timeoutMs
+      );
     });
   };
 
@@ -363,15 +366,6 @@ export default function Setting({
                 size={20}
                 className={needRefresh ? "text-primary animate-bounce" : ""}
               />
-              {needRefresh && (
-                <Button
-                  onClick={handleUpdate}
-                  className="h-9 px-3"
-                  disabled={isUpdating}
-                >
-                  {isUpdating ? t("setting.updating") : t("setting.updateNow")}
-                </Button>
-              )}
             </div>
           </SettingRow>
           {updateError && (
