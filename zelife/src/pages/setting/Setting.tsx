@@ -71,6 +71,7 @@ export default function Setting({
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [copyMessage, setCopyMessage] = useState(false);
   const [status, setStatus] = useState(t("setting.check"));
+  const [updateError, setUpdateError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
 
@@ -103,7 +104,8 @@ export default function Setting({
 
   const waitForServiceWorkerUpdate = (
     registration: ServiceWorkerRegistration,
-    timeoutMs = 7000
+    timeoutMs = 15000,
+    pollIntervalMs = 1000
   ) => {
     if (registration.waiting) {
       return Promise.resolve(true);
@@ -111,22 +113,28 @@ export default function Setting({
 
     return new Promise<boolean>((resolve) => {
       const installing = registration.installing;
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      let interval: ReturnType<typeof setInterval> | null = null;
+      let resolved = false;
 
       const cleanup = () => {
         registration.removeEventListener("updatefound", onUpdateFound);
         installing?.removeEventListener("statechange", onInstallingStateChange);
-        clearTimeout(timer);
+        if (timer) clearTimeout(timer);
+        if (interval) clearInterval(interval);
       };
 
-      const finish = () => {
+      const finish = (found: boolean) => {
+        if (resolved) return;
+        resolved = true;
         cleanup();
-        resolve(Boolean(registration.waiting));
+        resolve(found);
       };
 
       const onInstallingStateChange = (event: Event) => {
         const worker = event.target as ServiceWorker;
         if (worker.state === "installed" || worker.state === "redundant") {
-          finish();
+          finish(Boolean(registration.waiting));
         }
       };
 
@@ -136,7 +144,7 @@ export default function Setting({
         newWorker.addEventListener("statechange", (event) => {
           const worker = event.target as ServiceWorker;
           if (worker.state === "installed" || worker.state === "redundant") {
-            finish();
+            finish(Boolean(registration.waiting));
           }
         });
       };
@@ -147,7 +155,13 @@ export default function Setting({
 
       registration.addEventListener("updatefound", onUpdateFound);
 
-      const timer = setTimeout(finish, timeoutMs);
+      interval = setInterval(() => {
+        if (registration.waiting) {
+          finish(true);
+        }
+      }, pollIntervalMs);
+
+      timer = setTimeout(() => finish(Boolean(registration.waiting)), timeoutMs);
     });
   };
 
@@ -157,9 +171,11 @@ export default function Setting({
       await updateServiceWorker(true);
       setIsUpdateModalOpen(false);
       setStatus(t("setting.check"));
+      setUpdateError(null);
     } catch (error) {
       console.error("Update failed:", error);
       setStatus(t("setting.errorUpdating"));
+      setUpdateError(t("setting.errorUpdating"));
     } finally {
       setIsUpdating(false);
     }
@@ -168,6 +184,7 @@ export default function Setting({
   const handleCheckUpdate = async () => {
     setIsCheckingUpdate(true);
     setStatus(t("setting.checking"));
+    setUpdateError(null);
     try {
       if (!("serviceWorker" in navigator)) {
         setStatus(t("setting.serviceWorkerNotSupported"));
@@ -189,6 +206,7 @@ export default function Setting({
     } catch (error) {
       console.error("Check update failed:", error);
       setStatus(t("setting.errorChecking"));
+      setUpdateError(t("setting.errorChecking"));
     } finally {
       setIsCheckingUpdate(false);
     }
@@ -318,13 +336,30 @@ export default function Setting({
             >
               {status}
             </Paragraph>
-            <div className="flex items-center relative justify-center gap-4">
+            <div className="flex items-center relative justify-center gap-3">
+              {isCheckingUpdate && !needRefresh && (
+                <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full" />
+              )}
               <FiDownload
                 size={20}
                 className={needRefresh ? "text-primary animate-bounce" : ""}
               />
+              {needRefresh && (
+                <Button
+                  onClick={handleUpdate}
+                  className="h-9 px-3"
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? t("setting.updating") : t("setting.updateNow")}
+                </Button>
+              )}
             </div>
           </SettingRow>
+          {updateError && (
+            <Paragraph className="text-red-400 text-sm px-4">
+              {updateError}
+            </Paragraph>
+          )}
           <SettingRow onClick={handleExportTransactions}>
             <Paragraph size="lg">{t("setting.exportFinancial")}</Paragraph>
             {copyMessage ? (
