@@ -81,23 +81,75 @@ export default function Setting({
       ? getTransactionsByDay(String(year), String(month), String(day))
       : getTransactionsByMonth(String(year), String(month));
 
-  const { needRefresh, updateServiceWorker, swRegistration } =
+  const { needRefresh, updateServiceWorker, swRegistration, setNeedRefresh } =
     useServiceWorker();
 
   useEffect(() => {
+    if (!("serviceWorker" in navigator)) {
+      setStatus(t("setting.serviceWorkerNotSupported"));
+      return;
+    }
+
     if (!swRegistration) {
       setStatus(t("setting.noServiceWorker"));
+      return;
     }
-  }, [swRegistration, t]);
 
-  useEffect(() => {
     if (needRefresh) {
       setStatus(t("setting.updateAvailable"));
       setIsUpdateModalOpen(true);
-    } else {
-      setStatus(t("setting.check"));
     }
-  }, [needRefresh, t]);
+  }, [needRefresh, swRegistration, t]);
+
+  const waitForServiceWorkerUpdate = (
+    registration: ServiceWorkerRegistration,
+    timeoutMs = 7000
+  ) => {
+    if (registration.waiting) {
+      return Promise.resolve(true);
+    }
+
+    return new Promise<boolean>((resolve) => {
+      const installing = registration.installing;
+
+      const cleanup = () => {
+        registration.removeEventListener("updatefound", onUpdateFound);
+        installing?.removeEventListener("statechange", onInstallingStateChange);
+        clearTimeout(timer);
+      };
+
+      const finish = () => {
+        cleanup();
+        resolve(Boolean(registration.waiting));
+      };
+
+      const onInstallingStateChange = (event: Event) => {
+        const worker = event.target as ServiceWorker;
+        if (worker.state === "installed" || worker.state === "redundant") {
+          finish();
+        }
+      };
+
+      const onUpdateFound = () => {
+        const newWorker = registration.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener("statechange", (event) => {
+          const worker = event.target as ServiceWorker;
+          if (worker.state === "installed" || worker.state === "redundant") {
+            finish();
+          }
+        });
+      };
+
+      if (installing) {
+        installing.addEventListener("statechange", onInstallingStateChange);
+      }
+
+      registration.addEventListener("updatefound", onUpdateFound);
+
+      const timer = setTimeout(finish, timeoutMs);
+    });
+  };
 
   const handleUpdate = async () => {
     setIsUpdating(true);
@@ -126,8 +178,13 @@ export default function Setting({
         return;
       }
       await swRegistration.update();
-      if (!swRegistration.waiting && !swRegistration.installing) {
-        setStatus(t("setting.check"));
+      const hasUpdate = await waitForServiceWorkerUpdate(swRegistration);
+      if (hasUpdate) {
+        setNeedRefresh(true);
+        setStatus(t("setting.updateAvailable"));
+        setIsUpdateModalOpen(true);
+      } else {
+        setStatus(t("setting.upToDate"));
       }
     } catch (error) {
       console.error("Check update failed:", error);
@@ -193,7 +250,8 @@ export default function Setting({
   };
 
   const versionLabel = `V${version.version}`;
-  const canCheckForUpdate = !needRefresh && !isCheckingUpdate;
+  const canCheckForUpdate =
+    Boolean(swRegistration) && !needRefresh && !isCheckingUpdate;
 
   return (
     <PageLayout>
