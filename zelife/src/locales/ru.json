@@ -1,0 +1,81 @@
+{
+  "auth": {
+    "startJourney": "Начните путь вместе с нами",
+    "wellcome": "С возвращением",
+    "createYourAccount": "Создайте аккаунт",
+    "createAccount": "Создать аккаунт",
+    "userName": "Имя пользователя",
+    "userNameRequired": "Имя пользователя обязательно"
+  },
+  "dashboard": {
+    "addTransaction": "Добавить транзакцию",
+    "editTransaction": "Редактировать транзакцию",
+    "transactions": "Транзакции",
+    "noTransaction": "Создайте первую транзакцию!"
+  },
+  "transaction": {
+    "transactionType": "Тип транзакции",
+    "transactionTypeRequired": "Тип транзакции обязателен",
+    "income": "Доход",
+    "expense": "Расход",
+    "choseOption": "Выберите опцию",
+    "amount": "Сумма",
+    "amountRequired": "Сумма обязательна",
+    "amountInvalid": "Неверная сумма",
+    "amountMustBePositive": "Сумма должна быть больше нуля",
+    "description": "Описание"
+  },
+  "navbar": {
+    "finance": "Финансы",
+    "tasks": "Задачи",
+    "setting": "Настройки"
+  },
+  "setting": {
+    "enterYourGithubData": "Введите данные GitHub",
+    "syncData": "Синхронизация данных",
+    "token": "GitHub PAT токен",
+    "tokenRequired": "GitHub PAT токен обязателен",
+    "gistId": "ID Gist",
+    "gistIdRequired": "ID Gist обязателен",
+    "filename": "Имя файла",
+    "filenameRequired": "Имя файла обязательно",
+    "language": "Язык",
+    "selectDate": "Выберите дату",
+    "changeDate": "Изменить дату",
+    "today": "Сегодня",
+    "explain": "Чтобы использовать синхронизацию, скопируйте ID Gist из ссылки Share, создайте токен на github.com/settings/tokens (доступ gist) и укажите имя файла, например data.json.",
+    "viewType": "Тип финансового отчёта",
+    "taskViewType": "Тип отображения задач",
+    "dateInvalid": "Неверная дата. Используйте ГГГГ/ММ/ДД.",
+    "dateExplain": "Нажмите на дату выше, чтобы просмотреть или отредактировать отчёты. В настройках можно переключать отображение между месяцем и днём.",
+    "resetData": "Сбросить данные",
+    "resetWarn": "Внимание: это действие удалит все финансовые данные и задачи",
+    "check": "Проверить обновления",
+    "checking": "Проверка обновлений...",
+    "updateAvailable": "Доступно обновление!",
+    "upToDate": "Приложение актуально!",
+    "error": "Ошибка при проверке обновления",
+    "updateMessage": "Доступна новая версия! Приложение перезагрузится, чтобы применить изменения.",
+    "updating": "Обновление...",
+    "updateNow": "Обновить сейчас",
+    "later": "Позже",
+    "cancel": "Отмена",
+    "serviceWorkerNotSupported": "Service Worker не поддерживается в этом браузере",
+    "noServiceWorker": "Service Worker не зарегистрирован",
+    "errorChecking": "Ошибка при проверке обновлений",
+    "errorUpdating": "Не удалось применить обновление. Попробуйте ещё раз",
+    "errorRegistering": "Не удалось зарегистрировать Service Worker",
+    "exportFinancial": "Экспортировать финансовые данные"
+  },
+  "tasks": {
+    "taskManager": "Менеджер задач",
+    "tasks": "Задачи",
+    "createTask": "Создать задачу",
+    "editTask": "Редактировать задачу",
+    "noTask": "Пока пусто, добавьте новую задачу!",
+    "title": "Заголовок",
+    "description": "Описание",
+    "priority": "Приоритет",
+    "doneTasks": "Выполненные задачи"
+  }
+}

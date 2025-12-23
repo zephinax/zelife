@@ -84,6 +84,12 @@ export default function Setting({
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
+  const languageOptions = [
+    { value: "en", label: "EN" },
+    { value: "ru", label: "RU" },
+    { value: "de", label: "DE" },
+    { value: "fa", label: "FA" },
+  ];
 
   const DATE = selectedDate ? selectedDate : defaultDate;
   const { year, month, day } = parseShamsiDate(DATE);
@@ -270,10 +276,6 @@ export default function Setting({
     setIsGetUserDataModalOpen(true);
   };
 
-  const handleLanguageToggle = (value: boolean) => {
-    setLanguage(value ? "fa" : "en");
-  };
-
   const handleDefaultViewToggle = (value: boolean) => {
     setDefaultView(value ? "daily" : "monthly");
   };
@@ -318,13 +320,24 @@ export default function Setting({
           <SettingDivider />
           <SettingRow>
             <Paragraph size="lg">{t("setting.language")}</Paragraph>
-            <LabeledToggle
-              checked={language === "fa"}
-              onChange={handleLanguageToggle}
-              leftLabel="En"
-              rightLabel="Fa"
-              reverse={language === "fa"}
-            />
+            <div className="flex items-center gap-2 bg-background rounded-3xl p-1">
+              {languageOptions.map((option) => {
+                const isActive = language === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => setLanguage(option.value)}
+                    className={`relative rounded-2xl text-sm font-semibold transition-all duration-200 ${
+                      isActive
+                        ? "px-1.5 py-0.5 bg-primary/15 text-primary"
+                        : "px-1.5 py-0.5 text-text/70 hover:text-primary hover:bg-primary/5"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
           </SettingRow>
           <SettingRow>
             <Paragraph size="lg">{t("setting.viewType")}</Paragraph>

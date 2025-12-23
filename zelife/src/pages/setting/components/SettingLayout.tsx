@@ -54,7 +54,9 @@ export function SettingHeader({
 }
 
 export function SettingCard({ children }: { children: ReactNode }) {
-  return <div className="bg-background-secondary mx-2 rounded-3xl">{children}</div>;
+  return (
+    <div className="bg-background-secondary mx-2 rounded-3xl">{children}</div>
+  );
 }
 
 export function SettingDivider() {
@@ -81,7 +83,7 @@ export function SettingRow({
     <>
       <div
         onClick={onClick}
-        className={`p-4 flex justify-between items-center hover:bg-background/30 transition-colors ${className} ${
+        className={`p-4 flex justify-between h-[56px] items-center hover:bg-background/30 transition-colors ${className} ${
           isInteractive ? "cursor-pointer" : ""
         }`}
       >

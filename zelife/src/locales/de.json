@@ -1,0 +1,81 @@
+{
+  "auth": {
+    "startJourney": "Starte deine Reise mit uns",
+    "wellcome": "Willkommen zurück",
+    "createYourAccount": "Erstelle dein Konto",
+    "createAccount": "Konto erstellen",
+    "userName": "Benutzername",
+    "userNameRequired": "Benutzername ist erforderlich"
+  },
+  "dashboard": {
+    "addTransaction": "Transaktion hinzufügen",
+    "editTransaction": "Transaktion bearbeiten",
+    "transactions": "Transaktionen",
+    "noTransaction": "Erstelle deine erste Transaktion!"
+  },
+  "transaction": {
+    "transactionType": "Transaktionstyp",
+    "transactionTypeRequired": "Transaktionstyp ist erforderlich",
+    "income": "Einnahme",
+    "expense": "Ausgabe",
+    "choseOption": "Option wählen",
+    "amount": "Betrag",
+    "amountRequired": "Betrag ist erforderlich",
+    "amountInvalid": "Ungültiger Betrag",
+    "amountMustBePositive": "Betrag muss größer als null sein",
+    "description": "Beschreibung"
+  },
+  "navbar": {
+    "finance": "Finanzen",
+    "tasks": "Aufgaben",
+    "setting": "Einstellungen"
+  },
+  "setting": {
+    "enterYourGithubData": "GitHub-Daten eingeben",
+    "syncData": "Daten synchronisieren",
+    "token": "GitHub PAT-Token",
+    "tokenRequired": "GitHub PAT-Token ist erforderlich",
+    "gistId": "Gist-ID",
+    "gistIdRequired": "Gist-ID ist erforderlich",
+    "filename": "Dateiname",
+    "filenameRequired": "Dateiname ist erforderlich",
+    "language": "Sprache",
+    "selectDate": "Datum auswählen",
+    "changeDate": "Datum ändern",
+    "today": "Heute setzen",
+    "explain": "Kopiere die Gist-ID aus dem Share-Link, erstelle einen Token unter github.com/settings/tokens (Gist-Berechtigung) und gib einen Dateinamen wie data.json ein.",
+    "viewType": "Finanzbericht-Ansicht",
+    "taskViewType": "Aufgabenansicht",
+    "dateInvalid": "Ungültiges Datum. Format JJJJ/MM/TT.",
+    "dateExplain": "Klicke oben auf das Datum, um Berichte anzusehen oder zu bearbeiten. In den Einstellungen kannst du zwischen monatlicher und täglicher Ansicht wechseln.",
+    "resetData": "Daten zurücksetzen",
+    "resetWarn": "Achtung: Dadurch werden alle Finanz- und Aufgabendaten gelöscht",
+    "check": "Nach Updates suchen",
+    "checking": "Suche nach Updates...",
+    "updateAvailable": "Update verfügbar!",
+    "upToDate": "App ist aktuell!",
+    "error": "Fehler bei der Updateprüfung",
+    "updateMessage": "Eine neue Version ist bereit! Die App wird neu geladen, um die Änderungen anzuwenden.",
+    "updating": "Aktualisiere...",
+    "updateNow": "Jetzt aktualisieren",
+    "later": "Später",
+    "cancel": "Abbrechen",
+    "serviceWorkerNotSupported": "Service Worker wird in diesem Browser nicht unterstützt",
+    "noServiceWorker": "Kein Service Worker registriert",
+    "errorChecking": "Fehler bei der Updateprüfung",
+    "errorUpdating": "Update konnte nicht angewendet werden. Bitte versuche es erneut",
+    "errorRegistering": "Service Worker konnte nicht registriert werden",
+    "exportFinancial": "Finanzdaten exportieren"
+  },
+  "tasks": {
+    "taskManager": "Aufgabenmanager",
+    "tasks": "Aufgaben",
+    "createTask": "Aufgabe erstellen",
+    "editTask": "Aufgabe bearbeiten",
+    "noTask": "Noch nichts hier, füge eine Aufgabe hinzu!",
+    "title": "Titel",
+    "description": "Beschreibung",
+    "priority": "Priorität",
+    "doneTasks": "Erledigte Aufgaben"
+  }
+}
