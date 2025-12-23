@@ -16,6 +16,7 @@ export default defineConfig({
         "logo.svg",
         "robots.txt",
         "logo.png",
+        "apple-touch-icon.png",
         "fonts/*.ttf",
         "icons/*.png",
       ],
