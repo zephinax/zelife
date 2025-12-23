@@ -38,6 +38,16 @@ type SettingProps = {
   triggerSync: () => void;
 };
 
+type StatusKey =
+  | "check"
+  | "checking"
+  | "updateAvailable"
+  | "upToDate"
+  | "serviceWorkerNotSupported"
+  | "noServiceWorker"
+  | "errorChecking"
+  | "errorUpdating";
+
 export default function Setting({
   lastSyncAt,
   isLoading,
@@ -70,7 +80,7 @@ export default function Setting({
   const [isResetDataModalOpen, setIsResetDataModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [copyMessage, setCopyMessage] = useState(false);
-  const [status, setStatus] = useState(t("setting.check"));
+  const [statusKey, setStatusKey] = useState<StatusKey>("check");
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
@@ -87,20 +97,22 @@ export default function Setting({
 
   useEffect(() => {
     if (!("serviceWorker" in navigator)) {
-      setStatus(t("setting.serviceWorkerNotSupported"));
+      setStatusKey("serviceWorkerNotSupported");
       return;
     }
 
     if (!swRegistration) {
-      setStatus(t("setting.noServiceWorker"));
+      setStatusKey("noServiceWorker");
       return;
     }
 
     if (needRefresh) {
-      setStatus(t("setting.updateAvailable"));
+      setStatusKey("updateAvailable");
       setIsUpdateModalOpen(true);
+    } else if (!isCheckingUpdate && !isUpdating) {
+      setStatusKey("check");
     }
-  }, [needRefresh, swRegistration, t]);
+  }, [needRefresh, swRegistration, isCheckingUpdate, isUpdating]);
 
   const waitForServiceWorkerUpdate = (
     registration: ServiceWorkerRegistration,
@@ -170,42 +182,49 @@ export default function Setting({
     try {
       await updateServiceWorker(true);
       setIsUpdateModalOpen(false);
-      setStatus(t("setting.check"));
+      setNeedRefresh(false);
+      setStatusKey("check");
       setUpdateError(null);
     } catch (error) {
       console.error("Update failed:", error);
-      setStatus(t("setting.errorUpdating"));
+      setStatusKey("errorUpdating");
       setUpdateError(t("setting.errorUpdating"));
     } finally {
       setIsUpdating(false);
     }
   };
 
+  const handleLater = () => {
+    setNeedRefresh(false);
+    setIsUpdateModalOpen(false);
+    setStatusKey("check");
+  };
+
   const handleCheckUpdate = async () => {
     setIsCheckingUpdate(true);
-    setStatus(t("setting.checking"));
+    setStatusKey("checking");
     setUpdateError(null);
     try {
       if (!("serviceWorker" in navigator)) {
-        setStatus(t("setting.serviceWorkerNotSupported"));
+        setStatusKey("serviceWorkerNotSupported");
         return;
       }
       if (!swRegistration) {
-        setStatus(t("setting.noServiceWorker"));
+        setStatusKey("noServiceWorker");
         return;
       }
       await swRegistration.update();
       const hasUpdate = await waitForServiceWorkerUpdate(swRegistration);
       if (hasUpdate) {
         setNeedRefresh(true);
-        setStatus(t("setting.updateAvailable"));
+        setStatusKey("updateAvailable");
         setIsUpdateModalOpen(true);
       } else {
-        setStatus(t("setting.upToDate"));
+        setStatusKey("upToDate");
       }
     } catch (error) {
       console.error("Check update failed:", error);
-      setStatus(t("setting.errorChecking"));
+      setStatusKey("errorChecking");
       setUpdateError(t("setting.errorChecking"));
     } finally {
       setIsCheckingUpdate(false);
@@ -334,7 +353,7 @@ export default function Setting({
                 !needRefresh ? "cursor-pointer" : ""
               }`}
             >
-              {status}
+              {t(`setting.${statusKey}`)}
             </Paragraph>
             <div className="flex items-center relative justify-center gap-3">
               {isCheckingUpdate && !needRefresh && (
@@ -461,7 +480,7 @@ export default function Setting({
           <div className="flex gap-3 mt-6">
             <Button
               onClick={() => {
-                setIsUpdateModalOpen(false);
+                handleLater();
               }}
               className="flex-1"
               disabled={isUpdating}
