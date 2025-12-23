@@ -2,9 +2,8 @@ import { FaChartLine, FaCreditCard } from "react-icons/fa";
 import { useFinanceStore } from "../../../store/store";
 import { BiChevronDown } from "react-icons/bi";
 import Modal from "../../modal/Modal";
-import { WheelDatePicker } from "@local/wheel-datepicker";
 import { useState } from "react";
-import "@local/wheel-datepicker/css";
+import { parseShamsiDate, formatShamsiDate } from "../../../utils/helper";
 import { useTranslation } from "../../../hooks/useTranslation";
 import Paragraph from "../../typography/Paragraph";
 export default function TopNavigation({
@@ -15,8 +14,22 @@ export default function TopNavigation({
   const { defaultDate, selectedDate, avatarUrl, setSelectedDate, language } =
     useFinanceStore();
   const { t } = useTranslation();
-  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const DATE = selectedDate ? selectedDate : defaultDate;
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+  const [dateInput, setDateInput] = useState(DATE);
+  const [dateError, setDateError] = useState("");
+
+  const handleSaveDate = () => {
+    try {
+      const { year, month, day } = parseShamsiDate(dateInput);
+      const formatted = formatShamsiDate(year, month, day);
+      setSelectedDate(formatted);
+      setIsDateModalOpen(false);
+      setDateError("");
+    } catch (_err) {
+      setDateError(t("setting.dateInvalid") || "Invalid date (YYYY/MM/DD)");
+    }
+  };
 
   return (
     <div
@@ -67,27 +80,32 @@ export default function TopNavigation({
         }}
         title={`${t("setting.selectDate")}`}
       >
-        <div className="pb-4">
-          <WheelDatePicker
-            button={{
-              size: "medium",
-              text: `${t("setting.selectDate")}`,
-              className: "button w-full",
-            }}
-            input={{
-              placeholder: "select date",
-              label: "",
-            }}
-            indicatorClassName={"rounded-xl bg-primary opacity-20"}
-            className={`text-text ${
-              language === "fa" ? "!font-[Vazirmatn]" : "!font-[Ubuntu]"
-            }`}
-            value={DATE}
-            onChange={(date: string) => {
-              setSelectedDate(date);
-              setIsDateModalOpen(false);
-            }}
-          />
+        <div className="pb-4 space-y-3">
+          <label className="flex flex-col gap-1">
+            <Paragraph size="md">{t("setting.selectDate")}</Paragraph>
+            <input
+              type="text"
+              value={dateInput}
+              onChange={(e) => setDateInput(e.target.value)}
+              className="w-full rounded-xl bg-background p-3 outline-none border border-secondary-200 focus:border-primary"
+              placeholder="YYYY/MM/DD"
+              dir={language === "fa" ? "rtl" : "ltr"}
+            />
+          </label>
+          {dateError && (
+            <Paragraph className="text-red-400 text-sm">{dateError}</Paragraph>
+          )}
+          <div className="flex gap-3">
+            <button
+              onClick={() => setIsDateModalOpen(false)}
+              className="flex-1 button"
+            >
+              {t("setting.cancel")}
+            </button>
+            <button onClick={handleSaveDate} className="flex-1 button">
+              {t("setting.selectDate")}
+            </button>
+          </div>
           <Paragraph className="mt-2">{t("setting.dateExplain")}</Paragraph>
         </div>
       </Modal>
