@@ -6,6 +6,7 @@ import { useState } from "react";
 import { parseShamsiDate, formatShamsiDate } from "../../../utils/helper";
 import { useTranslation } from "../../../hooks/useTranslation";
 import Paragraph from "../../typography/Paragraph";
+import Input from "../../inputs/Input";
 export default function TopNavigation({
   className = "",
 }: {
@@ -81,17 +82,13 @@ export default function TopNavigation({
         title={`${t("setting.selectDate")}`}
       >
         <div className="pb-4 space-y-3">
-          <label className="flex flex-col gap-1">
-            <Paragraph size="md">{t("setting.selectDate")}</Paragraph>
-            <input
-              type="text"
-              value={dateInput}
-              onChange={(e) => setDateInput(e.target.value)}
-              className="w-full rounded-xl bg-background p-3 outline-none border border-secondary-200 focus:border-primary"
-              placeholder="YYYY/MM/DD"
-              dir={language === "fa" ? "rtl" : "ltr"}
-            />
-          </label>
+          <Input
+            label={t("setting.selectDate")}
+            value={dateInput}
+            onChange={(e) => setDateInput(e.target.value)}
+            placeholder="YYYY/MM/DD"
+            dir={language === "fa" ? "rtl" : "ltr"}
+          />
           {dateError && (
             <Paragraph className="text-red-400 text-sm">{dateError}</Paragraph>
           )}
