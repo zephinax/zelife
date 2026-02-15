@@ -31,7 +31,6 @@ export default function TopNavigation({
       setDateError(t("setting.dateInvalid") || "Invalid date (YYYY/MM/DD)");
     }
   };
-
   return (
     <div
       className={`flex py-4 px-6 w-full justify-between items-center ${className}`}
